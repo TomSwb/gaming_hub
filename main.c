@@ -10,6 +10,8 @@ int	main(int ac, char **av)
 			G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(app, "activate", G_CALLBACK(hub_activate), NULL);
 	status = g_application_run(G_APPLICATION(app), ac, av);
+	g_object_unref(app);
+	return (status);
 }
 
 void	hub_activate(GtkApplication *self, gpointer user_data)
