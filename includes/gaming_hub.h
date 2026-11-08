@@ -5,4 +5,9 @@
 # include <gtk/gtk.h>
 # include "libft.h"
 
+// *** Functions *** //
+
+// main.c
+void	hub_activate(GtkApplication *self, gpointer user_data);
+
 #endif
