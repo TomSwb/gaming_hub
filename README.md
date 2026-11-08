@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) done on 8 Nov 2026. Next: milestone 1, the first window. Nothing runs yet.
+> 🚧 **Work in progress.** Milestone 0 (research) done on 8 Nov 2026. Milestone 1 (the first window) in progress: the build links GTK4. Nothing to see yet.
 
 #### Brief overview:
 
@@ -33,7 +33,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 
 * `main.c`: entry point
 * `includes/gaming_hub.h`: shared header
-* `Makefile`: builds the hub and libft
+* `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
 
 `Additionally contains:`
@@ -42,15 +42,23 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 
 ## Instructions
 
-Fedora, with GTK4 and the PulseAudio client library (PipeWire speaks its API):
+Linux with GTK4's development package (and, from milestone 5, the PulseAudio client library; PipeWire speaks its API):
 
 ```bash
+# Fedora
 sudo dnf install gtk4-devel pulseaudio-libs-devel
+# Debian / Ubuntu
+sudo apt install libgtk-4-dev libpulse-dev
+
 make
 ./gaming_hub
 ```
 
-The Makefile will get the GTK4 and libpulse flags from `pkg-config` from milestone 1 on. Until then `make` only builds the empty skeleton.
+The Makefile gets GTK's compiler and linker flags from `pkg-config`, so it builds on any distribution without editing paths.
+
+**Editor support:** `make` also writes `compile_flags.txt` (one flag per line, from the same `pkg-config` output) so clangd finds GTK's headers. It is generated for each machine and not tracked in git.
+
+**Coming at milestone 4:** `make install` (app menu entry with an icon) and a guide to start the hub automatically with your games (Steam, Heroic, Lutris, emulators) through GameMode. Packaging (Flatpak or RPM) is a later idea.
 
 ## Milestones
 
@@ -60,7 +68,7 @@ Each one is usable on its own. Full plan: [`docs/game-dashboard.md`](https://git
 - [ ] 1. Hello window: GtkApplication, main loop, signals, GObject basics
 - [ ] 2. Live stats from `/proc` and `/sys` + fps-cost check
 - [ ] 3. Timer and healthy-gaming features, settings file
-- [ ] 4. Auto-start with GameMode, single instance, `--end`
+- [ ] 4. Auto-start with GameMode, single instance, `--end`; `make install` (app menu icon) and a guide to hook it to Steam, Heroic, Lutris and emulators
 - [ ] 5. Headset volume and mic with libpulse
 - [ ] 6. Power profile and charger over D-Bus
 - [ ] 7. Session log, game notes, stop ritual, monthly review
