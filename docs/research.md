@@ -139,6 +139,9 @@ It is a bug in MangoHud 0.8.2 on this system, not in my config. Fedora had no up
 
 ### Rules for the hub and the config
 
+In my config since 8 Nov (dotfiles `8aa59ec`): `output_folder=/home/tomswb/mangologs`, `log_interval=1000`, `autostart_log=3` + a warning comment. Other keys in my config: Shift_L+F1 cycles the fps cap (30 / 60 / none; the log shows the real fps), Shift_R+F12 hides/shows the HUD (logging should go on underneath, to test with a real game).
+
+
 - Config: `output_folder`, `log_interval=1000`, `autostart_log=3`. **No `log_duration`.** Never press the logging key in a game.
 - Logging runs for the whole game and ends when the game quits. No summary → the hub doesn't need one.
 - Logs pile up in `~/mangologs` (about 4.5 KB per minute → ~270 KB per hour). The hub, or I by hand, cleans old ones later.
