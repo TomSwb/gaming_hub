@@ -20,12 +20,12 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Headset | Volume, mute, mic volume and mute, battery (if Linux can read it) | PipeWire through libpulse; battery TBD in milestone 0 |
 | Timer | Session plan, breaks, wind-down warning, 20-20-20 eye cue, pause button | GLib timers, GtkMediaFile, GNotification |
 | Power | Balanced ↔ Performance switch, charger warning | power-profiles D-Bus API (tuned-ppd), UPower |
-| Session log | Game, start/end, play time, average fps, max temperature → CSV | Own code, `~/.local/share/gaming_hub/` |
+| Session log | Game (detected, then confirmed by me at the end), start/end, play time, average fps, max temperature → CSV | Own code, `~/.local/share/gaming_hub/` |
 | Game notes | Per-game card: settings that worked, "where I was / what's next" | Text files per game |
 | Temp graph | Temperature over the whole session | GtkDrawingArea + Cairo |
 | FPS (stretch) | Frame rate and frame time | MangoHud's log, if it can be read live |
 
-**Starts and stops by itself:** every game launches through `gamemoderun`, and GameMode's `[custom] start=` / `end=` hooks run the hub. It is single-instance (GtkApplication), so the end hook just tells the running window to close the session.
+**Starts and stops by itself:** every game launches through `gamemoderun`, and GameMode's `[custom] start=` / `end=` hooks run the hub. It is single-instance (GtkApplication), so the end hook just tells the running window to close the session. Emulators get `gamemoderun` added once to their app shortcut, so they open the hub too.
 
 **Rule: the hub must not cost fps.** Iris Xe shares one power budget between CPU and GPU, so the hub refreshes once a second, redraws only what changed and has no animations. Checked at milestone 2 and at the end.
 
