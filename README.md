@@ -34,6 +34,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 * `main.c`: entry point
 * `includes/gaming_hub.h`: shared header
 * `Makefile`: builds the hub and libft
+* `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
 
 `Additionally contains:`
 
