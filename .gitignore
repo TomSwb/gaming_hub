@@ -2,3 +2,4 @@
 *.a
 gaming_hub
 compile_commands.json
+compile_flags.txt
