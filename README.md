@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) done on 8 Nov 2026. Milestone 1 (the first window) in progress: the build links GTK4. Nothing to see yet.
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026: the hub opens a "Gaming Hub" window with a label. Next: live stats (milestone 2).
 
 #### Brief overview:
 
@@ -31,7 +31,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 
 `Files:`
 
-* `main.c`: entry point
+* `main.c`: creates the application (`ch.bitminded.GamingHub`), runs GTK's main loop, builds the window when the app is activated
 * `includes/gaming_hub.h`: shared header
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
@@ -65,7 +65,7 @@ The Makefile gets GTK's compiler and linker flags from `pkg-config`, so it build
 Each one is usable on its own. Full plan: [`docs/game-dashboard.md`](https://github.com/TomSwb/set_up/blob/main/docs/game-dashboard.md) in my set_up repo.
 
 - [x] 0. Research (no code): headset battery, MangoHud logging (8 Nov, see `docs/research.md`)
-- [ ] 1. Hello window: GtkApplication, main loop, signals, GObject basics
+- [x] 1. Hello window: GtkApplication, main loop, signals, GObject basics (8 Nov)
 - [ ] 2. Live stats from `/proc` and `/sys` + fps-cost check
 - [ ] 3. Timer and healthy-gaming features, settings file
 - [ ] 4. Auto-start with GameMode, single instance, `--end`; `make install` (app menu icon) and a guide to hook it to Steam, Heroic, Lutris and emulators
@@ -109,4 +109,33 @@ I use VSCodium on purpose to not have AI integration. This means that, except fo
 
 ## Detailed description:
 
-To be written as the milestones get done.
+### Application id
+
+`ch.bitminded.GamingHub` (reverse of my domain `bitminded.ch`). It is only a name, nothing goes online: the system uses it to recognise the running app (single instance, milestone 4) and to name the `.desktop` file and the icon. **It never changes.** The window title, "Gaming Hub", can.
+
+### How the program runs (milestone 1)
+
+GTK programs are **event-driven**: `main` sets things up, then hands control to GTK's **main loop**, which sleeps until something happens and calls the functions that asked for it (callbacks).
+
+```
+main → gtk_application_new (the app object, with its id)
+     → g_signal_connect(app, "activate", hub_activate)   only registers the callback
+     → g_application_run → main loop starts → emits "activate" → hub_activate builds the window
+                         → … waits for events …
+                         → window closed → nothing holds the app → loop ends
+     → g_object_unref(app) → return the exit status
+```
+
+`hub_activate` creates a `GtkApplicationWindow` (it belongs to the app and keeps it running while open), sets the title and a default size (480×720, a portrait panel; it is snapped to half the screen anyway), puts a `GtkLabel` in it and presents it. Setup first, `present` last.
+
+### Who frees what
+
+The docs of every function say who owns the returned object ("Return value"):
+
+| Object | Owner | Freed by |
+| --- | --- | --- |
+| The app (`gtk_application_new`: "the caller takes ownership") | `main` | `g_object_unref(app)` at the end of `main` |
+| The window (`gtk_application_window_new`: "owned by the called function") | GTK's list of windows | GTK, when the window is closed |
+| The label | the window (`gtk_window_set_child` takes its floating reference) | the window, when it is destroyed |
+
+Never `free()` a GObject, never unref what you don't own. Each widget is stored as the type I call most on it (`GtkWindow *` for the window, `GtkWidget *` for the label), so casts like `GTK_WINDOW()` are rare.
