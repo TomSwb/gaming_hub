@@ -6,11 +6,11 @@
 #    By: tschwab <tschwab@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/01 23:17:43 by tomswb            #+#    #+#              #
-#    Updated: 2026/10/25 16:13:35 by tschwab          ###   ########.ch        #
+#    Updated: 2026/11/08 09:21:02 by tschwab          ###   ########.ch        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = template
+NAME = gaming_hub
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
@@ -20,7 +20,7 @@ LIBFT = ${LIBFT_DIR}/libft.a
 
 INC_DIR = ./includes
 INCLUDES = -I${INC_DIR} -I${LIBFT_DIR}
-HEADERS = ${INC_DIR}/template.h \
+HEADERS = ${INC_DIR}/gaming_hub.h \
 		${LIBFT_DIR}/libft.h
 
 SRCS = main.c
