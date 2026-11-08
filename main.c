@@ -16,7 +16,14 @@ int	main(int ac, char **av)
 
 void	hub_activate(GtkApplication *self, gpointer user_data)
 {
+	GtkWindow	*window;
+	GtkWidget	*label;
+
 	(void)user_data;
-	(void)self;
-	ft_printf("Hello World\n");
+	window = GTK_WINDOW(gtk_application_window_new(self));
+	gtk_window_set_title(window, "Gaming Hub");
+	gtk_window_set_default_size(window, 480, 720);
+	label = gtk_label_new("Hello World!");
+	gtk_window_set_child(window, label);
+	gtk_window_present(window);
 }
