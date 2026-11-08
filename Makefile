@@ -15,7 +15,8 @@ HEADERS = ${INC_DIR}/gaming_hub.h \
 GTK_CFLAGS := ${shell pkg-config --cflags gtk4}
 GTK_LIBS := ${shell pkg-config --libs gtk4}
 
-SRCS = main.c
+SRCS = main.c \
+	ram.c
 
 OBJS = ${SRCS:.c=.o}
 

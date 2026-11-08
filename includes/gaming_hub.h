@@ -10,6 +10,8 @@
 // main.c
 void		hub_activate(GtkApplication *self, gpointer user_data);
 gboolean	hub_tick(gpointer user_data);
+
+// ram.c
 void		hub_read_ram(void);
 gboolean	hub_meminfo_value(const gchar *mem_start,  gsize length_file,
 		const char *key, guint64 *value);
