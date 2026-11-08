@@ -1,0 +1,4 @@
+*.o
+*.a
+template
+compile_commands.json
