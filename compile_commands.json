@@ -10,9 +10,9 @@
       "part1/ft_atoi.o",
       "part1/ft_atoi.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_atoi.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_atoi.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_atoi.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_atoi.o"
   },
   {
     "arguments": [
@@ -25,9 +25,9 @@
       "part1/ft_bzero.o",
       "part1/ft_bzero.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_bzero.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_bzero.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_bzero.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_bzero.o"
   },
   {
     "arguments": [
@@ -40,9 +40,9 @@
       "part1/ft_calloc.o",
       "part1/ft_calloc.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_calloc.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_calloc.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_calloc.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_calloc.o"
   },
   {
     "arguments": [
@@ -55,9 +55,9 @@
       "part1/ft_isalnum.o",
       "part1/ft_isalnum.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isalnum.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isalnum.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isalnum.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isalnum.o"
   },
   {
     "arguments": [
@@ -70,9 +70,9 @@
       "part1/ft_isalpha.o",
       "part1/ft_isalpha.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isalpha.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isalpha.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isalpha.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isalpha.o"
   },
   {
     "arguments": [
@@ -85,9 +85,9 @@
       "part1/ft_isascii.o",
       "part1/ft_isascii.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isascii.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isascii.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isascii.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isascii.o"
   },
   {
     "arguments": [
@@ -100,9 +100,9 @@
       "part1/ft_isdigit.o",
       "part1/ft_isdigit.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isdigit.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isdigit.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isdigit.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isdigit.o"
   },
   {
     "arguments": [
@@ -115,9 +115,9 @@
       "part1/ft_isprint.o",
       "part1/ft_isprint.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isprint.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_isprint.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isprint.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_isprint.o"
   },
   {
     "arguments": [
@@ -130,9 +130,9 @@
       "part1/ft_memchr.o",
       "part1/ft_memchr.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memchr.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memchr.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memchr.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memchr.o"
   },
   {
     "arguments": [
@@ -145,9 +145,9 @@
       "part1/ft_memcmp.o",
       "part1/ft_memcmp.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memcmp.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memcmp.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memcmp.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memcmp.o"
   },
   {
     "arguments": [
@@ -160,9 +160,9 @@
       "part1/ft_memcpy.o",
       "part1/ft_memcpy.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memcpy.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memcpy.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memcpy.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memcpy.o"
   },
   {
     "arguments": [
@@ -175,9 +175,9 @@
       "part1/ft_memmove.o",
       "part1/ft_memmove.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memmove.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memmove.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memmove.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memmove.o"
   },
   {
     "arguments": [
@@ -190,9 +190,9 @@
       "part1/ft_memset.o",
       "part1/ft_memset.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memset.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_memset.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memset.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_memset.o"
   },
   {
     "arguments": [
@@ -205,9 +205,9 @@
       "part1/ft_strchr.o",
       "part1/ft_strchr.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strchr.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strchr.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strchr.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strchr.o"
   },
   {
     "arguments": [
@@ -220,9 +220,9 @@
       "part1/ft_strdup.o",
       "part1/ft_strdup.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strdup.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strdup.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strdup.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strdup.o"
   },
   {
     "arguments": [
@@ -235,9 +235,9 @@
       "part1/ft_strlcat.o",
       "part1/ft_strlcat.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strlcat.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strlcat.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strlcat.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strlcat.o"
   },
   {
     "arguments": [
@@ -250,9 +250,9 @@
       "part1/ft_strlcpy.o",
       "part1/ft_strlcpy.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strlcpy.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strlcpy.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strlcpy.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strlcpy.o"
   },
   {
     "arguments": [
@@ -265,9 +265,9 @@
       "part1/ft_strlen.o",
       "part1/ft_strlen.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strlen.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strlen.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strlen.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strlen.o"
   },
   {
     "arguments": [
@@ -280,9 +280,9 @@
       "part1/ft_strncmp.o",
       "part1/ft_strncmp.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strncmp.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strncmp.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strncmp.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strncmp.o"
   },
   {
     "arguments": [
@@ -295,9 +295,9 @@
       "part1/ft_strnstr.o",
       "part1/ft_strnstr.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strnstr.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strnstr.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strnstr.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strnstr.o"
   },
   {
     "arguments": [
@@ -310,9 +310,9 @@
       "part1/ft_strrchr.o",
       "part1/ft_strrchr.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strrchr.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_strrchr.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strrchr.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_strrchr.o"
   },
   {
     "arguments": [
@@ -325,9 +325,9 @@
       "part1/ft_tolower.o",
       "part1/ft_tolower.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_tolower.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_tolower.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_tolower.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_tolower.o"
   },
   {
     "arguments": [
@@ -340,9 +340,9 @@
       "part1/ft_toupper.o",
       "part1/ft_toupper.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_toupper.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part1/ft_toupper.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_toupper.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part1/ft_toupper.o"
   },
   {
     "arguments": [
@@ -355,9 +355,9 @@
       "part2/ft_itoa.o",
       "part2/ft_itoa.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_itoa.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_itoa.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_itoa.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_itoa.o"
   },
   {
     "arguments": [
@@ -370,9 +370,9 @@
       "part2/ft_putchar_fd.o",
       "part2/ft_putchar_fd.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putchar_fd.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putchar_fd.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putchar_fd.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putchar_fd.o"
   },
   {
     "arguments": [
@@ -385,9 +385,9 @@
       "part2/ft_putendl_fd.o",
       "part2/ft_putendl_fd.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putendl_fd.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putendl_fd.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putendl_fd.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putendl_fd.o"
   },
   {
     "arguments": [
@@ -400,9 +400,9 @@
       "part2/ft_putnbr_fd.o",
       "part2/ft_putnbr_fd.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putnbr_fd.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putnbr_fd.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putnbr_fd.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putnbr_fd.o"
   },
   {
     "arguments": [
@@ -415,9 +415,9 @@
       "part2/ft_putstr_fd.o",
       "part2/ft_putstr_fd.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putstr_fd.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_putstr_fd.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putstr_fd.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_putstr_fd.o"
   },
   {
     "arguments": [
@@ -430,9 +430,9 @@
       "part2/ft_split.o",
       "part2/ft_split.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_split.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_split.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_split.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_split.o"
   },
   {
     "arguments": [
@@ -445,9 +445,9 @@
       "part2/ft_striteri.o",
       "part2/ft_striteri.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_striteri.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_striteri.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_striteri.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_striteri.o"
   },
   {
     "arguments": [
@@ -460,9 +460,9 @@
       "part2/ft_strjoin.o",
       "part2/ft_strjoin.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_strjoin.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_strjoin.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_strjoin.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_strjoin.o"
   },
   {
     "arguments": [
@@ -475,9 +475,9 @@
       "part2/ft_strmapi.o",
       "part2/ft_strmapi.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_strmapi.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_strmapi.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_strmapi.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_strmapi.o"
   },
   {
     "arguments": [
@@ -490,9 +490,9 @@
       "part2/ft_strtrim.o",
       "part2/ft_strtrim.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_strtrim.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_strtrim.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_strtrim.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_strtrim.o"
   },
   {
     "arguments": [
@@ -505,9 +505,9 @@
       "part2/ft_substr.o",
       "part2/ft_substr.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_substr.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part2/ft_substr.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_substr.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part2/ft_substr.o"
   },
   {
     "arguments": [
@@ -520,9 +520,9 @@
       "part3/ft_lstadd_back.o",
       "part3/ft_lstadd_back.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstadd_back.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstadd_back.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstadd_back.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstadd_back.o"
   },
   {
     "arguments": [
@@ -535,9 +535,9 @@
       "part3/ft_lstadd_front.o",
       "part3/ft_lstadd_front.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstadd_front.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstadd_front.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstadd_front.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstadd_front.o"
   },
   {
     "arguments": [
@@ -550,9 +550,9 @@
       "part3/ft_lstclear.o",
       "part3/ft_lstclear.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstclear.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstclear.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstclear.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstclear.o"
   },
   {
     "arguments": [
@@ -565,9 +565,9 @@
       "part3/ft_lstdelone.o",
       "part3/ft_lstdelone.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstdelone.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstdelone.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstdelone.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstdelone.o"
   },
   {
     "arguments": [
@@ -580,9 +580,9 @@
       "part3/ft_lstiter.o",
       "part3/ft_lstiter.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstiter.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstiter.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstiter.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstiter.o"
   },
   {
     "arguments": [
@@ -595,9 +595,9 @@
       "part3/ft_lstlast.o",
       "part3/ft_lstlast.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstlast.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstlast.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstlast.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstlast.o"
   },
   {
     "arguments": [
@@ -610,9 +610,9 @@
       "part3/ft_lstmap.o",
       "part3/ft_lstmap.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstmap.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstmap.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstmap.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstmap.o"
   },
   {
     "arguments": [
@@ -625,9 +625,9 @@
       "part3/ft_lstnew.o",
       "part3/ft_lstnew.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstnew.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstnew.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstnew.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstnew.o"
   },
   {
     "arguments": [
@@ -640,9 +640,9 @@
       "part3/ft_lstsize.o",
       "part3/ft_lstsize.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstsize.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/part3/ft_lstsize.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstsize.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/part3/ft_lstsize.o"
   },
   {
     "arguments": [
@@ -655,9 +655,9 @@
       "get_next_line/get_next_line.o",
       "get_next_line/get_next_line.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/get_next_line/get_next_line.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/get_next_line/get_next_line.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/get_next_line/get_next_line.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/get_next_line/get_next_line.o"
   },
   {
     "arguments": [
@@ -670,9 +670,9 @@
       "get_next_line/get_next_line_utils.o",
       "get_next_line/get_next_line_utils.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/get_next_line/get_next_line_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/get_next_line/get_next_line_utils.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/get_next_line/get_next_line_utils.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/get_next_line/get_next_line_utils.o"
   },
   {
     "arguments": [
@@ -685,9 +685,9 @@
       "ft_printf/ft_printf.o",
       "ft_printf/ft_printf.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf.o"
   },
   {
     "arguments": [
@@ -700,9 +700,9 @@
       "ft_printf/ft_printf_managers.o",
       "ft_printf/ft_printf_managers.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_managers.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_managers.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_managers.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_managers.o"
   },
   {
     "arguments": [
@@ -715,9 +715,9 @@
       "ft_printf/ft_printf_parsing.o",
       "ft_printf/ft_printf_parsing.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_parsing.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_parsing.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_parsing.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_parsing.o"
   },
   {
     "arguments": [
@@ -730,9 +730,9 @@
       "ft_printf/ft_printf_parsing_utils.o",
       "ft_printf/ft_printf_parsing_utils.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_parsing_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_parsing_utils.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_parsing_utils.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_parsing_utils.o"
   },
   {
     "arguments": [
@@ -745,9 +745,9 @@
       "ft_printf/ft_printf_printing.o",
       "ft_printf/ft_printf_printing.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_printing.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_printing.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_printing.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_printing.o"
   },
   {
     "arguments": [
@@ -760,9 +760,9 @@
       "ft_printf/ft_printf_printing_utils.o",
       "ft_printf/ft_printf_printing_utils.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_printing_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_printing_utils.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_printing_utils.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_printing_utils.o"
   },
   {
     "arguments": [
@@ -775,9 +775,9 @@
       "ft_printf/ft_printf_len_utils.o",
       "ft_printf/ft_printf_len_utils.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_len_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/libft/ft_printf/ft_printf_len_utils.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_len_utils.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/libft/ft_printf/ft_printf_len_utils.o"
   },
   {
     "arguments": [
@@ -785,418 +785,15 @@
       "-Wall",
       "-Wextra",
       "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
+      "-I./includes",
       "-I./libft",
       "-c",
       "-o",
       "main.o",
       "main.c"
     ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/main.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "bench_utils.o",
-      "bench_utils.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/bench_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/bench_utils.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "tests.o",
-      "tests.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/tests.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/tests.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "parsing/parsing.o",
-      "parsing/parsing.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/parsing.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/parsing.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "parsing/parsing_utils.o",
-      "parsing/parsing_utils.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/parsing_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/parsing_utils.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "parsing/parsing_utils_2.o",
-      "parsing/parsing_utils_2.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/parsing_utils_2.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/parsing_utils_2.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "parsing/disorder_ranks.o",
-      "parsing/disorder_ranks.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/disorder_ranks.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/parsing/disorder_ranks.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "moves/p_moves.o",
-      "moves/p_moves.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/p_moves.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/p_moves.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "moves/r_moves.o",
-      "moves/r_moves.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/r_moves.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/r_moves.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "moves/rr_moves.o",
-      "moves/rr_moves.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/rr_moves.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/rr_moves.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "moves/s_moves.o",
-      "moves/s_moves.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/s_moves.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/moves/s_moves.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/on2/on2.o",
-      "algos/on2/on2.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/on2/on2_find_node.o",
-      "algos/on2/on2_find_node.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_find_node.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_find_node.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/on2/on2_cost.o",
-      "algos/on2/on2_cost.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_cost.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_cost.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/on2/on2_moves.o",
-      "algos/on2/on2_moves.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_moves.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_moves.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/on2/on2_utils.o",
-      "algos/on2/on2_utils.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/on2/on2_utils.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/onrootn/onrootn.o",
-      "algos/onrootn/onrootn.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onrootn/onrootn.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onrootn/onrootn.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/onlogn/onlogn.o",
-      "algos/onlogn/onlogn.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/onlogn/onlogn_split.o",
-      "algos/onlogn/onlogn_split.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn_split.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn_split.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/onlogn/onlogn_small.o",
-      "algos/onlogn/onlogn_small.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn_small.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn_small.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-I.",
-      "-Ialgos/on2",
-      "-Ialgos/onlogn",
-      "-Ialgos/onrootn",
-      "-I./libft",
-      "-c",
-      "-o",
-      "algos/onlogn/onlogn_utils.o",
-      "algos/onlogn/onlogn_utils.c"
-    ],
-    "directory": "/home/tomswb/Desktop/42/rank00_01/push_swap",
-    "file": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn_utils.c",
-    "output": "/home/tomswb/Desktop/42/rank00_01/push_swap/algos/onlogn/onlogn_utils.o"
+    "directory": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub",
+    "file": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/main.c",
+    "output": "/home/tomswb/Desktop/bitminded/bitminded-products/gaming_hub/main.o"
   }
 ]

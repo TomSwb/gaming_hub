@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   template.h                                         :+:      :+:    :+:   */
+/*   gaming_hub.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tschwab <tschwab@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/26 23:12:00 by tschwab           #+#    #+#             */
-/*   Updated: 2026/10/26 23:12:00 by tschwab          ###   ########.ch       */
+/*   Updated: 2026/11/08 09:19:28 by tschwab          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEMPLATE_H
-# define TEMPLATE_H
+#ifndef GAMING_HUB_H
+# define GAMING_HUB_H
 
 # include "libft.h"
 

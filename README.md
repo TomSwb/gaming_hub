@@ -1,6 +1,4 @@
-*This project has been created as part of the 42 curriculum by \<tschwab>*
-
-# NAME - a program/function by TomSwb
+# Gaming_Hub - a program by TomSwb
 
 ## Description
 
@@ -33,13 +31,7 @@
 
 * `VSCodium`: Used to avoid Microsoft telemetry and AI-integrated temptations.
 
-#### 42:
-
-* `xxx.pdf` version: xx.x
-
 ### AI:
-
-#### Before beginning of cursus
 
 ⚠️ Disclaimer: I only ask for actual answers/solutions when I realise that I am missing theoretical knowledge.
 
@@ -51,12 +43,9 @@ My AI agents are set to guide me with questions as per the 42 pedagogical philos
 
 I use VSCodium on purpose to not have AI integration. This means that, except for my copy-pastes into chats for some reviews, AI does not see my code, and AI will never write my code - I do not copy-paste from AI into my code.
 
-`ChatGPT:`
+`Claude:`
 
 1. ...
 
 ## Detailed description:
 
-#### Why this algorithm:
-
-...
