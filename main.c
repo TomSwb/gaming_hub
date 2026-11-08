@@ -25,5 +25,15 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	gtk_window_set_default_size(window, 480, 720);
 	label = gtk_label_new("Hello World!");
 	gtk_window_set_child(window, label);
+	g_timeout_add_seconds(1, hub_tick, label);
 	gtk_window_present(window);
+}
+
+gboolean	hub_tick(gpointer user_data)
+{
+	GtkLabel	*label;
+
+	label = GTK_LABEL(user_data);
+	gtk_label_set_text(label, "It's time to game!");
+	return(G_SOURCE_CONTINUE);
 }
