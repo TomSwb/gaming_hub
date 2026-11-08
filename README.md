@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research, no code) is underway. Nothing runs yet.
+> 🚧 **Work in progress.** Milestone 0 (research) done on 8 Nov 2026. Next: milestone 1, the first window. Nothing runs yet.
 
 #### Brief overview:
 
@@ -56,7 +56,7 @@ The Makefile will get the GTK4 and libpulse flags from `pkg-config` from milesto
 
 Each one is usable on its own. Full plan: [`docs/game-dashboard.md`](https://github.com/TomSwb/set_up/blob/main/docs/game-dashboard.md) in my set_up repo.
 
-- [ ] 0. Research (no code): headset battery, MangoHud logging
+- [x] 0. Research (no code): headset battery, MangoHud logging (8 Nov, see `docs/research.md`)
 - [ ] 1. Hello window: GtkApplication, main loop, signals, GObject basics
 - [ ] 2. Live stats from `/proc` and `/sys` + fps-cost check
 - [ ] 3. Timer and healthy-gaming features, settings file
