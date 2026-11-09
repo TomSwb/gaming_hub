@@ -34,8 +34,10 @@ gboolean	hub_meminfo_value(const gchar *mem_start, gsize length_file,
 		const char *key, guint64 *value);
 
 // cpu.c
+void		hub_update_cpu(t_hub *hub);
 gboolean	hub_cpu_sample(guint64 *total, guint64 *idle);
 gboolean	hub_getting_sample(guint64 *total, guint64 *idle,
 		gchar **cpu_info, int *i);
+void		hub_set_cpu_text(t_hub *hub, double percent);
 
 #endif
