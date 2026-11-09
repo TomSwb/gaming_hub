@@ -16,7 +16,8 @@ GTK_CFLAGS := ${shell pkg-config --cflags gtk4}
 GTK_LIBS := ${shell pkg-config --libs gtk4}
 
 SRCS = main.c \
-	ram.c
+	sources/utils.c \
+	sources/ram.c
 
 OBJS = ${SRCS:.c=.o}
 

@@ -18,18 +18,19 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 {
 	GtkWindow	*window;
 	GtkWidget	*box;
-	GtkWidget	*label;
+	t_hub		hub;
 
 	(void)user_data;
+	hub_struct_init(&hub);
 	window = GTK_WINDOW(gtk_application_window_new(self));
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
-	label = gtk_label_new("");
+	hub.ram = gtk_label_new("");
 	box = gtk_box_new(1, 12);
-	gtk_box_append(GTK_BOX(box), label);
+	gtk_box_append(GTK_BOX(box), hub.ram);
 	gtk_window_set_child(window, box);
-	g_timeout_add_seconds(1, hub_tick, label);
-	hub_tick(label);
+	g_timeout_add_seconds(1, hub_tick, hub.ram);
+	hub_tick(hub.ram);
 	gtk_window_present(window);
 }
 

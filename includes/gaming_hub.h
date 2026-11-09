@@ -5,11 +5,25 @@
 # include <gtk/gtk.h>
 # include "libft.h"
 
+// *** Struct *** //
+
+typedef struct s_hub
+{
+	GtkWidget	*ram;
+}	t_hub;
+
 // *** Functions *** //
+
+// root/
 
 // main.c
 void		hub_activate(GtkApplication *self, gpointer user_data);
 gboolean	hub_tick(gpointer user_data);
+
+// sources/
+
+// utils.c
+void		hub_struct_init(t_hub *hub);
 
 // ram.c
 void		hub_read_ram(GtkLabel *label);
