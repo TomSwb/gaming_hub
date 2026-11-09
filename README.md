@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026: the hub opens a "Gaming Hub" window with a label. Next: live stats (milestone 2).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026. Milestone 2 (live stats) in progress since 8 Nov: the window shows **RAM** and **CPU %**, updated every second. Next: temperatures, GPU frequency, battery and charger, then the fps-cost check.
 
 #### Brief overview:
 
@@ -31,8 +31,11 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 
 `Files:`
 
-* `main.c`: creates the application (`ch.bitminded.GamingHub`), runs GTK's main loop, builds the window when the app is activated
-* `includes/gaming_hub.h`: shared header
+* `main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, starts the once-a-second timer (`hub_tick`)
+* `sources/utils.c`: `hub_struct_init`, sets every field of the state struct to a known value
+* `sources/ram.c`: reads `/proc/meminfo`, shows used / total RAM
+* `sources/cpu.c`: reads `/proc/stat`, shows CPU % from two samples one second apart
+* `includes/gaming_hub.h`: shared header (the `t_hub` struct and every prototype)
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
 
@@ -66,7 +69,7 @@ Each one is usable on its own. Full plan: [`docs/game-dashboard.md`](https://git
 
 - [x] 0. Research (no code): headset battery, MangoHud logging (8 Nov, see `docs/research.md`)
 - [x] 1. Hello window: GtkApplication, main loop, signals, GObject basics (8 Nov)
-- [ ] 2. Live stats from `/proc` and `/sys` + fps-cost check
+- [ ] 2. Live stats from `/proc` and `/sys` + fps-cost check (in progress: timer, RAM, CPU % done 8–9 Nov; next: temperatures, GPU, battery, fps check)
 - [ ] 3. Timer and healthy-gaming features, settings file
 - [ ] 4. Auto-start with GameMode, single instance, `--end`; `make install` (app menu icon) and a guide to hook it to Steam, Heroic, Lutris and emulators
 - [ ] 5. Headset volume and mic with libpulse
@@ -136,6 +139,30 @@ The docs of every function say who owns the returned object ("Return value"):
 | --- | --- | --- |
 | The app (`gtk_application_new`: "the caller takes ownership") | `main` | `g_object_unref(app)` at the end of `main` |
 | The window (`gtk_application_window_new`: "owned by the called function") | GTK's list of windows | GTK, when the window is closed |
-| The label | the window (`gtk_window_set_child` takes its floating reference) | the window, when it is destroyed |
+| The label (milestone 1, before the box) | the window (`gtk_window_set_child` takes its floating reference) | the window, when it is destroyed |
+| The box and the stat labels (milestone 2) | the window owns the box, the box owns its labels (`gtk_box_append` takes the floating reference) | GTK, when the window is destroyed |
+| The state struct `t_hub` (milestone 2) | `main` (a local variable) | nobody: it lives on `main`'s stack, and `main` is inside `g_application_run` for as long as the app runs |
+| Strings from `g_file_get_contents` and `g_strdup_printf` | the caller | `g_free`, on every path (a second pointer walks the text, only the first one is freed) |
 
 Never `free()` a GObject, never unref what you don't own. Each widget is stored as the type I call most on it (`GtkWindow *` for the window, `GtkWidget *` for the label), so casts like `GTK_WINDOW()` are rare.
+
+### Live stats (milestone 2)
+
+**The tick.** `hub_activate` starts a timer with `g_timeout_add_seconds(1, hub_tick, hub)`: the main loop calls `hub_tick` once a second, and `hub_tick` returns `G_SOURCE_CONTINUE` to be called again (`G_SOURCE_REMOVE` would stop it). `hub_activate` also calls `hub_tick` once itself, so the labels are filled at once instead of after one second. Once a second is the fps rule: an interval of 0 would call it nonstop and eat CPU.
+
+**One pointer for everything.** A timer callback gets one `gpointer`, so all widgets and state live in one struct, `t_hub`, and the timer gets a pointer to it:
+
+```
+main: t_hub hub  ──&hub──▶  g_signal_connect(... "activate" ...)  ──▶  hub_activate(user_data)
+                                                                          └─ g_timeout_add_seconds(1, hub_tick, hub) ──▶ hub_tick(user_data) every second
+```
+
+The struct lives in `main`, not in `hub_activate`: `hub_activate` returns right after building the window, so a local there would be gone (dangling pointer) when the first tick comes. `main` stays inside `g_application_run` until the app quits, so its locals live exactly as long as the app. A plain struct comes back from `gpointer` by assignment (`t_hub *hub = user_data;`); a GObject uses its check macro (`GTK_LABEL(...)`), which checks the type at run time.
+
+**Layout.** A window has one child, so that child is a vertical `GtkBox`; each stat is a `GtkLabel` appended to it. `gtk_label_set_text` copies the text, and does nothing (no redraw) when the text hasn't changed: that is the "redraw only what changed" rule for free.
+
+**Reading kernel files.** `/proc` and `/sys` files are text the kernel writes when you read them. `g_file_get_contents` reads one whole file into a new string (`contents`, `length` and the error are out-parameters; `NULL` for the error, because a failure every second must not spam: the label shows `—` instead). Values are found with pointers into that text, no copies: `ft_strnstr` for the key (with its colon, so `Active:` doesn't match `Active(anon):`), jump past the key, `g_ascii_strtoull` for the number. Its `endptr` says where it stopped: if it didn't move, there was no number; it is also where the next number starts.
+
+**RAM** (`ram.c`): used = `MemTotal − MemAvailable`. `MemFree` is wrong for this: Linux fills spare RAM with file cache and drops it when a program needs memory; `MemAvailable` is the kernel's estimate of what a new program (the game) can get without swapping. Values are in KiB, shown in GiB (divide by `1024.0 * 1024.0`, the `.0` makes it a `double` division).
+
+**CPU %** (`cpu.c`): the first line of `/proc/stat` holds counters, in 1/100 s, of time spent by all 8 threads since boot: user, nice, system, idle, iowait, irq, softirq, steal (guest columns skipped: already inside user/nice). A percentage needs two readings: CPU % = 100 × (Δtotal − Δidle) / Δtotal, with total = columns 1–8 and idle = idle + iowait. The struct keeps the previous reading (`prev_total`, `prev_idle`). First tick: nothing to compare with yet, so it stores the reading and shows `CPU -`. If Δtotal is 0 (two calls within 10 ms), it keeps the old text instead of dividing by zero. Check: one `yes > /dev/null` adds about 12.5 % (one thread of 8).
