@@ -10,6 +10,9 @@
 typedef struct s_hub
 {
 	GtkWidget	*ram;
+	GtkWidget	*cpu;
+	guint64		prev_total;
+	guint64		prev_idle;
 }	t_hub;
 
 // *** Functions *** //
