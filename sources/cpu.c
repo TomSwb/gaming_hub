@@ -11,6 +11,11 @@ void	hub_update_cpu(t_hub *hub)
 
 	if (!hub_cpu_sample(&total, &idle))
 		return ;
+	if (hub->prev_total == 0)
+	{
+		hub->prev_total = total;
+		hub->prev_idle = idle;
+	}
 	dtotal = total - hub->prev_total;
 	didle = idle - hub->prev_idle;
 	percent = 100.0 * (dtotal - didle) / dtotal;
