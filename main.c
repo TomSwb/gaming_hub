@@ -27,8 +27,10 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
 	hub->ram = gtk_label_new("");
+	hub->cpu = gtk_label_new("");
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->ram);
+	gtk_box_append(GTK_BOX(box), hub->cpu);
 	gtk_window_set_child(window, box);
 	g_timeout_add_seconds(1, hub_tick, hub);
 	hub_tick(hub);
@@ -38,11 +40,9 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 gboolean	hub_tick(gpointer user_data)
 {
 	t_hub	*hub;
-	guint64	total;
-	guint64	idle;
 
 	hub = user_data;
 	hub_read_ram(GTK_LABEL(hub->ram));
-	hub_cpu_sample(&total, &idle);
+	hub_update_cpu(hub);
 	return (G_SOURCE_CONTINUE);
 }

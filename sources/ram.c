@@ -18,7 +18,7 @@ void	hub_read_ram(GtkLabel *label)
 		g_free(ram_info);
 		return ;
 	}
-	text = g_strdup_printf("Ram %.1f / %.1f GiB",
+	text = g_strdup_printf("RAM %.1f / %.1f GiB",
 			(memtotal - memavailable) / (1024.0 * 1024.0),
 			memtotal / (1024.0 * 1024.0));
 	gtk_label_set_text(label, text);

@@ -1,6 +1,24 @@
 
 #include "gaming_hub.h"
 
+void	hub_update_cpu(t_hub *hub)
+{
+	guint64	total;
+	guint64	idle;
+	guint64	dtotal;
+	guint64	didle;
+	double	percent;
+
+	if (!hub_cpu_sample(&total, &idle))
+		return ;
+	dtotal = total - hub->prev_total;
+	didle = idle - hub->prev_idle;
+	percent = 100.0 * (dtotal - didle) / dtotal;
+	hub->prev_total = total;
+	hub->prev_idle = idle;
+	hub_set_cpu_text(hub, percent);
+}
+
 gboolean	hub_cpu_sample(guint64 *total, guint64 *idle)
 {
 	gchar	*p;
@@ -22,8 +40,6 @@ gboolean	hub_cpu_sample(guint64 *total, guint64 *idle)
 			return (FALSE);
 		}
 	}
-	g_print("Total = %lu\n", *total);
-	g_print("Idle = %lu\n", *idle);
 	g_free(p);
 	return (TRUE);
 }
@@ -43,4 +59,13 @@ gboolean	hub_getting_sample(guint64 *total, guint64 *idle,
 	*cpu_info = end;
 	(*i)++;
 	return (TRUE);
+}
+
+void	hub_set_cpu_text(t_hub *hub, double percent)
+{
+	gchar	*text;
+
+	text = g_strdup_printf("CPU %.1f %%", percent);
+	gtk_label_set_text(GTK_LABEL(hub->cpu), text);
+	g_free(text);
 }
