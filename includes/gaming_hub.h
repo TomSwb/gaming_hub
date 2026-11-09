@@ -35,5 +35,7 @@ gboolean	hub_meminfo_value(const gchar *mem_start, gsize length_file,
 
 // cpu.c
 gboolean	hub_cpu_sample(guint64 *total, guint64 *idle);
+gboolean	hub_getting_sample(guint64 *total, guint64 *idle,
+		gchar *cpu_info, int *i);
 
 #endif
