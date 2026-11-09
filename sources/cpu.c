@@ -15,6 +15,8 @@ void	hub_update_cpu(t_hub *hub)
 	{
 		hub->prev_total = total;
 		hub->prev_idle = idle;
+		gtk_label_set_text(GTK_LABEL(hub->cpu), "CPU -");
+		return ;
 	}
 	dtotal = total - hub->prev_total;
 	didle = idle - hub->prev_idle;
