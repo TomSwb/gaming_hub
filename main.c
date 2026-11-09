@@ -26,6 +26,7 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	label = gtk_label_new("");
 	gtk_window_set_child(window, label);
 	g_timeout_add_seconds(1, hub_tick, label);
+	hub_tick(label);
 	gtk_window_present(window);
 }
 
