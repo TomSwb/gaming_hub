@@ -33,4 +33,7 @@ void		hub_read_ram(GtkLabel *label);
 gboolean	hub_meminfo_value(const gchar *mem_start, gsize length_file,
 		const char *key, guint64 *value);
 
+// cpu.c
+gboolean	hub_cpu_sample(guint64 *total, guint64 *idle);
+
 #endif

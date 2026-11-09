@@ -3,24 +3,26 @@
 
 gboolean	hub_cpu_sample(guint64 *total, guint64 *idle)
 {
-	const char	*p;
-	char		*end;
-	int			i;
-	guint64		sum;
+	gchar	*cpu_info;
+	gsize	length_file;
+	gchar	*end;
+	int		i;
+	guint64	sum;
 
-	p = "/proc/stat";
-	p += 4;
+	if (!g_file_get_contents("/proc/meminfo", &cpu_info, &length_file, NULL))
+		return (FALSE);
+	cpu_info += 4;
 	i = 0;
-	while (i < 9)
+	while (i < 8)
 	{
-		sum += g_ascii_strtoll(p, &end, 10);
-		*total += sum;
-		if (i == 4 || i == 5)
-			*idle += sum;
-		if (end == p)
-			return (FALSE);
-		p = end;
 		sum = 0;
+		sum += g_ascii_strtoll(cpu_info, &end, 10);
+		if (end == cpu_info)
+			return (FALSE);
+		*total += sum;
+		if (i == 3 || i == 4)
+			*idle += sum;
+		cpu_info = end;
 		i++;
 	}
 	return (TRUE);
