@@ -23,7 +23,7 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	window = GTK_WINDOW(gtk_application_window_new(self));
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
-	label = gtk_label_new("Hello World!");
+	label = gtk_label_new("");
 	gtk_window_set_child(window, label);
 	g_timeout_add_seconds(1, hub_tick, label);
 	gtk_window_present(window);
@@ -31,10 +31,6 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 
 gboolean	hub_tick(gpointer user_data)
 {
-	GtkLabel	*label;
-
-	label = GTK_LABEL(user_data);
-	gtk_label_set_text(label, "It's time to game!");
-	hub_read_ram();
+	hub_read_ram(user_data);
 	return (G_SOURCE_CONTINUE);
 }
