@@ -1,12 +1,13 @@
 
 #include "gaming_hub.h"
 
-void	hub_read_ram(void)
+void	hub_read_ram(GtkLabel *label)
 {
 	gchar		*ram_info;
 	gsize		length_file;
 	guint64		memtotal;
 	guint64		memavailable;
+	gchar		*text;
 
 	if (!g_file_get_contents("/proc/meminfo", &ram_info, &length_file, NULL))
 		return ;
@@ -17,7 +18,11 @@ void	hub_read_ram(void)
 		g_free(ram_info);
 		return ;
 	}
-	g_print("%lu|\n", memtotal - memavailable);
+	text = g_strdup_printf("Ram %.1f / %.1f GiB",
+			(memtotal - memavailable) / (1024.0 * 1024.0),
+			memtotal / (1024.0 * 1024.0));
+	gtk_label_set_text(label, text);
+	g_free(text);
 	g_free(ram_info);
 }
 
