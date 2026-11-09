@@ -38,8 +38,11 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 gboolean	hub_tick(gpointer user_data)
 {
 	t_hub	*hub;
+	guint64	total;
+	guint64	idle;
 
 	hub = user_data;
 	hub_read_ram(GTK_LABEL(hub->ram));
+	hub_cpu_sample(&total, &idle);
 	return (G_SOURCE_CONTINUE);
 }
