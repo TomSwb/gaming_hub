@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                            :::::::    :::     :::  :::::   */
+/*   utils.c                                  :+:   :+:  :+:+: :+:+:   :+:    */
+/*                                            +#++:+#+   +#+ +:+ +#+   +#+    */
+/*   By: TomSwb <github.com/TomSwb>           +#+   +#+  +#+     +#+   +#+    */
+/*                                            ########   ###     ###  #####   */
+/*   Created: 2026/11/10 23:07:18 by TomSwb                                   */
+/*   Updated: 2026/11/10 23:07:18 by TomSwb                   bitminded.ch    */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "gaming_hub.h"
 
@@ -29,7 +40,7 @@ void	hub_setting_hub(t_hub *hub)
 	hub->fan_dir = hub_find_dir("/sys/class/hwmon", "name", "thinkpad");
 	hub->gpu_dir = hub_find_gpu();
 	hub_read_number(hub->gpu_dir, "gt_RP0_freq_mhz",
-			&hub->gpu_max);
+		&hub->gpu_max);
 	hub->bat_dir = hub_find_dir("/sys/class/power_supply", "type", "Battery");
 	hub->mains_dir = hub_find_dir("/sys/class/power_supply", "type", "Mains");
 }
