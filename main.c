@@ -25,7 +25,6 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	t_hub		*hub;
 
 	hub = user_data;
-	box = NULL;
 	window = GTK_WINDOW(gtk_application_window_new(self));
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
@@ -48,12 +47,13 @@ void	hub_setting_hub(t_hub *hub)
 
 GtkWidget	*hub_build_box(t_hub *hub)
 {
-	GtkWidget	*box;;
+	GtkWidget	*box;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->ram);
 	gtk_box_append(GTK_BOX(box), hub->cpu);
 	gtk_box_append(GTK_BOX(box), hub->temp);
+	return (box);
 }
 
 gboolean	hub_tick(gpointer user_data)
