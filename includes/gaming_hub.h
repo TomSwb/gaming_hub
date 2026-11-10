@@ -46,8 +46,8 @@ void		hub_set_cpu_text(t_hub *hub, double percent);
 // temp.c
 void		hub_update_temp(t_hub *hub);
 void		hub_set_temp_text(t_hub *hub, guint64 temp);
-void		hub_temp_free(gchar *contents, gchar *path, t_hub *hub,
-		int print_bool);
+void		hub_temp_done(gchar *contents, gchar *path, t_hub *hub,
+		gboolean print_bool);
 
 // hwmon.c
 gchar		*hub_find_hwmon(const char *sensor);

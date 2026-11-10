@@ -10,22 +10,22 @@ void	hub_update_temp(t_hub *hub)
 
 	if (!hub->temp_dir)
 	{
-		hub_temp_free(NULL, NULL, hub, 1);
+		hub_temp_done(NULL, NULL, hub, TRUE);
 		return ;
 	}
 	path = g_build_filename(hub->temp_dir, "temp1_input", NULL);
 	if (!g_file_get_contents(path, &contents, NULL, NULL))
 	{
-		hub_temp_free(NULL, path, hub, 1);
+		hub_temp_done(NULL, path, hub, TRUE);
 		return ;
 	}
 	value = g_ascii_strtoull(contents, &end, 10);
 	if (end == contents)
 	{
-		hub_temp_free(contents, path, hub, 1);
+		hub_temp_done(contents, path, hub, TRUE);
 		return ;
 	}
-	hub_temp_free(contents, path, hub, 0);
+	hub_temp_done(contents, path, hub, FALSE);
 	hub_set_temp_text(hub, value);
 }
 
@@ -38,7 +38,8 @@ void	hub_set_temp_text(t_hub *hub, guint64 temp)
 	g_free(text);
 }
 
-void	hub_temp_free(gchar *contents, gchar *path, t_hub *hub, int print_bool)
+void	hub_temp_done(gchar *contents, gchar *path, t_hub *hub,
+		gboolean print_bool)
 {
 	g_free(contents);
 	g_free(path);
