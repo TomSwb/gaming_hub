@@ -14,7 +14,7 @@ void	hub_update_gpu(t_hub *hub)
 		gtk_label_set_text(GTK_LABEL(hub->gpu), "GPU - MHz");
 		return ;
 	}
-	text = g_strdup_printf("GPU %lu MHz", gpu);
+	text = g_strdup_printf("GPU %" G_GUINT64_FORMAT " MHz", gpu);
 	gtk_label_set_text(GTK_LABEL(hub->gpu), text);
 	g_free(text);
 }
