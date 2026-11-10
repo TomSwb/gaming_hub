@@ -51,6 +51,7 @@ gboolean	hub_cpu_sample(guint64 *total, guint64 *idle);
 gboolean	hub_getting_sample(guint64 *total, guint64 *idle,
 		gchar **cpu_info, int *i);
 void		hub_set_cpu_text(t_hub *hub, double percent);
+gboolean	hub_cpu_error_path(t_hub *hub, guint64 *total, guint64 *idle);
 
 // temp_fan.c
 void		hub_update_temp_fan(t_hub *hub);

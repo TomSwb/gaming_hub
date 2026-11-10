@@ -29,9 +29,9 @@ gboolean	hub_temp_fan_error_path(t_hub *hub, guint64 *temp, guint64 *rpm)
 	if (!temp_ok || !fan_ok)
 	{
 		if (!temp_ok && !fan_ok)
-			text = g_strdup_printf("TEMP - °C, FAN - rpm");
+			text = g_strdup_printf("TEMP ... °C, FAN ... rpm");
 		else if (!temp_ok)
-			text = g_strdup_printf("TEMP - °C, FAN %" G_GUINT64_FORMAT " rpm",
+			text = g_strdup_printf("TEMP ... °C, FAN %" G_GUINT64_FORMAT " rpm",
 					*rpm);
 		else
 			text = g_strdup_printf("TEMP %.0f °C, FAN - rpm", *temp / 1000.0);
