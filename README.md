@@ -22,6 +22,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Power | Balanced ↔ Performance switch, charger warning | power-profiles D-Bus API (tuned-ppd), UPower |
 | Session log | Game (detected, then confirmed by me at the end), start/end, play time, average fps, max temperature → CSV | Own code, `~/.local/share/gaming_hub/` |
 | Game notes | Per-game card: settings that worked, "where I was / what's next" | Text files per game |
+| Library | All my games (Steam, GOG/Epic through Heroic, emulators) in one list, started from the hub | Steam `appmanifest_*.acf`, Heroic's library JSON, ROM folders |
 | Temp graph | Temperature over the whole session | GtkDrawingArea + Cairo |
 | FPS (stretch) | Frame rate and frame time | MangoHud's log, if it can be read live |
 
@@ -79,8 +80,9 @@ Each one is usable on its own. Full plan: [`docs/game-dashboard.md`](https://git
 - [ ] 5. Headset volume and mic with libpulse
 - [ ] 6. Power profile and charger over D-Bus
 - [ ] 7. Session log, game notes, stop ritual, monthly review
-- [ ] 8. Temperature graph with Cairo
-- [ ] 9. FPS from MangoHud (stretch)
+- [ ] 8. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub
+- [ ] 9. Temperature graph with Cairo
+- [ ] 10. FPS from MangoHud (stretch)
 
 ## Resources
 
