@@ -18,7 +18,8 @@ GTK_LIBS := ${shell pkg-config --libs gtk4}
 SRCS = main.c \
 	sources/utils.c \
 	sources/ram.c \
-	sources/cpu.c
+	sources/cpu.c \
+	sources/hwmon.c
 
 OBJS = ${SRCS:.c=.o}
 
