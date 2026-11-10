@@ -15,7 +15,7 @@ gchar	*hub_find_hwmon(const char *sensor)
 	{
 		folder = hub_find_hwmon_loop(sensor, dir, entry);
 		if (folder)
-			return (folder);
+			return (g_dir_close(dir), folder);
 		entry = g_dir_read_name(dir);
 	}
 	g_dir_close(dir);
@@ -37,7 +37,6 @@ gchar	*hub_find_hwmon_loop(const char *sensor, GDir *dir, const gchar *entry)
 		{
 			g_free(name_path);
 			g_free(file);
-			g_dir_close(dir);
 			return (folder);
 		}
 		g_free(file);
