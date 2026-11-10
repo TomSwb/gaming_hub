@@ -68,5 +68,7 @@ gboolean	hub_read_number(const gchar *dir, const gchar *file,
 		g_free(path);
 		return (FALSE);
 	}
+	g_free(contents);
+	g_free(path);
 	return (TRUE);
 }
