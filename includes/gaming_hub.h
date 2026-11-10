@@ -62,7 +62,8 @@ void		hub_update_gpu(t_hub *hub);
 // battery.c
 void		hub_update_battery(t_hub *hub);
 gboolean	hub_battery_error_path(t_hub *hub, guint64 *capacity,
-			guint64 *plugged, gchar *charging);
+			gchar *charging);
+gchar 		*hub_battery_set_charging(t_hub *hub);
 
 // sysfs.c
 gchar		*hub_find_dir(const char *class_dir, const char *file,
