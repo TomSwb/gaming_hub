@@ -13,7 +13,7 @@ gchar	*hub_find_dir(const char *class_dir, const char *file, const char *value)
 	entry = g_dir_read_name(dir);
 	while (entry)
 	{
-		folder = hub_find_dir_loop(value, entry, file, class_dir);
+		folder = hub_find_dir_loop(class_dir, file, value, entry);
 		if (folder)
 			return (g_dir_close(dir), folder);
 		entry = g_dir_read_name(dir);
@@ -22,16 +22,16 @@ gchar	*hub_find_dir(const char *class_dir, const char *file, const char *value)
 	return (NULL);
 }
 
-gchar	*hub_find_dir_loop(const char *value, const gchar *entry,
-		const char *file_name, const char *class_dir)
+gchar	*hub_find_dir_loop(const char *class_dir, const char *file,
+			const char *value, const gchar *entry)
 {
 	gchar	*name_path;
-	gchar	*file;
+	gchar	*content;
 	gchar	*folder;
 
 	folder = g_build_filename(class_dir, entry, NULL);
-	name_path = g_build_filename(folder, file_name, NULL);
-	if (g_file_get_contents(name_path, &file, NULL, NULL))
+	name_path = g_build_filename(folder, file, NULL);
+	if (g_file_get_contents(name_path, &content, NULL, NULL))
 	{
 		g_strchomp(file);
 		if (g_strcmp0(file, value) == 0)

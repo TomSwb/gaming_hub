@@ -49,4 +49,6 @@ void	hub_free_hub(t_hub *hub)
 	g_free(hub->temp_dir);
 	g_free(hub->fan_dir);
 	g_free(hub->gpu_dir);
+	g_free(hub->bat_dir);
+	g_free(hub->mains_dir);
 }

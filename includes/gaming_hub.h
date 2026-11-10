@@ -61,11 +61,11 @@ void		hub_update_gpu(t_hub *hub);
 // sysfs.c
 gchar	*hub_find_dir(const char *class_dir, const char *file,
 		const char *value);
-gchar	*hub_find_dir_loop(const char *value, const gchar *entry,
-		const char *file_name, const char *class_dir);
+gchar	*hub_find_dir_loop(const char *class_dir, const char *file,
+		const char *value, const gchar *entry);
 gchar		*hub_find_gpu(void);
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
-				guint64 *value);
+		guint64 *value);
 
 
 #endif
