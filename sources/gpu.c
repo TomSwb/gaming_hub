@@ -11,10 +11,10 @@ void	hub_update_gpu(t_hub *hub)
 	gpu_ok = hub_read_number(hub->gpu_dir, "gt_act_freq_mhz", &gpu);
 	if (!gpu_ok)
 	{
-		gtk_label_set_text(GTK_LABEL(hub->gpu), "GPU - Mhz");
+		gtk_label_set_text(GTK_LABEL(hub->gpu), "GPU - MHz");
 		return ;
 	}
-	text = g_strdup_printf("GPU %lu Mhz", gpu);
+	text = g_strdup_printf("GPU %lu MHz", gpu);
 	gtk_label_set_text(GTK_LABEL(hub->gpu), text);
 	g_free(text);
 }
