@@ -41,6 +41,7 @@ void	hub_setting_hub(t_hub *hub)
 	hub->ram = gtk_label_new("");
 	hub->cpu = gtk_label_new("");
 	hub->temp = gtk_label_new("");
+	hub->gpu = gtk_label_new("");
 	hub->temp_dir = hub_find_hwmon("coretemp");
 	hub->fan_dir = hub_find_hwmon("thinkpad");
 }
@@ -53,6 +54,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->ram);
 	gtk_box_append(GTK_BOX(box), hub->cpu);
 	gtk_box_append(GTK_BOX(box), hub->temp);
+	gtk_box_append(GTK_BOX(box), hub->gpu);
 	return (box);
 }
 
