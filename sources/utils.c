@@ -12,10 +12,13 @@ void	hub_struct_init(t_hub *hub)
 	hub->temp_dir = NULL;
 	hub->fan_dir = NULL;
 	hub->gpu_dir = NULL;
+	hub->gpu_max = 0;
 }
 
 void	hub_setting_hub(t_hub *hub)
 {
+	gboolean	gpu_max_ok;
+
 	hub->ram = gtk_label_new("");
 	hub->cpu = gtk_label_new("");
 	hub->temp = gtk_label_new("");
@@ -23,6 +26,10 @@ void	hub_setting_hub(t_hub *hub)
 	hub->temp_dir = hub_find_hwmon("coretemp");
 	hub->fan_dir = hub_find_hwmon("thinkpad");
 	hub->gpu_dir = hub_find_gpu();
+	gpu_max_ok = hub_read_number(hub->gpu_dir, "gt_RP0_freq_mhz",
+			&hub->gpu_max);
+	if (!gpu_max_ok)
+		hub->gpu_max = 0;
 }
 
 GtkWidget	*hub_build_box(t_hub *hub)
