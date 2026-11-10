@@ -10,19 +10,23 @@ LIBFT = ${LIBFT_DIR}/libft.a
 INC_DIR = ./includes
 INCLUDES = -I${INC_DIR} -I${LIBFT_DIR}
 HEADERS = ${INC_DIR}/gaming_hub.h \
+		${INC_DIR}/structs.h \
+		${INC_DIR}/computer.h \
 		${LIBFT_DIR}/libft.h
 
 GTK_CFLAGS := ${shell pkg-config --cflags gtk4}
 GTK_LIBS := ${shell pkg-config --libs gtk4}
 
-SRCS = main.c \
+COMPUTER = sources/computer/ram.c \
+	sources/computer/cpu.c \
+	sources/computer/temp_fan.c \
+	sources/computer/gpu.c \
+	sources/computer/battery.c \
+	sources/computer/sysfs.c
+
+SRCS = sources/main.c \
 	sources/utils.c \
-	sources/ram.c \
-	sources/cpu.c \
-	sources/temp_fan.c \
-	sources/gpu.c \
-	sources/battery.c \
-	sources/sysfs.c
+	${COMPUTER}
 
 OBJS = ${SRCS:.c=.o}
 
