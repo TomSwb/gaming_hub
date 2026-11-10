@@ -4,23 +4,26 @@
 void	hub_read_ram(GtkLabel *label)
 {
 	gchar		*ram_info;
-	gsize		length_file;
 	guint64		memtotal;
 	guint64		memavailable;
+	gsize		length_file;
 	gchar		*text;
 
+	text = NULL;
+	memtotal = 0;
+	memavailable = 0;
 	if (!g_file_get_contents("/proc/meminfo", &ram_info, &length_file, NULL))
 		return ;
 	if (!hub_meminfo_value(ram_info, length_file, "MemTotal:", &memtotal)
-		|| !hub_meminfo_value(ram_info, length_file, "MemAvailable:",
-			&memavailable))
+		|| !hub_meminfo_value(ram_info, length_file,
+			"MemAvailable:", &memavailable))
+		text = g_strdup("RAM ... GiB");
+	else
 	{
-		g_free(ram_info);
-		return ;
+		text = g_strdup_printf("RAM %.1f / %.1f GiB",
+				(memtotal - memavailable) / (1024.0 * 1024.0),
+				memtotal / (1024.0 * 1024.0));
 	}
-	text = g_strdup_printf("RAM %.1f / %.1f GiB",
-			(memtotal - memavailable) / (1024.0 * 1024.0),
-			memtotal / (1024.0 * 1024.0));
 	gtk_label_set_text(label, text);
 	g_free(text);
 	g_free(ram_info);

@@ -9,15 +9,8 @@ void	hub_update_cpu(t_hub *hub)
 	guint64	didle;
 	double	percent;
 
-	if (!hub_cpu_sample(&total, &idle))
-		return ;
-	if (hub->prev_total == 0)
-	{
-		hub->prev_total = total;
-		hub->prev_idle = idle;
-		gtk_label_set_text(GTK_LABEL(hub->cpu), "CPU -");
-		return ;
-	}
+	if (!hub_cpu_error_path(hub, &total, &idle))
+		return;
 	dtotal = total - hub->prev_total;
 	if (dtotal == 0)
 		return ;
@@ -77,4 +70,21 @@ void	hub_set_cpu_text(t_hub *hub, double percent)
 	text = g_strdup_printf("CPU %.1f %%", percent);
 	gtk_label_set_text(GTK_LABEL(hub->cpu), text);
 	g_free(text);
+}
+
+gboolean	hub_cpu_error_path(t_hub *hub, guint64 *total, guint64 *idle)
+{
+	if (!hub_cpu_sample(total, idle))
+	{
+		gtk_label_set_text(GTK_LABEL(hub->cpu), "CPU ...");
+		return (FALSE);
+	}
+	if (hub->prev_total == 0)
+	{
+		hub->prev_total = *total;
+		hub->prev_idle = *idle;
+		gtk_label_set_text(GTK_LABEL(hub->cpu), "CPU ...");
+		return (FALSE);
+	}
+	return (TRUE);
 }
