@@ -10,6 +10,10 @@ It is also a learning project: event-driven programming in C with GTK4, GLib/GOb
 
 > 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Next: milestone 3, the timer and healthy-gaming features.
 
+**Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
+
+<img src="docs/historic/first_working_prototype.png" alt="Gaming Hub window showing RAM, CPU, temperature and fan, GPU frequency and battery" width="300">
+
 #### Brief overview:
 
 The window is snapped to one half of the laptop screen (Super+Left/Right), next to the YouTube Music app on the other half.
@@ -42,6 +46,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 * `sources/battery.c`: battery % and status, with the charger as fallback
 * `includes/gaming_hub.h`: shared header (the `t_hub` struct and every prototype)
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
+* `docs/historic/`: screenshots of the hub at each stage (`first_working_prototype.png`, milestone 2)
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
 
 `Additionally contains:`
