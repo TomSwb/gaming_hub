@@ -13,6 +13,8 @@ int	main(int ac, char **av)
 	g_signal_connect(app, "activate", G_CALLBACK(hub_activate), &hub);
 	status = g_application_run(G_APPLICATION(app), ac, av);
 	g_object_unref(app);
+	g_free(hub.temp_dir);
+	g_free(hub.fan_dir);
 	return (status);
 }
 
@@ -21,7 +23,6 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	GtkWindow	*window;
 	GtkWidget	*box;
 	t_hub		*hub;
-	gchar		*test;
 
 	hub = user_data;
 	window = GTK_WINDOW(gtk_application_window_new(self));
@@ -29,14 +30,8 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	gtk_window_set_default_size(window, 480, 720);
 	hub->ram = gtk_label_new("");
 	hub->cpu = gtk_label_new("");
-
-	hub->coretemp = hub_find_hwmon("coretemp");
-	g_print("%s\n", hub->coretemp);
-	hub->fan = hub_find_hwmon("thinkpad");
-	g_print("%s\n", hub->fan);
-	g_free(hub->coretemp);
-	g_free(hub->fan);
-
+	hub->temp_dir = hub_find_hwmon("coretemp");
+	hub->fan_dir = hub_find_hwmon("thinkpad");
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->ram);
 	gtk_box_append(GTK_BOX(box), hub->cpu);
