@@ -12,7 +12,7 @@ It is also a learning project: event-driven programming in C with GTK4, GLib/GOb
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
-<img src="docs/historic/first_working_prototype.png" alt="Gaming Hub window showing RAM, CPU, temperature and fan, GPU frequency and battery" width="300">
+<img src="assets/historic/first_working_prototype.png" alt="Gaming Hub window showing RAM, CPU, temperature and fan, GPU frequency and battery" width="300">
 
 #### Brief overview:
 
