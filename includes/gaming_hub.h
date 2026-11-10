@@ -41,8 +41,8 @@ gboolean	hub_getting_sample(guint64 *total, guint64 *idle,
 void		hub_set_cpu_text(t_hub *hub, double percent);
 
 // hwmon.c
-gchar		*hub_find_hwmon(const char *name);
-gchar		*hub_find_hwmon_loop(const char *sensor, GDir *dir, const gchar *entry);
+gchar		*hub_find_hwmon(const char *sensor);
+gchar		*hub_find_hwmon_loop(const char *sensor, const gchar *entry);
 
 
 #endif

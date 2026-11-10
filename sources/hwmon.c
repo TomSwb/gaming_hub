@@ -13,7 +13,7 @@ gchar	*hub_find_hwmon(const char *sensor)
 	entry = g_dir_read_name(dir);
 	while (entry)
 	{
-		folder = hub_find_hwmon_loop(sensor, dir, entry);
+		folder = hub_find_hwmon_loop(sensor, entry);
 		if (folder)
 			return (g_dir_close(dir), folder);
 		entry = g_dir_read_name(dir);
@@ -22,7 +22,7 @@ gchar	*hub_find_hwmon(const char *sensor)
 	return (NULL);
 }
 
-gchar	*hub_find_hwmon_loop(const char *sensor, GDir *dir, const gchar *entry)
+gchar	*hub_find_hwmon_loop(const char *sensor, const gchar *entry)
 {
 	gchar	*name_path;
 	gchar	*file;
