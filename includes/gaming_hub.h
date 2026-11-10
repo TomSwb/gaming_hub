@@ -13,6 +13,7 @@ typedef struct s_hub
 	GtkWidget	*cpu;
 	GtkWidget	*temp;
 	GtkWidget	*gpu;
+	GtkWidget	*bat;
 	guint64		prev_total;
 	guint64		prev_idle;
 	gchar		*temp_dir;
@@ -58,6 +59,11 @@ gboolean	hub_temp_fan_error_path(t_hub *hub, guint64 *temp, guint64 *rpm);
 // gpu.c
 void		hub_update_gpu(t_hub *hub);
 
+// battery.c
+void		hub_update_battery(t_hub *hub);
+gboolean	hub_battery_error_path(t_hub *hub, guint64 *capacity,
+			guint64 *plugged, gchar *charging);
+
 // sysfs.c
 gchar		*hub_find_dir(const char *class_dir, const char *file,
 		const char *value);
@@ -66,6 +72,7 @@ gchar		*hub_find_dir_loop(const char *class_dir, const char *file,
 gchar		*hub_find_gpu(void);
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
 		guint64 *value);
+gchar	*hub_read_text(const gchar *dir, const gchar *file);
 
 
 #endif

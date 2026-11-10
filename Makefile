@@ -21,6 +21,7 @@ SRCS = main.c \
 	sources/cpu.c \
 	sources/temp_fan.c \
 	sources/gpu.c \
+	sources/battery.c \
 	sources/sysfs.c
 
 OBJS = ${SRCS:.c=.o}

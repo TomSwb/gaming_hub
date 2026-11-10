@@ -7,6 +7,7 @@ void	hub_struct_init(t_hub *hub)
 	hub->cpu = NULL;
 	hub->temp = NULL;
 	hub->gpu = NULL;
+	hub->bat = NULL;
 	hub->prev_total = 0;
 	hub->prev_idle = 0;
 	hub->temp_dir = NULL;
@@ -23,6 +24,7 @@ void	hub_setting_hub(t_hub *hub)
 	hub->cpu = gtk_label_new("");
 	hub->temp = gtk_label_new("");
 	hub->gpu = gtk_label_new("");
+	hub->bat = gtk_label_new("");
 	hub->temp_dir = hub_find_dir("/sys/class/hwmon", "name", "coretemp");
 	hub->fan_dir = hub_find_dir("/sys/class/hwmon", "name", "thinkpad");
 	hub->gpu_dir = hub_find_gpu();
@@ -41,6 +43,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->cpu);
 	gtk_box_append(GTK_BOX(box), hub->temp);
 	gtk_box_append(GTK_BOX(box), hub->gpu);
+	gtk_box_append(GTK_BOX(box), hub->bat);
 	return (box);
 }
 

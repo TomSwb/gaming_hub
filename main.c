@@ -44,5 +44,6 @@ gboolean	hub_tick(gpointer user_data)
 	hub_update_cpu(hub);
 	hub_update_temp_fan(hub);
 	hub_update_gpu(hub);
+	hub_update_battery(hub);
 	return (G_SOURCE_CONTINUE);
 }
