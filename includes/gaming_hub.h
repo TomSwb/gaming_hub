@@ -72,7 +72,7 @@ gchar		*hub_find_dir_loop(const char *class_dir, const char *file,
 gchar		*hub_find_gpu(void);
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
 		guint64 *value);
-gchar	*hub_read_text(const gchar *dir, const gchar *file);
+gchar		*hub_read_text(const gchar *dir, const gchar *file);
 
 
 #endif

@@ -12,14 +12,12 @@ void	hub_update_battery(t_hub *hub)
 	plugged = 0;
 	text = NULL;
 	charging = hub_read_text(hub->bat_dir, "status");
+	if (!charging)
+		charging = "...";
 	if (!hub_battery_error_path(hub, &capacity, &plugged, charging))
 		return ;
-	if (g_strcmp0(charging, "Charging") == 0)
-		text = g_strdup_printf("BAT %" G_GUINT64_FORMAT " %%, %s", capacity, charging);
-	else if (g_strcmp0(charging, "Discharging") == 0)
-		text = g_strdup_printf("BAT %" G_GUINT64_FORMAT " %%, %s", capacity, charging);
-	else
-		text = g_strdup_printf("BAT %" G_GUINT64_FORMAT " %%, %s", capacity, charging);
+	text = g_strdup_printf("BAT %" G_GUINT64_FORMAT " %%, %s",
+			capacity, charging);
 	gtk_label_set_text(GTK_LABEL(hub->bat), text);
 	g_free(charging);
 	g_free(text);
@@ -36,10 +34,10 @@ gboolean	hub_battery_error_path(t_hub *hub, guint64 *capacity,
 	plugged_ok = hub_read_number(hub->mains_dir, "online", plugged);
 	if (!capacity_ok || !plugged_ok)
 	{
-		if (!plugged_ok)
-			text = g_strdup_printf("BAT %" G_GUINT64_FORMAT " %%, -", *capacity);
+		if (!capacity_ok)
+			text = g_strdup_printf("BAT - %%, %s", charging);
 		else
-			text = g_strdup_printf("BAT - %%, ...");
+			text = g_strdup_printf("BAT %" G_GUINT64_FORMAT " %%, %s", *capacity, charging);
 		gtk_label_set_text(GTK_LABEL(hub->bat), text);
 		g_free(charging);
 		g_free(text);
