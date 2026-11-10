@@ -32,9 +32,10 @@ gboolean	hub_temp_fan_error_path(t_hub *hub, guint64 *temp, guint64 *rpm)
 			text = g_strdup_printf("TEMP ... °C, FAN ... rpm");
 		else if (!temp_ok)
 			text = g_strdup_printf("TEMP ... °C, FAN %" G_GUINT64_FORMAT
-			" rpm", *rpm);
+					" rpm", *rpm);
 		else
-			text = g_strdup_printf("TEMP %.0f °C, FAN ... rpm", *temp / 1000.0);
+			text = g_strdup_printf("TEMP %.0f °C, FAN ... rpm",
+					*temp / 1000.0);
 		gtk_label_set_text(GTK_LABEL(hub->temp), text);
 		g_free(text);
 		return (FALSE);

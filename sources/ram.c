@@ -50,7 +50,7 @@ gchar	*hub_ram_set_text(guint64 memtotal, guint64 memavailable)
 	gchar	*text;
 
 	text = g_strdup_printf("RAM %.1f / %.1f GiB",
-				(memtotal - memavailable) / (1024.0 * 1024.0),
-				memtotal / (1024.0 * 1024.0));
+			(memtotal - memavailable) / (1024.0 * 1024.0),
+			memtotal / (1024.0 * 1024.0));
 	return (text);
 }
