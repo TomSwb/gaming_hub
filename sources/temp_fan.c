@@ -21,7 +21,8 @@ void	hub_set_temp_fan_text(t_hub *hub, guint64 temp, guint64 rpm)
 {
 	gchar	*text;
 
-	text = g_strdup_printf("TEMP %.1f °C, FAN %d rpm", temp / 1000.0, (int)rpm);
+	text = g_strdup_printf("TEMP %.1f °C, FAN %" G_GUINT64_FORMAT " rpm",
+			temp / 1000.0, rpm);
 	gtk_label_set_text(GTK_LABEL(hub->temp), text);
 	g_free(text);
 }
