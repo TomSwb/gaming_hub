@@ -19,7 +19,7 @@ SRCS = main.c \
 	sources/utils.c \
 	sources/ram.c \
 	sources/cpu.c \
-	sources/temp.c \
+	sources/temp_fan.c \
 	sources/hwmon.c
 
 OBJS = ${SRCS:.c=.o}

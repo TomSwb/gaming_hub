@@ -50,6 +50,6 @@ gboolean	hub_tick(gpointer user_data)
 	hub = user_data;
 	hub_read_ram(GTK_LABEL(hub->ram));
 	hub_update_cpu(hub);
-	hub_update_temp(hub);
+	hub_update_temp_fan(hub);
 	return (G_SOURCE_CONTINUE);
 }
