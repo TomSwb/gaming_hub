@@ -44,6 +44,7 @@ void		hub_free_hub(t_hub *hub);
 void		hub_read_ram(GtkLabel *label);
 gboolean	hub_meminfo_value(const gchar *mem_start, gsize length_file,
 		const char *key, guint64 *value);
+gchar		*hub_ram_set_text(guint64 memtotal, guint64 memavailable);
 
 // cpu.c
 void		hub_update_cpu(t_hub *hub);
