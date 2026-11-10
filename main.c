@@ -44,6 +44,7 @@ void	hub_setting_hub(t_hub *hub)
 	hub->gpu = gtk_label_new("");
 	hub->temp_dir = hub_find_hwmon("coretemp");
 	hub->fan_dir = hub_find_hwmon("thinkpad");
+	hub->gpu_dir = hub_find_gpu();
 }
 
 GtkWidget	*hub_build_box(t_hub *hub)
@@ -66,5 +67,6 @@ gboolean	hub_tick(gpointer user_data)
 	hub_read_ram(GTK_LABEL(hub->ram));
 	hub_update_cpu(hub);
 	hub_update_temp_fan(hub);
+	hub_update_gpu(hub);
 	return (G_SOURCE_CONTINUE);
 }

@@ -3,14 +3,18 @@
 
 void	hub_update_gpu(t_hub *hub)
 {
-	gchar	*gpu;
-	gchar	*text;
+	gboolean	gpu_ok;
+	guint64		gpu;
+	gchar		*text;
 
-	gpu = hub_find_gpu();
-	if (!gpu)
+	gpu = 0;
+	gpu_ok = hub_read_number(hub->gpu_dir, "gt_act_freq_mhz", &gpu);
+	if (!gpu_ok)
+	{
+		gtk_label_set_text(GTK_LABEL(hub->gpu), "GPU - Mhz");
 		return ;
-	text = g_strdup_printf("GPU %s Mhz", gpu);
+	}
+	text = g_strdup_printf("GPU %lu Mhz", gpu);
 	gtk_label_set_text(GTK_LABEL(hub->gpu), text);
-	g_free(gpu);
 	g_free(text);
 }

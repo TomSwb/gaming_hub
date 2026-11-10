@@ -17,6 +17,7 @@ typedef struct s_hub
 	guint64		prev_idle;
 	gchar		*temp_dir;
 	gchar		*fan_dir;
+	gchar		*gpu_dir;
 }	t_hub;
 
 // *** Functions *** //
