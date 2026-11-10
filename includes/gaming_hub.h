@@ -45,6 +45,7 @@ void		hub_set_cpu_text(t_hub *hub, double percent);
 
 // temp_fan.c
 void		hub_update_temp_fan(t_hub *hub);
+gboolean	hub_temp_fan_error_path(t_hub *hub, guint64 *temp, guint64 *rpm);
 
 // hwmon.c
 gchar		*hub_find_hwmon(const char *sensor);
