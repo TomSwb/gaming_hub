@@ -12,6 +12,7 @@ typedef struct s_hub
 	GtkWidget	*ram;
 	GtkWidget	*cpu;
 	GtkWidget	*temp;
+	GtkWidget	*gpu;
 	guint64		prev_total;
 	guint64		prev_idle;
 	gchar		*temp_dir;
@@ -49,9 +50,13 @@ void		hub_set_cpu_text(t_hub *hub, double percent);
 void		hub_update_temp_fan(t_hub *hub);
 gboolean	hub_temp_fan_error_path(t_hub *hub, guint64 *temp, guint64 *rpm);
 
-// hwmon.c
+// gpu.c
+void		hub_update_gpu(t_hub *hub);
+
+// sysfs.c
 gchar		*hub_find_hwmon(const char *sensor);
 gchar		*hub_find_hwmon_loop(const char *sensor, const gchar *entry);
+gchar		*hub_find_gpu(void);
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
 				guint64 *value);
 

@@ -46,6 +46,34 @@ gchar	*hub_find_hwmon_loop(const char *sensor, const gchar *entry)
 	return (NULL);
 }
 
+gchar	*hub_find_gpu(void)
+{
+	GDir		*dir;
+	const gchar	*entry;
+	gchar		*folder;
+	gchar	*name_path;
+
+	dir = g_dir_open("/sys/class/drm", 0, NULL);
+	if (!dir)
+		return (NULL);
+	entry = g_dir_read_name(dir);
+	while (entry)
+	{
+		folder = g_build_filename("/sys/class/drm", entry, NULL);
+		name_path = g_build_filename(folder, "gt_act_freq_mhz", NULL);
+		if (g_file_test(name_path, G_FILE_TEST_EXISTS))
+		{
+			g_free(name_path);
+			return (g_dir_close(dir), folder);
+		}
+		g_free(folder);
+		g_free(name_path);
+		entry = g_dir_read_name(dir);
+	}
+	g_dir_close(dir);
+	return (NULL);
+}
+
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
 				guint64 *value)
 {
