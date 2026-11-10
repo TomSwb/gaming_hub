@@ -109,7 +109,7 @@ gchar	*hub_read_text(const gchar *dir, const gchar *file)
 	gchar	*content;
 
 	if (!dir)
-		return (FALSE);
+		return (NULL);
 	path = g_build_filename(dir, file, NULL);
 	if (g_file_get_contents(path, &content, NULL, NULL))
 	{
@@ -117,7 +117,6 @@ gchar	*hub_read_text(const gchar *dir, const gchar *file)
 		g_free(path);
 		return (content);
 	}
-	g_free(content);
 	g_free(path);
 	return (NULL);
 }
