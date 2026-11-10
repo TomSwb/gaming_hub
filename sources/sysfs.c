@@ -51,7 +51,7 @@ gchar	*hub_find_gpu(void)
 	GDir		*dir;
 	const gchar	*entry;
 	gchar		*folder;
-	gchar	*name_path;
+	gchar		*name_path;
 
 	dir = g_dir_open("/sys/class/drm", 0, NULL);
 	if (!dir)

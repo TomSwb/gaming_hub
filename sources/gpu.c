@@ -14,7 +14,11 @@ void	hub_update_gpu(t_hub *hub)
 		gtk_label_set_text(GTK_LABEL(hub->gpu), "GPU - MHz");
 		return ;
 	}
-	text = g_strdup_printf("GPU %" G_GUINT64_FORMAT " / 1300 MHz", gpu);
+	if (hub->gpu_max == 0)
+		text = g_strdup_printf("GPU %" G_GUINT64_FORMAT " / - MHz", gpu);
+	else
+		text = g_strdup_printf("GPU %" G_GUINT64_FORMAT " / %"
+				G_GUINT64_FORMAT " MHz", gpu, hub->gpu_max);
 	gtk_label_set_text(GTK_LABEL(hub->gpu), text);
 	g_free(text);
 }

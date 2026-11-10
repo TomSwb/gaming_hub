@@ -18,6 +18,7 @@ typedef struct s_hub
 	gchar		*temp_dir;
 	gchar		*fan_dir;
 	gchar		*gpu_dir;
+	guint64		gpu_max;
 }	t_hub;
 
 // *** Functions *** //
