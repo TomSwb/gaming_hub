@@ -11,6 +11,7 @@ typedef struct s_hub
 {
 	GtkWidget	*ram;
 	GtkWidget	*cpu;
+	GtkWidget	*temp;
 	guint64		prev_total;
 	guint64		prev_idle;
 	gchar		*temp_dir;
@@ -41,6 +42,12 @@ gboolean	hub_cpu_sample(guint64 *total, guint64 *idle);
 gboolean	hub_getting_sample(guint64 *total, guint64 *idle,
 		gchar **cpu_info, int *i);
 void		hub_set_cpu_text(t_hub *hub, double percent);
+
+// temp.c
+void		hub_update_temp(t_hub *hub);
+void		hub_set_temp_text(t_hub *hub, guint64 temp);
+void		hub_temp_free(gchar *contents, gchar *path, t_hub *hub,
+		int print_bool);
 
 // hwmon.c
 gchar		*hub_find_hwmon(const char *sensor);

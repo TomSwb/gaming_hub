@@ -30,11 +30,13 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	gtk_window_set_default_size(window, 480, 720);
 	hub->ram = gtk_label_new("");
 	hub->cpu = gtk_label_new("");
+	hub->temp = gtk_label_new("");
 	hub->temp_dir = hub_find_hwmon("coretemp");
 	hub->fan_dir = hub_find_hwmon("thinkpad");
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->ram);
 	gtk_box_append(GTK_BOX(box), hub->cpu);
+	gtk_box_append(GTK_BOX(box), hub->temp);
 	gtk_window_set_child(window, box);
 	g_timeout_add_seconds(1, hub_tick, hub);
 	hub_tick(hub);
@@ -48,5 +50,6 @@ gboolean	hub_tick(gpointer user_data)
 	hub = user_data;
 	hub_read_ram(GTK_LABEL(hub->ram));
 	hub_update_cpu(hub);
+	hub_update_temp(hub);
 	return (G_SOURCE_CONTINUE);
 }
