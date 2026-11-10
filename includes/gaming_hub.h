@@ -13,6 +13,8 @@ typedef struct s_hub
 	GtkWidget	*cpu;
 	guint64		prev_total;
 	guint64		prev_idle;
+	gchar		*coretemp;
+	gchar		*fan;
 }	t_hub;
 
 // *** Functions *** //

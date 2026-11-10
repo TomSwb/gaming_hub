@@ -7,4 +7,6 @@ void	hub_struct_init(t_hub *hub)
 	hub->cpu = NULL;
 	hub->prev_total = 0;
 	hub->prev_idle = 0;
+	hub->coretemp = NULL;
+	hub->fan = NULL;
 }
