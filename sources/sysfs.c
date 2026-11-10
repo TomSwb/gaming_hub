@@ -1,7 +1,7 @@
 
 #include "gaming_hub.h"
 
-gchar	*hub_find_hwmon(const char *sensor)
+gchar	*hub_find_dir(const char *class_dir, const char *file, const char *value)
 {
 	GDir		*dir;
 	const gchar	*entry;
@@ -13,7 +13,7 @@ gchar	*hub_find_hwmon(const char *sensor)
 	entry = g_dir_read_name(dir);
 	while (entry)
 	{
-		folder = hub_find_hwmon_loop(sensor, entry);
+		folder = hub_find_dir_loop(value, entry, file, class_dir);
 		if (folder)
 			return (g_dir_close(dir), folder);
 		entry = g_dir_read_name(dir);
@@ -22,18 +22,19 @@ gchar	*hub_find_hwmon(const char *sensor)
 	return (NULL);
 }
 
-gchar	*hub_find_hwmon_loop(const char *sensor, const gchar *entry)
+gchar	*hub_find_dir_loop(const char *value, const gchar *entry,
+		const char *file_name, const char *class_dir)
 {
 	gchar	*name_path;
 	gchar	*file;
 	gchar	*folder;
 
-	folder = g_build_filename("/sys/class/hwmon", entry, NULL);
-	name_path = g_build_filename(folder, "name", NULL);
+	folder = g_build_filename(class_dir, entry, NULL);
+	name_path = g_build_filename(folder, file_name, NULL);
 	if (g_file_get_contents(name_path, &file, NULL, NULL))
 	{
 		g_strchomp(file);
-		if (g_strcmp0(file, sensor) == 0)
+		if (g_strcmp0(file, value) == 0)
 		{
 			g_free(name_path);
 			g_free(file);
