@@ -13,17 +13,16 @@ void	hub_read_ram(GtkLabel *label)
 	memtotal = 0;
 	memavailable = 0;
 	if (!g_file_get_contents("/proc/meminfo", &ram_info, &length_file, NULL))
+	{
+		gtk_label_set_text(label, "RAM ... GiB");
 		return ;
+	}
 	if (!hub_meminfo_value(ram_info, length_file, "MemTotal:", &memtotal)
 		|| !hub_meminfo_value(ram_info, length_file,
 			"MemAvailable:", &memavailable))
 		text = g_strdup("RAM ... GiB");
 	else
-	{
-		text = g_strdup_printf("RAM %.1f / %.1f GiB",
-				(memtotal - memavailable) / (1024.0 * 1024.0),
-				memtotal / (1024.0 * 1024.0));
-	}
+		text = hub_ram_set_text(memtotal, memavailable);
 	gtk_label_set_text(label, text);
 	g_free(text);
 	g_free(ram_info);
@@ -44,4 +43,14 @@ gboolean	hub_meminfo_value(const gchar *mem_start, gsize length_file,
 	if (mem_a_end == mem_start)
 		return (FALSE);
 	return (TRUE);
+}
+
+gchar	*hub_ram_set_text(guint64 memtotal, guint64 memavailable)
+{
+	gchar	*text;
+
+	text = g_strdup_printf("RAM %.1f / %.1f GiB",
+				(memtotal - memavailable) / (1024.0 * 1024.0),
+				memtotal / (1024.0 * 1024.0));
+	return (text);
 }

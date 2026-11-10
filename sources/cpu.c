@@ -10,7 +10,7 @@ void	hub_update_cpu(t_hub *hub)
 	double	percent;
 
 	if (!hub_cpu_error_path(hub, &total, &idle))
-		return;
+		return ;
 	dtotal = total - hub->prev_total;
 	if (dtotal == 0)
 		return ;

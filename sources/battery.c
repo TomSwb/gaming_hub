@@ -33,7 +33,7 @@ gboolean	hub_battery_error_path(t_hub *hub, guint64 *capacity,
 	capacity_ok = hub_read_number(hub->bat_dir, "capacity", capacity);
 	if (!capacity_ok)
 	{
-		text = g_strdup_printf("BAT - %%, %s", charging);
+		text = g_strdup_printf("BAT ... %%, %s", charging);
 		gtk_label_set_text(GTK_LABEL(hub->bat), text);
 		g_free(text);
 		return (FALSE);
