@@ -47,29 +47,26 @@ gchar	*hub_find_hwmon_loop(const char *sensor, const gchar *entry)
 }
 
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
-				guint64 *value, t_hub *hub)
+				guint64 *value)
 {
 	gchar	*path;
 	gchar	*contents;
 	gchar	*end;
 
-	if (dir)
-	{
-		hub_temp_fan_done(NULL, NULL, hub, TRUE);
+	if (!dir)
 		return (FALSE);
-	}
-	path = g_build_filename(hub->temp_dir, file, NULL);
+	path = g_build_filename(dir, file, NULL);
 	if (!g_file_get_contents(path, &contents, NULL, NULL))
 	{
-		hub_temp_fan_done(NULL, path, hub, TRUE);
+		g_free(path);
 		return (FALSE);
 	}
 	*value = g_ascii_strtoull(contents, &end, 10);
 	if (end == contents)
 	{
-		hub_temp_fan_done(contents, path, hub, TRUE);
+		g_free(contents);
+		g_free(path);
 		return (FALSE);
 	}
-	hub_temp_fan_done(contents, path, hub, FALSE);
 	return (TRUE);
 }

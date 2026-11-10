@@ -46,14 +46,12 @@ void		hub_set_cpu_text(t_hub *hub, double percent);
 // temp_fan.c
 void		hub_update_temp_fan(t_hub *hub);
 void		hub_set_temp_fan_text(t_hub *hub, guint64 temp, guint64 rpm);
-void		hub_temp_fan_done(gchar *contents, gchar *path, t_hub *hub,
-		gboolean print_bool);
 
 // hwmon.c
 gchar		*hub_find_hwmon(const char *sensor);
 gchar		*hub_find_hwmon_loop(const char *sensor, const gchar *entry);
 gboolean	hub_read_number(const gchar *dir, const gchar *file,
-				guint64 *value, t_hub *hub);
+				guint64 *value);
 
 
 #endif
