@@ -1,13 +1,14 @@
 
 #include "gaming_hub.h"
 
-gchar	*hub_find_dir(const char *class_dir, const char *file, const char *value)
+gchar	*hub_find_dir(const char *class_dir, const char *file,
+		const char *value)
 {
 	GDir		*dir;
 	const gchar	*entry;
 	gchar		*folder;
 
-	dir = g_dir_open("/sys/class/hwmon", 0, NULL);
+	dir = g_dir_open(class_dir, 0, NULL);
 	if (!dir)
 		return (NULL);
 	entry = g_dir_read_name(dir);
@@ -33,14 +34,14 @@ gchar	*hub_find_dir_loop(const char *class_dir, const char *file,
 	name_path = g_build_filename(folder, file, NULL);
 	if (g_file_get_contents(name_path, &content, NULL, NULL))
 	{
-		g_strchomp(file);
-		if (g_strcmp0(file, value) == 0)
+		g_strchomp(content);
+		if (g_strcmp0(content, value) == 0)
 		{
 			g_free(name_path);
-			g_free(file);
+			g_free(content);
 			return (folder);
 		}
-		g_free(file);
+		g_free(content);
 	}
 	g_free(name_path);
 	g_free(folder);
