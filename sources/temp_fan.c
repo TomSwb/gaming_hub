@@ -25,7 +25,7 @@ gboolean	hub_temp_fan_error_path(t_hub *hub, guint64 *temp, guint64 *rpm)
 	gchar		*text;
 
 	temp_ok = hub_read_number(hub->temp_dir, "temp1_input", temp);
-	fan_ok = !hub_read_number(hub->fan_dir, "fan1_input", rpm);
+	fan_ok = hub_read_number(hub->fan_dir, "fan1_input", rpm);
 	if (!temp_ok || !fan_ok)
 	{
 		if (!temp_ok && !fan_ok)
