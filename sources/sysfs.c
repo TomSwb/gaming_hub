@@ -102,3 +102,22 @@ gboolean	hub_read_number(const gchar *dir, const gchar *file,
 	g_free(path);
 	return (TRUE);
 }
+
+gchar	*hub_read_text(const gchar *dir, const gchar *file)
+{
+	gchar	*path;
+	gchar	*content;
+
+	if (!dir)
+		return (FALSE);
+	path = g_build_filename(dir, file, NULL);
+	if (g_file_get_contents(path, &content, NULL, NULL))
+	{
+		g_strchomp(content);
+		g_free(path);
+		return (content);
+	}
+	g_free(content);
+	g_free(path);
+	return (NULL);
+}
