@@ -25,22 +25,33 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	t_hub		*hub;
 
 	hub = user_data;
+	box = NULL;
 	window = GTK_WINDOW(gtk_application_window_new(self));
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
+	setting_labels(hub);
+	appending_boxes(&box, hub);
+	gtk_window_set_child(window, box);
+	g_timeout_add_seconds(1, hub_tick, hub);
+	hub_tick(hub);
+	gtk_window_present(window);
+}
+
+void	setting_labels(t_hub *hub)
+{
 	hub->ram = gtk_label_new("");
 	hub->cpu = gtk_label_new("");
 	hub->temp = gtk_label_new("");
 	hub->temp_dir = hub_find_hwmon("coretemp");
 	hub->fan_dir = hub_find_hwmon("thinkpad");
-	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-	gtk_box_append(GTK_BOX(box), hub->ram);
-	gtk_box_append(GTK_BOX(box), hub->cpu);
-	gtk_box_append(GTK_BOX(box), hub->temp);
-	gtk_window_set_child(window, box);
-	g_timeout_add_seconds(1, hub_tick, hub);
-	hub_tick(hub);
-	gtk_window_present(window);
+}
+
+void	appending_boxes(GtkWidget **box, t_hub *hub)
+{
+	*box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
+	gtk_box_append(GTK_BOX(*box), hub->ram);
+	gtk_box_append(GTK_BOX(*box), hub->cpu);
+	gtk_box_append(GTK_BOX(*box), hub->temp);
 }
 
 gboolean	hub_tick(gpointer user_data)

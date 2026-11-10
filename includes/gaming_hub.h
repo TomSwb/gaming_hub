@@ -24,6 +24,8 @@ typedef struct s_hub
 
 // main.c
 void		hub_activate(GtkApplication *self, gpointer user_data);
+void		setting_labels(t_hub *hub);
+void		appending_boxes(GtkWidget **box, t_hub *hub);
 gboolean	hub_tick(gpointer user_data);
 
 // sources/
