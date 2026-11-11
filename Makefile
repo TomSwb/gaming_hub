@@ -21,9 +21,8 @@ LIBFT = ${LIBFT_DIR}/libft.a
 INC_DIR = ./includes
 INCLUDES = -I${INC_DIR} -I${LIBFT_DIR}
 HEADERS = ${INC_DIR}/gaming_hub.h \
-		${INC_DIR}/structs.h \
-		${INC_DIR}/computer.h \
-		${INC_DIR}/defaults.h \
+		${INC_DIR}/structs.h ${INC_DIR}/defaults.h \
+		${INC_DIR}/computer.h ${INC_DIR}/timer.h \
 		${LIBFT_DIR}/libft.h
 
 GTK_CFLAGS := ${shell pkg-config --cflags gtk4}
@@ -36,9 +35,11 @@ COMPUTER = sources/computer/ram.c \
 	sources/computer/battery.c \
 	sources/computer/sysfs.c
 
+TIMER = sources/timer/settings.c
+
 SRCS = sources/main.c \
 	sources/utils.c \
-	${COMPUTER}
+	${COMPUTER} ${TIMER}
 
 OBJS = ${SRCS:.c=.o}
 
