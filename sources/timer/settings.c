@@ -25,6 +25,12 @@ void	hub_load_settings(t_hub *hub)
 	key_file = g_key_file_new();
 	if (!hub_key_file_error(key_file, path, error))
 		return ;
+	if (!hub_read_setting(key_file, "timer",
+			"session_minutes", &hub->setting.session))
+	{
+		g_free(path);
+		return ;
+	}
 	g_key_file_free(key_file);
 	g_print("%s\n", path);
 	g_free(path);
@@ -41,5 +47,25 @@ gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path, GError *error)
 		g_free(path);
 		return (FALSE);
 	}
+	return (TRUE);
+}
+
+gboolean	hub_read_setting(GKeyFile *key_file, const gchar *group,
+			const gchar *key, gint *value)
+{
+	GError	*error;
+	gint	temp;
+
+	error = NULL;
+	temp = g_key_file_get_integer(key_file, group, key, &error);
+	if (error)
+	{
+		if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+			g_printerr("Can't read file: %s %s\n", key, error->message);
+		g_error_free(error);
+		g_key_file_free(key_file);
+		return (FALSE);
+	}
+	*value = temp;
 	return (TRUE);
 }
