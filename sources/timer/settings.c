@@ -60,10 +60,15 @@ gboolean	hub_read_setting(GKeyFile *key_file, const gchar *group,
 	temp = g_key_file_get_integer(key_file, group, key, &error);
 	if (error)
 	{
-		if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+		if (!g_error_matches(error, G_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
+			|| g_error_matches(error, G_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
 			g_printerr("Can't read file: %s %s\n", key, error->message);
-		g_error_free(error);
+		{
+			*value = temp;
+			return (TRUE);
+		}
 		g_key_file_free(key_file);
+		g_error_free(error);
 		return (FALSE);
 	}
 	*value = temp;
