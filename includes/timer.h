@@ -22,6 +22,6 @@
 // sources/timer/
 
 // settings.c
-void hub_load_settings(t_hub *hub);
+void	hub_load_settings(t_hub *hub);
 
 #endif
