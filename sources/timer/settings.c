@@ -81,7 +81,7 @@ void	hub_read_setting(GKeyFile *key_file, const gchar *group,
 			g_printerr("Can't read file: %s %s - using default\n",
 				key, error->message);
 	}
-	if (temp <= 0)
+	else if (temp <= 0)
 		g_printerr("Value must be higher than 0: %s - using default\n", key);
-	g_error_free(error);
+	g_clear_error(&error);
 }
