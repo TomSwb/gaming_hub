@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                            :::::::    :::     :::  :::::   */
-/*   defautls.h                               :+:   :+:  :+:+: :+:+:   :+:    */
+/*   defaults.h                               :+:   :+:  :+:+: :+:+:   :+:    */
 /*                                            +#++:+#+   +#+ +:+ +#+   +#+    */
 /*   By: TomSwb <github.com/TomSwb>           +#+   +#+  +#+     +#+   +#+    */
 /*                                            ########   ###     ###  #####   */
@@ -15,10 +15,10 @@
 
 // === Settings === //
 
-# define APP_DEF_SESSION 120
-# define APP_DEF_WIND_DOWN 10
-# define APP_DEF_BREAK_EVERY 50
-# define APP_DEF_EYE_CUE_EVERY 20
-# define APP_DEF_EYE_CUE_LENGTH 20
+# define HUB_DEF_SESSION 120
+# define HUB_DEF_WIND_DOWN 10
+# define HUB_DEF_BREAK_MIN 50
+# define HUB_DEF_EYE_CUE_MIN 20
+# define HUB_DEF_EYE_CUE_LENGTH 20
 
 #endif
