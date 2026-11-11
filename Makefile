@@ -35,10 +35,12 @@ COMPUTER = sources/computer/ram.c \
 	sources/computer/battery.c \
 	sources/computer/sysfs.c
 
-TIMER = sources/timer/settings.c
+TIMER = sources/timer/settings.c \
+	sources/timer/session.c
 
 SRCS = sources/main.c \
 	sources/utils.c \
+	sources/inits.c \
 	${COMPUTER} ${TIMER}
 
 OBJS = ${SRCS:.c=.o}

@@ -28,4 +28,7 @@ void		hub_set_timer_settings(GKeyFile *key_file, t_hub *hub);
 void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 				const gchar *key, gint *value);
 
+// session.c
+void		hub_setting_timer(t_hub *hub);
+
 #endif
