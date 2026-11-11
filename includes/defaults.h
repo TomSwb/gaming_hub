@@ -20,5 +20,8 @@
 # define HUB_DEF_BREAK_MIN 50
 # define HUB_DEF_EYE_CUE_MIN 20
 # define HUB_DEF_EYE_CUE_LENGTH 20
+# define HUB_SESSION_LOWEST 5
+# define HUB_SESSION_HIGHEST 360
+# define HUB_SESSION_STEP 5
 
 #endif
