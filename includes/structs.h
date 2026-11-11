@@ -19,7 +19,16 @@
 
 // === Struct === //
 
-typedef struct s_hub
+typedef struct s_settings
+{
+	gint	session;
+	gint	wind_down;
+	gint	break_min;
+	gint	eye_min;
+	gint	eye_sec;
+}	t_settings;
+
+typedef struct s_computer
 {
 	GtkWidget	*ram;
 	GtkWidget	*cpu;
@@ -34,6 +43,12 @@ typedef struct s_hub
 	guint64		gpu_max;
 	gchar		*bat_dir;
 	gchar		*mains_dir;
+}	t_computer;
+
+typedef struct s_hub
+{
+	t_computer	*computer;
+	t_settings	*setting;
 }	t_hub;
 
 #endif
