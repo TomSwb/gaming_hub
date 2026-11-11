@@ -32,6 +32,7 @@ void	hub_struct_init(t_hub *hub)
 	hub->setting.break_min = HUB_DEF_BREAK_MIN;
 	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
 	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
+	hub->timer.session = NULL;
 }
 
 void	hub_setting_hub(t_hub *hub)
@@ -53,6 +54,7 @@ void	hub_setting_hub(t_hub *hub)
 			"type", "Battery");
 	hub->computer.mains_dir = hub_find_dir("/sys/class/power_supply",
 			"type", "Mains");
+	hub->timer.session = gtk_label_new("");
 }
 
 GtkWidget	*hub_build_box(t_hub *hub)
@@ -65,6 +67,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->computer.temp);
 	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
 	gtk_box_append(GTK_BOX(box), hub->computer.bat);
+	gtk_box_append(GTK_BOX(box), hub->timer.session);
 	return (box);
 }
 
