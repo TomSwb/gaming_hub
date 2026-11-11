@@ -42,7 +42,7 @@ gboolean	hub_battery_error_path(t_hub *hub, guint64 *capacity,
 	gchar		*text;
 
 	capacity_ok = hub_read_number(hub->computer.bat_dir,
-				"capacity", capacity);
+			"capacity", capacity);
 	if (!capacity_ok)
 	{
 		text = g_strdup_printf("BAT ... %%, %s", charging);

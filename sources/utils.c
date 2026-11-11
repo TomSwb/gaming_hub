@@ -36,13 +36,17 @@ void	hub_setting_hub(t_hub *hub)
 	hub->computer.temp = gtk_label_new("");
 	hub->computer.gpu = gtk_label_new("");
 	hub->computer.bat = gtk_label_new("");
-	hub->computer.temp_dir = hub_find_dir("/sys/class/hwmon", "name", "coretemp");
-	hub->computer.fan_dir = hub_find_dir("/sys/class/hwmon", "name", "thinkpad");
+	hub->computer.temp_dir = hub_find_dir("/sys/class/hwmon",
+			"name", "coretemp");
+	hub->computer.fan_dir = hub_find_dir("/sys/class/hwmon",
+			"name", "thinkpad");
 	hub->computer.gpu_dir = hub_find_gpu();
 	hub_read_number(hub->computer.gpu_dir, "gt_RP0_freq_mhz",
 		&hub->computer.gpu_max);
-	hub->computer.bat_dir = hub_find_dir("/sys/class/power_supply", "type", "Battery");
-	hub->computer.mains_dir = hub_find_dir("/sys/class/power_supply", "type", "Mains");
+	hub->computer.bat_dir = hub_find_dir("/sys/class/power_supply",
+			"type", "Battery");
+	hub->computer.mains_dir = hub_find_dir("/sys/class/power_supply",
+			"type", "Mains");
 }
 
 GtkWidget	*hub_build_box(t_hub *hub)
