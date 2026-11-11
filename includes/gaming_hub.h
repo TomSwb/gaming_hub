@@ -18,6 +18,7 @@
 # include "libft.h"
 # include "structs.h"
 # include "computer.h"
+# include "defaults.h"
 
 // === Functions === //
 
