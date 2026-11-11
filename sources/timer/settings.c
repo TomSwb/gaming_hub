@@ -25,7 +25,7 @@ void	hub_load_settings(t_hub *hub)
 	key_file = g_key_file_new();
 	if (!hub_key_file_error(key_file, path, error))
 		return ;
-	if (!hub_read_setting(key_file, "timer",
+	if (!hub_read_settings(key_file, "timer",
 			"session_minutes", &hub->setting.session))
 	{
 		g_free(path);
@@ -50,24 +50,23 @@ gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path, GError *error)
 	return (TRUE);
 }
 
-gboolean	hub_read_setting(GKeyFile *key_file, const gchar *group,
+gboolean	hub_read_settings(GKeyFile *key_file, const gchar *group,
 			const gchar *key, gint *value)
 {
-	GError	*error;
-	gint	temp;
+	GError		*error;
+	gint		temp;
+	gboolean	missing;
 
 	error = NULL;
 	temp = g_key_file_get_integer(key_file, group, key, &error);
+	missing = g_error_matches(error, G_KEY_FILE_ERROR,
+				G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
+			|| g_error_matches(error, G_KEY_FILE_ERROR,
+				G_KEY_FILE_ERROR_KEY_NOT_FOUND);
 	if (error)
 	{
-		if (!g_error_matches(error, G_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
-			|| g_error_matches(error, G_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+		if (!missing)
 			g_printerr("Can't read file: %s %s\n", key, error->message);
-		{
-			*value = temp;
-			return (TRUE);
-		}
-		g_key_file_free(key_file);
 		g_error_free(error);
 		return (FALSE);
 	}

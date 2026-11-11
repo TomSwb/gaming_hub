@@ -24,7 +24,7 @@
 // settings.c
 void		hub_load_settings(t_hub *hub);
 gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path, GError *error);
-gboolean	hub_read_setting(GKeyFile *key_file, const gchar *group,
+gboolean	hub_read_settings(GKeyFile *key_file, const gchar *group,
 				const gchar *key, gint *value);
 
 #endif
