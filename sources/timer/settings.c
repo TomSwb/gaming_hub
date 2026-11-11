@@ -21,7 +21,7 @@ void	hub_load_settings(t_hub *hub)
 			"gaming_hub", "settings.ini", NULL);
 	key_file = g_key_file_new();
 	if (hub_key_file_error(key_file, path))
-		hub_set_settings(key_file, hub);
+		hub_set_timer_settings(key_file, hub);
 	g_key_file_free(key_file);
 	g_free(path);
 }
@@ -42,7 +42,7 @@ gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path)
 	return (TRUE);
 }
 
-void	hub_set_settings(GKeyFile *key_file, t_hub *hub)
+void	hub_set_timer_settings(GKeyFile *key_file, t_hub *hub)
 {
 	hub_read_setting(key_file, "timer",
 		"session_minutes", &hub->setting.session);
