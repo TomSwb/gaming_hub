@@ -54,7 +54,10 @@ void	hub_setting_hub(t_hub *hub)
 			"type", "Battery");
 	hub->computer.mains_dir = hub_find_dir("/sys/class/power_supply",
 			"type", "Mains");
-	hub->timer.session = gtk_label_new("");
+	hub->timer.session = gtk_spin_button_new_with_range(HUB_SESSION_LOWEST,
+			HUB_SESSION_HIGHEST, HUB_SESSION_STEP);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.session),
+			hub->setting.session);
 }
 
 GtkWidget	*hub_build_box(t_hub *hub)
