@@ -30,5 +30,6 @@ void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 
 // session.c
 void		hub_setting_timer(t_hub *hub);
+void		hub_start_clicked(GtkButton *self, gpointer user_data);
 
 #endif

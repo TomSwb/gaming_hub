@@ -49,6 +49,7 @@ typedef struct s_timer
 {
 	GtkWidget	*session;
 	GtkWidget	*start;
+	gint		planned;
 }	t_timer;
 
 typedef struct s_hub
