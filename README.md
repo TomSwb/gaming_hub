@@ -36,8 +36,8 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 
 `Files:`
 
-* `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, loads the settings, starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
-* `sources/utils.c`: the state struct's life: `hub_struct_init` (every field to a known value, the settings to their defaults), `hub_setting_hub` (labels + finding the sensor folders, once), `hub_build_box` (the window's layout), `hub_free_hub` (frees what the struct owns)
+* `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
+* `sources/utils.c`: the state struct's life: `hub_struct_init` (every field to a known value, the settings to their defaults), `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, once), `hub_build_box` (the window's layout), `hub_free_hub` (frees what the struct owns)
 * `sources/computer/`: the live stats (milestone 2)
   * `sysfs.c`: shared readers for `/sys`: `hub_find_dir` (finds a device folder by the content of one of its files, e.g. hwmon `name` = `coretemp`), `hub_find_gpu` (the DRM card that has `gt_act_freq_mhz`), `hub_read_number` and `hub_read_text` (one value from a one-value file)
   * `ram.c`: reads `/proc/meminfo`, shows used / total RAM
@@ -46,7 +46,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `gpu.c`: GPU frequency (actual / maximum), from `/sys/class/drm`
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
-  * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_settings`, `hub_key_file_error` (loads the file, reports a broken one), `hub_set_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
+  * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples) and a `t_settings` (timer values), both by value
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
@@ -181,7 +181,7 @@ The docs of every function say who owns the returned object ("Return value"):
 | Fixed texts (`"CPU ..."`) passed to `gtk_label_set_text` | nobody (string literals) | never freed: the label copies the text |
 | `t_computer` and `t_settings` inside `t_hub` (milestone 3 restructure) | `t_hub` (they are fields, not pointers) | nobody: they are part of `t_hub`'s memory. A pointer field here would point nowhere until something allocated it |
 | The config folder path from `g_get_user_config_dir()` | GLib (borrowed, `const`) | never freed or changed: GLib keeps it for the whole program |
-| A `GKeyFile` (`g_key_file_new`) | `hub_load_settings` | `g_key_file_free`, once, at the bottom of `hub_load_settings` (the helpers only borrow it) |
+| A `GKeyFile` (`g_key_file_new`) | `hub_load_timer_settings` | `g_key_file_free`, once, at the bottom of `hub_load_timer_settings` (the helpers only borrow it) |
 | A `GError` | whoever passed `&error`, once GLib has set it | `g_error_free`, or `g_clear_error(&error)`, which also accepts a `NULL` error. Must be `NULL` before it is passed again |
 
 Never `free()` a GObject, never unref what you don't own. Each widget is stored as the type I call most on it (`GtkWindow *` for the window, `GtkWidget *` for the label), so casts like `GTK_WINDOW()` are rare.
@@ -248,4 +248,4 @@ The GPU has no `name` file, and its connectors (`card1-eDP-1`, `card1-HDMI-A-1`,
 | Not a number (`=abc`) | `G_KEY_FILE_ERROR_INVALID_VALUE` | `Can't read file: <key> <reason> - using default` |
 | A number ≤ 0 | none (GLib accepts it) | `Value must be higher than 0: <key> - using default` (a break every 0 minutes would fire every second) |
 
-**One exit, frees at the bottom.** `hub_load_settings` never returns early: build the path, create the key file, read the keys only if loading worked, then free the key file and the path. Every path through the function reaches the same two frees. The helpers borrow the key file and never free it; each one frees only its own `GError`.
+**One exit, frees at the bottom.** `hub_load_timer_settings` never returns early: build the path, create the key file, read the keys only if loading worked, then free the key file and the path. Every path through the function reaches the same two frees. The helpers borrow the key file and never free it; each one frees only its own `GError`.
