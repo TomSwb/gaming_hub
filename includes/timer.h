@@ -22,6 +22,7 @@
 // sources/timer/
 
 // settings.c
-void	hub_load_settings(t_hub *hub);
+void		hub_load_settings(t_hub *hub);
+gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path, GError *error);
 
 #endif
