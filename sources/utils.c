@@ -36,6 +36,7 @@ void	hub_struct_init(t_hub *hub)
 
 void	hub_setting_hub(t_hub *hub)
 {
+	hub_load_timer_settings(hub);
 	hub->computer.ram = gtk_label_new("");
 	hub->computer.cpu = gtk_label_new("");
 	hub->computer.temp = gtk_label_new("");
@@ -52,7 +53,6 @@ void	hub_setting_hub(t_hub *hub)
 			"type", "Battery");
 	hub->computer.mains_dir = hub_find_dir("/sys/class/power_supply",
 			"type", "Mains");
-	hub_load_timer_settings(hub);
 }
 
 GtkWidget	*hub_build_box(t_hub *hub)

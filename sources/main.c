@@ -43,7 +43,6 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	gtk_window_set_child(window, box);
 	g_timeout_add_seconds(1, hub_tick, hub);
 	hub_tick(hub);
-	hub_load_settings(hub);
 	gtk_window_present(window);
 }
 
