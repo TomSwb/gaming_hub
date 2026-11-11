@@ -12,7 +12,7 @@
 
 #include "gaming_hub.h"
 
-void	hub_load_settings(t_hub *hub)
+void	hub_load_timer_settings(t_hub *hub)
 {
 	gchar		*path;
 	GKeyFile	*key_file;
