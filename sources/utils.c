@@ -59,11 +59,11 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	GtkWidget	*box;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-	gtk_box_HUBend(GTK_BOX(box), hub->computer.ram);
-	gtk_box_HUBend(GTK_BOX(box), hub->computer.cpu);
-	gtk_box_HUBend(GTK_BOX(box), hub->computer.temp);
-	gtk_box_HUBend(GTK_BOX(box), hub->computer.gpu);
-	gtk_box_HUBend(GTK_BOX(box), hub->computer.bat);
+	gtk_box_append(GTK_BOX(box), hub->computer.ram);
+	gtk_box_append(GTK_BOX(box), hub->computer.cpu);
+	gtk_box_append(GTK_BOX(box), hub->computer.temp);
+	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
+	gtk_box_append(GTK_BOX(box), hub->computer.bat);
 	return (box);
 }
 
