@@ -15,18 +15,14 @@
 void	hub_load_settings(t_hub *hub)
 {
 	gchar		*path;
-	GError		*error;
 	GKeyFile	*key_file;
 
 	(void)hub;
-	error = NULL;
 	path = g_build_filename(g_get_user_config_dir(),
 				"gaming_hub", "settings.ini", NULL);
 	key_file = g_key_file_new();
-	if (!hub_key_file_error(key_file, path))
-
-	if (!hub_read_setting(key_file, "timer",
-			"session_minutes", &hub->setting.session))
+	if (hub_key_file_error(key_file, path))
+		hub_set_setttings(key_file, hub);
 	g_key_file_free(key_file);
 	g_print("%s\n", path);
 	g_free(path);
@@ -47,7 +43,21 @@ gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path)
 	return (TRUE);
 }
 
-gboolean	hub_read_setting(GKeyFile *key_file, const gchar *group,
+void	hub_set_setttings(GKeyFile *key_file, t_hub *hub)
+{
+	hub_read_setting(key_file, "timer",
+		"session_minutes", &hub->setting.session);
+	hub_read_setting(key_file, "timer",
+		"wind_down_minutes", &hub->setting.session);
+	hub_read_setting(key_file, "timer",
+		"break_every_minutes", &hub->setting.session);
+	hub_read_setting(key_file, "timer",
+		"eye_every_minutes", &hub->setting.session);
+	hub_read_setting(key_file, "timer",
+		"eye_seconds", &hub->setting.session);
+}
+
+void	hub_read_setting(GKeyFile *key_file, const gchar *group,
 			const gchar *key, gint *value)
 {
 	GError		*error;
@@ -65,8 +75,7 @@ gboolean	hub_read_setting(GKeyFile *key_file, const gchar *group,
 		if (!missing)
 			g_printerr("Can't read file: %s %s\n", key, error->message);
 		g_error_free(error);
-		return (FALSE);
+		return ;
 	}
 	*value = temp;
-	return (TRUE);
 }
