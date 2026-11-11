@@ -45,10 +45,16 @@ typedef struct s_computer
 	gchar		*mains_dir;
 }	t_computer;
 
+typedef struct s_timer
+{
+	GtkWidget	*session;
+}	t_timer;
+
 typedef struct s_hub
 {
 	t_computer	computer;
 	t_settings	setting;
+	t_timer		timer;
 }	t_hub;
 
 #endif
