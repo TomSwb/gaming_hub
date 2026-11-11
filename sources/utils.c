@@ -27,6 +27,11 @@ void	hub_struct_init(t_hub *hub)
 	hub->computer.gpu_max = 0;
 	hub->computer.bat_dir = NULL;
 	hub->computer.mains_dir = NULL;
+	hub->setting.session = APP_DEF_SESSION;
+	hub->setting.wind_down = APP_DEF_WIND_DOWN;
+	hub->setting.break_min = APP_DEF_BREAK_EVERY;
+	hub->setting.eye_min = APP_DEF_EYE_CUE_EVERY;
+	hub->setting.eye_sec = APP_DEF_EYE_CUE_LENGTH;
 }
 
 void	hub_setting_hub(t_hub *hub)
