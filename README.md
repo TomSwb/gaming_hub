@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (step 1, the settings file, done 11 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–2, settings file and session plan, done 11 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -37,7 +37,8 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 `Files:`
 
 * `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
-* `sources/utils.c`: the state struct's life: `hub_struct_init` (every field to a known value, the settings to their defaults), `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, once), `hub_build_box` (the window's layout), `hub_free_hub` (frees what the struct owns)
+* `sources/inits.c`: `hub_struct_init` sets every field to a known value: `hub_computer_init` (stats) and `hub_timer_init` (the settings to their defaults, the timer widgets to `NULL`)
+* `sources/utils.c`: `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, then the timer widgets, once), `hub_build_box` (the window's layout), `hub_free_hub` (frees what the struct owns)
 * `sources/computer/`: the live stats (milestone 2)
   * `sysfs.c`: shared readers for `/sys`: `hub_find_dir` (finds a device folder by the content of one of its files, e.g. hwmon `name` = `coretemp`), `hub_find_gpu` (the DRM card that has `gt_act_freq_mhz`), `hub_read_number` and `hub_read_text` (one value from a one-value file)
   * `ram.c`: reads `/proc/meminfo`, shows used / total RAM
@@ -47,8 +48,9 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
+  * `session.c`: the session plan: `hub_setting_timer` (minutes field + Start button), `hub_start_clicked` (Start's callback)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
-* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples) and a `t_settings` (timer values), both by value
+* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`: prototypes of `sources/computer/` and `sources/timer/`
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
@@ -236,7 +238,7 @@ The GPU has no `name` file, and its connectors (`card1-eDP-1`, `card1-HDMI-A-1`,
 
 **Format.** A GLib key file (INI style): `[timer]` is the group, `key=value` lines, `#` comments. `GKeyFile` reads it: `g_key_file_new` → `g_key_file_load_from_file` (flags `G_KEY_FILE_NONE`: read only, nothing kept for writing back) → `g_key_file_get_integer` per key → `g_key_file_free`.
 
-**Defaults first.** `hub_struct_init` sets every value from `defaults.h` (`HUB_DEF_SESSION` 120, `HUB_DEF_WIND_DOWN` 10, `HUB_DEF_BREAK_MIN` 50, `HUB_DEF_EYE_CUE_MIN` 20, `HUB_DEF_EYE_CUE_LENGTH` 20). The file can only replace a value, one key at a time; a read that fails leaves the default untouched. Test values on 11 Nov: the file's `break_every_minutes=45` replaced the default 50.
+**Defaults first.** `hub_timer_init` sets every value from `defaults.h` (`HUB_DEF_SESSION` 120, `HUB_DEF_WIND_DOWN` 10, `HUB_DEF_BREAK_MIN` 50, `HUB_DEF_EYE_CUE_MIN` 20, `HUB_DEF_EYE_CUE_LENGTH` 20). The file can only replace a value, one key at a time; a read that fails leaves the default untouched. Test values on 11 Nov: the file's `break_every_minutes=45` replaced the default 50.
 
 **`GError`.** The last argument `&error` (a `GError *` set to `NULL` first) is how GLib says *why* something failed: a domain (which library), a code (which error) and a `message`. `g_error_matches(error, domain, code)` checks both at once and returns `FALSE` for a `NULL` error. Once set, the error is the caller's: `g_error_free`, or `g_clear_error(&error)`, which also handles `NULL`. `g_key_file_get_integer` returns 0 on failure, and 0 could be a real value, so the error is checked, not the number.
 
@@ -249,3 +251,9 @@ The GPU has no `name` file, and its connectors (`card1-eDP-1`, `card1-HDMI-A-1`,
 | A number ≤ 0 | none (GLib accepts it) | `Value must be higher than 0: <key> - using default` (a break every 0 minutes would fire every second) |
 
 **One exit, frees at the bottom.** `hub_load_timer_settings` never returns early: build the path, create the key file, read the keys only if loading worked, then free the key file and the path. Every path through the function reaches the same two frees. The helpers borrow the key file and never free it; each one frees only its own `GError`.
+
+### Session plan (milestone 3, step 2)
+
+**The field.** A `GtkSpinButton` (a number with − / +, typing allowed) made with `gtk_spin_button_new_with_range(5, 360, 5)`: the limits are `HUB_SESSION_LOWEST`, `HUB_SESSION_HIGHEST` and `HUB_SESSION_STEP` in `defaults.h`, fixed limits rather than settings (no `DEF`). A `GtkAdjustment` behind it holds the value and limits. It is pre-filled with `gtk_spin_button_set_value` from `hub->setting.session`, which is why the settings load first in `hub_setting_hub`. `set_value` clamps to the range, so a file value of 500 shows 360. The step is only how far one click moves; breaks don't depend on it.
+
+**The button.** `gtk_button_new_with_label("Start")`; pressing it emits `clicked`. `g_signal_connect(button, "clicked", G_CALLBACK(hub_start_clicked), hub)` connects the callback, whose signature comes from the signal's doc page: `void (GtkButton *self, gpointer user_data)`. `user_data` is the `hub` passed to `g_signal_connect`, so the callback reads the field with `gtk_spin_button_get_value_as_int` into `hub->timer.planned`. The countdown itself is step 3.
