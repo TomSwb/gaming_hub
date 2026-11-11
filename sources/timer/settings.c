@@ -23,29 +23,25 @@ void	hub_load_settings(t_hub *hub)
 	path = g_build_filename(g_get_user_config_dir(),
 				"gaming_hub", "settings.ini", NULL);
 	key_file = g_key_file_new();
-	if (!hub_key_file_error(key_file, path, error))
-		return ;
+	if (!hub_key_file_error(key_file, path))
+
 	if (!hub_read_setting(key_file, "timer",
 			"session_minutes", &hub->setting.session))
-	{
-		g_free(key_file);
-		g_free(path);
-		return ;
-	}
 	g_key_file_free(key_file);
 	g_print("%s\n", path);
 	g_free(path);
 }
 
-gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path, GError *error)
+gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path)
 {
+	GError	*error;
+
+	error = NULL;
 	if (!g_key_file_load_from_file(key_file, path, G_KEY_FILE_NONE, &error))
 	{
 		if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
 			g_printerr("Can't read file: %s, %s\n", path, error->message);
 		g_error_free(error);
-		g_key_file_free(key_file);
-		g_free(path);
 		return (FALSE);
 	}
 	return (TRUE);
