@@ -47,8 +47,8 @@ typedef struct s_computer
 
 typedef struct s_hub
 {
-	t_computer	*computer;
-	t_settings	*setting;
+	t_computer	computer;
+	t_settings	setting;
 }	t_hub;
 
 #endif

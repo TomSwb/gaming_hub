@@ -51,7 +51,7 @@ gboolean	hub_tick(gpointer user_data)
 	t_hub	*hub;
 
 	hub = user_data;
-	hub_read_ram(GTK_LABEL(hub->computer->ram));
+	hub_read_ram(GTK_LABEL(hub->computer.ram));
 	hub_update_cpu(hub);
 	hub_update_temp_fan(hub);
 	hub_update_gpu(hub);
