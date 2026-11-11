@@ -27,11 +27,11 @@ void	hub_struct_init(t_hub *hub)
 	hub->computer.gpu_max = 0;
 	hub->computer.bat_dir = NULL;
 	hub->computer.mains_dir = NULL;
-	hub->setting.session = APP_DEF_SESSION;
-	hub->setting.wind_down = APP_DEF_WIND_DOWN;
-	hub->setting.break_min = APP_DEF_BREAK_EVERY;
-	hub->setting.eye_min = APP_DEF_EYE_CUE_EVERY;
-	hub->setting.eye_sec = APP_DEF_EYE_CUE_LENGTH;
+	hub->setting.session = HUB_DEF_SESSION;
+	hub->setting.wind_down = HUB_DEF_WIND_DOWN;
+	hub->setting.break_min = HUB_DEF_BREAK_MIN;
+	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
+	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
 }
 
 void	hub_setting_hub(t_hub *hub)
@@ -59,11 +59,11 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	GtkWidget	*box;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-	gtk_box_append(GTK_BOX(box), hub->computer.ram);
-	gtk_box_append(GTK_BOX(box), hub->computer.cpu);
-	gtk_box_append(GTK_BOX(box), hub->computer.temp);
-	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
-	gtk_box_append(GTK_BOX(box), hub->computer.bat);
+	gtk_box_HUBend(GTK_BOX(box), hub->computer.ram);
+	gtk_box_HUBend(GTK_BOX(box), hub->computer.cpu);
+	gtk_box_HUBend(GTK_BOX(box), hub->computer.temp);
+	gtk_box_HUBend(GTK_BOX(box), hub->computer.gpu);
+	gtk_box_HUBend(GTK_BOX(box), hub->computer.bat);
 	return (box);
 }
 
