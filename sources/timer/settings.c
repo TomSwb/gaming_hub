@@ -25,14 +25,14 @@ void	hub_load_settings(t_hub *hub)
 	key_file = g_key_file_new();
 	if (!g_key_file_load_from_file(key_file, path, G_KEY_FILE_NONE, &error))
 	{
-		if (g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-			g_print("%s\n", path);
-		else
-			g_printerr("Can't read file: %s\n", error->message);
+		if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+			g_printerr("Can't read file: %s, %s\n", path, error->message);
 		g_error_free(error);
+		g_key_file_free(key_file);
 		g_free(path);
 		return ;
 	}
+	g_key_file_free(key_file);
 	g_print("%s\n", path);
 	g_free(path);
 }
