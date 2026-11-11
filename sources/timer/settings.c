@@ -17,14 +17,12 @@ void	hub_load_settings(t_hub *hub)
 	gchar		*path;
 	GKeyFile	*key_file;
 
-	(void)hub;
 	path = g_build_filename(g_get_user_config_dir(),
 				"gaming_hub", "settings.ini", NULL);
 	key_file = g_key_file_new();
 	if (hub_key_file_error(key_file, path))
-		hub_set_setttings(key_file, hub);
+		hub_set_settings(key_file, hub);
 	g_key_file_free(key_file);
-	g_print("%s\n", path);
 	g_free(path);
 }
 
@@ -43,18 +41,18 @@ gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path)
 	return (TRUE);
 }
 
-void	hub_set_setttings(GKeyFile *key_file, t_hub *hub)
+void	hub_set_settings(GKeyFile *key_file, t_hub *hub)
 {
 	hub_read_setting(key_file, "timer",
 		"session_minutes", &hub->setting.session);
 	hub_read_setting(key_file, "timer",
-		"wind_down_minutes", &hub->setting.session);
+		"wind_down_minutes", &hub->setting.wind_down);
 	hub_read_setting(key_file, "timer",
-		"break_every_minutes", &hub->setting.session);
+		"break_every_minutes", &hub->setting.break_min);
 	hub_read_setting(key_file, "timer",
-		"eye_every_minutes", &hub->setting.session);
+		"eye_every_minutes", &hub->setting.eye_min);
 	hub_read_setting(key_file, "timer",
-		"eye_seconds", &hub->setting.session);
+		"eye_seconds", &hub->setting.eye_sec);
 }
 
 void	hub_read_setting(GKeyFile *key_file, const gchar *group,
