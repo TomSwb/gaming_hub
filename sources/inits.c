@@ -44,4 +44,5 @@ void	hub_timer_init(t_hub *hub)
 	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
 	hub->timer.session = NULL;
 	hub->timer.start = NULL;
+	hub->timer.planned = 0;
 }
