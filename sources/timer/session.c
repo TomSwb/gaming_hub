@@ -12,7 +12,7 @@
 
 #include "gaming_hub.h"
 
-void hub_setting_timer(t_hub *hub)
+void	hub_setting_timer(t_hub *hub)
 {
 	hub->timer.session = gtk_spin_button_new_with_range(HUB_SESSION_LOWEST,
 			HUB_SESSION_HIGHEST, HUB_SESSION_STEP);

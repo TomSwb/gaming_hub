@@ -45,6 +45,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
 	gtk_box_append(GTK_BOX(box), hub->computer.bat);
 	gtk_box_append(GTK_BOX(box), hub->timer.session);
+	gtk_box_append(GTK_BOX(box), hub->timer.start);
 	return (box);
 }
 
