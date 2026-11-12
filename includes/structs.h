@@ -17,7 +17,7 @@
 
 # include <gtk/gtk.h>
 
-// === Struct === //
+// === Enum === //
 
 typedef enum e_timer_state
 {
@@ -28,14 +28,7 @@ typedef enum e_timer_state
 	TIMER_ENDED
 }	t_timer_state;
 
-typedef struct s_settings
-{
-	gint	session;
-	gint	wind_down;
-	gint	break_min;
-	gint	eye_min;
-	gint	eye_sec;
-}	t_settings;
+// === Struct === //
 
 typedef struct s_computer
 {
@@ -54,11 +47,21 @@ typedef struct s_computer
 	gchar		*mains_dir;
 }	t_computer;
 
+typedef struct s_settings
+{
+	gint	session;
+	gint	wind_down;
+	gint	break_min;
+	gint	eye_min;
+	gint	eye_sec;
+}	t_settings;
+
 typedef struct s_timer
 {
-	GtkWidget	*session;
-	GtkWidget	*start;
-	gint		planned;
+	GtkWidget		*session;
+	GtkWidget		*start;
+	gint			planned;
+	t_timer_state	state;
 }	t_timer;
 
 typedef struct s_hub
