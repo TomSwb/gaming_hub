@@ -19,6 +19,15 @@
 
 // === Struct === //
 
+typedef enum e_timer_state
+{
+	PLANNING,
+	PLAYING,
+	PAUSED,
+	BREAK,
+	ENDED
+}	t_timer_state;
+
 typedef struct s_settings
 {
 	gint	session;
