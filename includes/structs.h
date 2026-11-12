@@ -21,11 +21,11 @@
 
 typedef enum e_timer_state
 {
-	PLANNING,
-	PLAYING,
-	PAUSED,
-	BREAK,
-	ENDED
+	TIMER_PLANNING,
+	TIMER_PLAYING,
+	TIMER_PAUSED,
+	TIMER_BREAK,
+	TIMER_ENDED
 }	t_timer_state;
 
 typedef struct s_settings
