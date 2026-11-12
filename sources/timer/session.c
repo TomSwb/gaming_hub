@@ -31,5 +31,5 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 	hub = user_data;
 	hub->timer.planned = gtk_spin_button_get_value_as_int(
 			GTK_SPIN_BUTTON(hub->timer.session));
-	g_print("%d\n", hub->timer.planned);
+	hub->timer.state = TIMER_PLAYING;
 }
