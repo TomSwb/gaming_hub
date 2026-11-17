@@ -32,6 +32,7 @@ void	hub_setting_timer(t_hub *hub)
 	g_signal_connect(hub->timer.done, "clicked",
 			G_CALLBACK(hub_done_clicked), hub);
 	hub->timer.eye = gtk_label_new("");
+	gtk_widget_set_visible(hub->timer.eye, FALSE);
 	hub_show_eye(hub->timer.eye, hub->setting.eye_sec);
 }
 
