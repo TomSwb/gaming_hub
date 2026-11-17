@@ -32,7 +32,7 @@ void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 void		hub_setting_timer(t_hub *hub);
 void		hub_update_timer(t_hub *hub);
 void		hub_show_time(GtkWidget *label, gint seconds);
-void		hub_refresh_buttons(t_hub *hub);
+void		hub_show_timer_page(t_hub *hub);
 
 // buttons.c
 void		hub_start_clicked(GtkButton *self, gpointer user_data);

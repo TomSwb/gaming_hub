@@ -28,7 +28,6 @@ void	hub_setting_timer(t_hub *hub)
 	hub->timer.stop = gtk_button_new_with_label("End Session");
 	g_signal_connect(hub->timer.stop, "clicked",
 			G_CALLBACK(hub_stop_clicked), hub);
-	hub_refresh_buttons(hub);
 }
 
 void	hub_update_timer(t_hub *hub)
@@ -44,7 +43,7 @@ void	hub_update_timer(t_hub *hub)
 	{
 		left = 0;
 		hub->timer.state = TIMER_ENDED;
-		hub_refresh_buttons(hub);
+		hub_show_timer_page(hub);
 	}
 	hub_show_time(hub->timer.countdown, left);
 }
@@ -63,7 +62,7 @@ void	hub_show_time(GtkWidget *label, gint seconds)
 	g_free(text);
 }
 
-void	hub_refresh_buttons(t_hub *hub)
+void	hub_show_timer_page(t_hub *hub)
 {
 	gboolean	planning;
 	gboolean	playing;
@@ -75,5 +74,5 @@ void	hub_refresh_buttons(t_hub *hub)
 	if (planning)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");
 	else if (playing)
-	 	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
+		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
 }
