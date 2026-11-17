@@ -81,7 +81,7 @@ void hub_pause_clicked(GtkButton *self, gpointer user_data)
 		hub->timer.state = TIMER_PAUSED;
 		gtk_button_set_label(self, "Resume");
 	}
-	else
+	else if (hub->timer.state == TIMER_PAUSED)
 	{
 		hub->timer.started += g_get_monotonic_time() - hub->timer.paused_at;
 		hub->timer.state = TIMER_PLAYING;
