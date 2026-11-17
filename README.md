@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–5 done: settings file and session plan 11 Nov; countdown, Pause, End session and the break screen 17 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–6 done: settings file and session plan 11 Nov; countdown, Pause, End session, break screen and eye cue 17 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -50,7 +50,8 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
-  * `session.c`: `hub_setting_timer` (minutes field, Start, countdown label, Pause, End session), `hub_update_timer` (time left, once a second from `hub_tick`), `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_show_timer_page` (shows the page that matches the state)
+  * `session.c`: `hub_setting_timer` (all timer widgets), `hub_update_timer` (once a second from `hub_tick`: time left, breaks, eye cue), `hub_update_eye` (shows and hides the eye cue)
+  * `show.c`: what puts values on screen: `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_show_timer_page` (the page that matches the state), `hub_show_eye` (the eye-cue text with `eye_sec`)
   * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack`
@@ -314,3 +315,15 @@ The stats are outside the stack because a widget has only one parent, so they ca
 **C or CSS.** Where things go is C (which boxes and pages, orientation, `gtk_widget_set_halign`, `gtk_box_set_homogeneous`, label wrapping); what they look like is CSS (colours, fonts, margins, borders). GTK CSS can't position widgets.
 
 **The tick.** Since step 5 the tick is `g_timeout_add(1000, …)` instead of `g_timeout_add_seconds(1, …)`: the seconds version lines its ticks up with other programs' timers to save power and can fire almost a second late, so the countdown sometimes stayed on a number and then skipped one. Still once a second.
+
+### Eye cue (milestone 3, step 6)
+
+**What it does.** Every `eye_min` minutes of play (20), a line under the countdown, "Look at something 6m away for 20 seconds", shows for `eye_sec` seconds (20), then hides. No page switch, nothing to click: the 20-20-20 rule, quieter than the break.
+
+**Showing and hiding.** `gtk_widget_set_visible(widget, FALSE)` hides a widget: it stays in its box but takes no space and isn't drawn. The label is created hidden in `hub_setting_timer`, and Start hides it again (a cue could still be showing from the last session).
+
+**Two schedules, one idea.** Like `next_break`, `next_eye` is the elapsed second of the next cue (`eye_min * 60` at Start), and `eye_until` the second it hides. Each tick while playing, `hub_update_eye`: if `elapsed >= next_eye`, show it, `eye_until = elapsed + eye_sec`, and `next_eye += eye_min * 60` (*moved on by*, not *set to*: set to, it would fire on every tick after the first cue). If `elapsed >= eye_until`, hide it (hiding a hidden widget changes nothing, so this is harmless before the first cue). The eye check runs **after** the break check, so when both are due on the same second (minute 60 with 20/60) the break wins and no cue shows during it. To test: `eye_every_minutes=1`, `eye_seconds=5`.
+
+**Text from the setting.** `hub_show_eye` builds the text with `g_strdup_printf` from `eye_sec`, so changing the setting changes the text too.
+
+**Order in Start.** `hub_update_timer` is the last line of `hub_start_clicked`: it reads `next_eye`, so everything it uses has to be set first.
