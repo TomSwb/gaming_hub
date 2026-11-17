@@ -45,8 +45,11 @@ void	hub_update_timer(t_hub *hub)
 		return ;
 	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
 	left = (hub->timer.planned * 60) - (gint)elapsed;
-	if (left < 0)
+	if (left <= 0)
+	{
 		left = 0;
+		hub->timer.state = TIMER_ENDED;
+	}
 	hub_show_time(hub->timer.countdown, left);
 }
 
