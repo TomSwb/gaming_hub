@@ -33,5 +33,6 @@ void		hub_setting_timer(t_hub *hub);
 void		hub_start_clicked(GtkButton *self, gpointer user_data);
 void		hub_update_timer(t_hub *hub);
 void		hub_show_time(GtkWidget *label, gint seconds);
+void hub_pause_clicked(GtkButton *self, gpointer user_data);
 
 #endif

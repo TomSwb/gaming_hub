@@ -61,9 +61,12 @@ typedef struct s_timer
 	GtkWidget		*session;
 	GtkWidget		*start;
 	GtkWidget		*countdown;
+	GtkWidget		*pause;
+	GtkWidget		*stop;
 	gint			planned;
 	t_timer_state	state;
 	gint64			started;
+	gint64			paused_at;
 }	t_timer;
 
 typedef struct s_hub

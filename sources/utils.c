@@ -47,6 +47,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->timer.session);
 	gtk_box_append(GTK_BOX(box), hub->timer.start);
 	gtk_box_append(GTK_BOX(box), hub->timer.countdown);
+	gtk_box_append(GTK_BOX(box), hub->timer.pause);
 	return (box);
 }
 

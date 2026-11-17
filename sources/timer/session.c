@@ -22,6 +22,9 @@ void	hub_setting_timer(t_hub *hub)
 	g_signal_connect(hub->timer.start, "clicked",
 			G_CALLBACK(hub_start_clicked), hub);
 	hub->timer.countdown = gtk_label_new("Not Started");
+	hub->timer.pause = gtk_button_new_with_label("Pause");
+	g_signal_connect(hub->timer.pause, "clicked",
+			G_CALLBACK(hub_pause_clicked), hub);
 }
 
 void	hub_start_clicked(GtkButton *self, gpointer user_data)
@@ -65,4 +68,22 @@ void	hub_show_time(GtkWidget *label, gint seconds)
 	text = g_strdup_printf("%d:%02d:%02d", hours, minutes, seconds);
 	gtk_label_set_text(GTK_LABEL(label), text);
 	g_free(text);
+}
+
+void hub_pause_clicked(GtkButton *self, gpointer user_data)
+{
+	t_hub	*hub;
+
+	hub = user_data;
+	if (hub->timer.state == TIMER_PLAYING)
+	{
+		hub->timer.state = TIMER_PAUSED;
+		gtk_button_set_label(self, "Resume");
+	}
+	else
+	{
+		hub->timer.started += g_get_monotonic_time() - hub->timer.paused_at;
+		hub->timer.state = TIMER_PLAYING;
+		gtk_button_set_label(self, "Pause");
+	}
 }
