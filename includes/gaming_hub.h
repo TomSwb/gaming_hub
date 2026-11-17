@@ -43,6 +43,9 @@ GtkWidget	*hub_build_box(t_hub *hub);
 GtkWidget	*hub_build_plan(t_hub *hub);
 GtkWidget	*hub_build_session(t_hub *hub);
 GtkWidget	*hub_build_stats(t_hub *hub);
+
+// build2.c
 GtkWidget	*hub_build_break(t_hub *hub);
+GtkWidget	*hub_image_with_label(const gchar *icon, const gchar *text);
 
 #endif

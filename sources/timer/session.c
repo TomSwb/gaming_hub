@@ -77,5 +77,5 @@ void	hub_show_timer_page(t_hub *hub)
 	else if (playing)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
 	else if (hub->timer.state == TIMER_BREAK)
-		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "break")
+		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "break");
 }

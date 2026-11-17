@@ -39,13 +39,17 @@ TIMER = sources/timer/settings.c \
 	sources/timer/session.c \
 	sources/timer/buttons.c
 
-SRCS = sources/main.c \
+SOURCES = sources/main.c \
 	sources/utils.c \
 	sources/inits.c \
 	sources/build.c \
-	${COMPUTER} ${TIMER}
+	sources/build2.c \
 
-OBJS = ${SRCS:.c=.o}
+FILES = ${SOURCES} \
+	${COMPUTER} \
+	${TIMER}
+
+OBJS = ${FILES:.c=.o}
 
 all: libft compile_flags.txt ${NAME}
 
