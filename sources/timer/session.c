@@ -72,8 +72,8 @@ void	hub_refresh_buttons(t_hub *hub)
 		|| hub->timer.state == TIMER_ENDED;
 	playing = hub->timer.state == TIMER_PLAYING
 		|| hub->timer.state == TIMER_PAUSED;
-	gtk_widget_set_sensitive(hub->timer.start, planning);
-	gtk_widget_set_sensitive(hub->timer.session, planning);
-	gtk_widget_set_sensitive(hub->timer.pause, playing);
-	gtk_widget_set_sensitive(hub->timer.stop, playing);
+	if (planning)
+		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");
+	else if (playing)
+	 	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
 }
