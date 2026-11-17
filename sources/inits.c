@@ -46,4 +46,5 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.start = NULL;
 	hub->timer.planned = 0;
 	hub->timer.state = TIMER_PLANNING;
+	hub->timer.started = 0;
 }

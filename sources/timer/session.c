@@ -26,10 +26,13 @@ void	hub_setting_timer(t_hub *hub)
 void	hub_start_clicked(GtkButton *self, gpointer user_data)
 {
 	t_hub	*hub;
+	gint64	t0;
 
 	(void)self;
+	t0 = g_get_monotonic_time();
 	hub = user_data;
 	hub->timer.planned = gtk_spin_button_get_value_as_int(
 			GTK_SPIN_BUTTON(hub->timer.session));
 	hub->timer.state = TIMER_PLAYING;
+	hub->timer.started = (g_get_monotonic_time() - t0) / G_USEC_PER_SEC;
 }
