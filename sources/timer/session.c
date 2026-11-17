@@ -21,6 +21,7 @@ void	hub_setting_timer(t_hub *hub)
 	hub->timer.start = gtk_button_new_with_label("Start");
 	g_signal_connect(hub->timer.start, "clicked",
 			G_CALLBACK(hub_start_clicked), hub);
+	hub->timer.countdown = gtk_label_new("Not Started");
 }
 
 void	hub_start_clicked(GtkButton *self, gpointer user_data)
