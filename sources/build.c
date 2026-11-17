@@ -38,7 +38,8 @@ GtkWidget	*hub_build_plan(t_hub *hub)
 	box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_box_append(GTK_BOX(box2), hub->timer.session);
 	gtk_box_append(GTK_BOX(box2), hub->timer.start);
-	gtk_box_append(GTK_BOX(box),hub_image_with_label("alarm-symbolic", NULL));
+	gtk_box_append(GTK_BOX(box),
+		hub_image_with_label("alarm-symbolic", NULL));
 	gtk_box_append(GTK_BOX(box), box2);
 	return (box);
 }
@@ -53,7 +54,8 @@ GtkWidget	*hub_build_session(t_hub *hub)
 	gtk_box_append(GTK_BOX(box2), hub->timer.pause);
 	gtk_box_append(GTK_BOX(box2), hub->timer.stop);
 	gtk_box_append(GTK_BOX(box), hub->timer.countdown);
-	gtk_box_append(GTK_BOX(box),hub_image_with_label("input-gaming-symbolic", NULL));
+	gtk_box_append(GTK_BOX(box),
+		hub_image_with_label("input-gaming-symbolic", NULL));
 	gtk_box_append(GTK_BOX(box), box2);
 	return (box);
 }

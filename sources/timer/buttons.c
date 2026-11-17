@@ -71,10 +71,10 @@ void	hub_done_clicked(GtkButton *self, gpointer user_data)
 
 	(void)self;
 	hub = user_data;
-		elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
+	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
 	if (hub->timer.state == TIMER_BREAK)
 	{
-		hub->timer.next_break = elapsed + hub->setting.break_min * 60;
+		hub->timer.next_break = (gint)elapsed + hub->setting.break_min * 60;
 		hub->timer.state = TIMER_PLAYING;
 		hub_show_timer_page(hub);
 		hub_update_timer(hub);
