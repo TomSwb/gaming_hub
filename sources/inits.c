@@ -16,6 +16,7 @@ void	hub_struct_init(t_hub *hub)
 {
 	hub_computer_init(hub);
 	hub_timer_init(hub);
+	hub->stack = NULL;
 }
 
 void	hub_computer_init(t_hub *hub)

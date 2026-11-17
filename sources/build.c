@@ -15,32 +15,48 @@
 GtkWidget	*hub_build_box(t_hub *hub)
 {
 	GtkWidget	*box;
+	GtkWidget	*stack;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-	hub_build_plan(box, hub);
-	hub_build_session(box, hub);
-	hub_build_stats(box, hub);
+	stack = gtk_stack_new();
+	hub->stack = stack;
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan(hub), "plan");
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
+	gtk_box_append(GTK_BOX(box), hub->stack);
+	gtk_box_append(GTK_BOX(box), hub_build_stats(hub));
 	return (box);
 }
 
-void	hub_build_plan(GtkWidget *box, t_hub *hub)
+GtkWidget	*hub_build_plan(t_hub *hub)
 {
+	GtkWidget	*box;
+
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->timer.session);
 	gtk_box_append(GTK_BOX(box), hub->timer.start);
+	return (box);
 }
 
-void	hub_build_session(GtkWidget *box, t_hub *hub)
+GtkWidget	*hub_build_session(t_hub *hub)
 {
+	GtkWidget	*box;
+
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->timer.countdown);
 	gtk_box_append(GTK_BOX(box), hub->timer.pause);
 	gtk_box_append(GTK_BOX(box), hub->timer.stop);
+	return (box);
 }
 
-void	hub_build_stats(GtkWidget *box, t_hub *hub)
+GtkWidget	*hub_build_stats(t_hub *hub)
 {
+	GtkWidget	*box;
+
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_box_append(GTK_BOX(box), hub->computer.ram);
 	gtk_box_append(GTK_BOX(box), hub->computer.cpu);
 	gtk_box_append(GTK_BOX(box), hub->computer.temp);
 	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
 	gtk_box_append(GTK_BOX(box), hub->computer.bat);
+	return (box);
 }
