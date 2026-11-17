@@ -30,7 +30,10 @@ GtkWidget	*hub_build_break(t_hub *hub)
 				"Roll neck & shoulder"));
 	gtk_box_append(GTK_BOX(icon_row),
 		hub_image_with_label("weather-showers-symbolic", "Drink water"));
+	gtk_box_set_homogeneous(GTK_BOX(icon_row), TRUE);
+	gtk_box_append(GTK_BOX(box), icon_row);
 	gtk_box_append(GTK_BOX(box), hub->timer.done);
+	gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
 	return (box);
 }
 
@@ -40,10 +43,16 @@ GtkWidget	*hub_image_with_label(const gchar *icon, const gchar *text)
 	GtkWidget	*label;
 	GtkWidget	*image;
 
+	label = NULL;
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	image = gtk_image_new_from_file(icon);
-	label = gtk_label_new(text);
+	image = gtk_image_new_from_icon_name(icon);
+	gtk_image_set_pixel_size(GTK_IMAGE(image), 48);
 	gtk_box_append(GTK_BOX(box), image);
-	gtk_box_append(GTK_BOX(box), label);
+	if (text)
+	{
+		label = gtk_label_new(text);
+		gtk_label_set_wrap(GTK_LABEL(label), TRUE);
+		gtk_box_append(GTK_BOX(box), label);
+	}
 	return (box);
 }
