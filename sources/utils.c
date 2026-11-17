@@ -34,24 +34,6 @@ void	hub_setting_hub(t_hub *hub)
 	hub_setting_timer(hub);
 }
 
-GtkWidget	*hub_build_box(t_hub *hub)
-{
-	GtkWidget	*box;
-
-	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-	gtk_box_append(GTK_BOX(box), hub->computer.ram);
-	gtk_box_append(GTK_BOX(box), hub->computer.cpu);
-	gtk_box_append(GTK_BOX(box), hub->computer.temp);
-	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
-	gtk_box_append(GTK_BOX(box), hub->computer.bat);
-	gtk_box_append(GTK_BOX(box), hub->timer.session);
-	gtk_box_append(GTK_BOX(box), hub->timer.start);
-	gtk_box_append(GTK_BOX(box), hub->timer.countdown);
-	gtk_box_append(GTK_BOX(box), hub->timer.pause);
-	gtk_box_append(GTK_BOX(box), hub->timer.stop);
-	return (box);
-}
-
 void	hub_free_hub(t_hub *hub)
 {
 	g_free(hub->computer.temp_dir);

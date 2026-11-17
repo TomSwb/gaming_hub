@@ -31,12 +31,17 @@ gboolean	hub_tick(gpointer user_data);
 
 // utils.c
 void		hub_setting_hub(t_hub *hub);
-GtkWidget	*hub_build_box(t_hub *hub);
 void		hub_free_hub(t_hub *hub);
 
 // inits.c
 void		hub_struct_init(t_hub *hub);
 void		hub_computer_init(t_hub *hub);
 void		hub_timer_init(t_hub *hub);
+
+// build.c
+GtkWidget	*hub_build_box(t_hub *hub);
+void		hub_build_plan(GtkWidget *box, t_hub *hub);
+void		hub_build_session(GtkWidget *box, t_hub *hub);
+void		hub_build_stats(GtkWidget *box, t_hub *hub);
 
 #endif

@@ -42,6 +42,7 @@ TIMER = sources/timer/settings.c \
 SRCS = sources/main.c \
 	sources/utils.c \
 	sources/inits.c \
+	sources/build.c \
 	${COMPUTER} ${TIMER}
 
 OBJS = ${SRCS:.c=.o}
