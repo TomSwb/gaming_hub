@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–2, settings file and session plan, done 11 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–3 done: settings file and session plan 11 Nov, countdown 17 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -48,7 +48,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
-  * `session.c`: the session plan: `hub_setting_timer` (minutes field + Start button), `hub_start_clicked` (Start's callback)
+  * `session.c`: the session plan: `hub_setting_timer` (minutes field + Start button), `hub_start_clicked` (Start's callback), `hub_update_timer` (time left, once a second from `hub_tick`), `hub_show_time` (seconds → `h:mm:ss` on a label)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
@@ -257,3 +257,13 @@ The GPU has no `name` file, and its connectors (`card1-eDP-1`, `card1-HDMI-A-1`,
 **The field.** A `GtkSpinButton` (a number with − / +, typing allowed) made with `gtk_spin_button_new_with_range(5, 360, 5)`: the limits are `HUB_SESSION_LOWEST`, `HUB_SESSION_HIGHEST` and `HUB_SESSION_STEP` in `defaults.h`, fixed limits rather than settings (no `DEF`). A `GtkAdjustment` behind it holds the value and limits. It is pre-filled with `gtk_spin_button_set_value` from `hub->setting.session`, which is why the settings load first in `hub_setting_hub`. `set_value` clamps to the range, so a file value of 500 shows 360. The step is only how far one click moves; breaks don't depend on it.
 
 **The button.** `gtk_button_new_with_label("Start")`; pressing it emits `clicked`. `g_signal_connect(button, "clicked", G_CALLBACK(hub_start_clicked), hub)` connects the callback, whose signature comes from the signal's doc page: `void (GtkButton *self, gpointer user_data)`. `user_data` is the `hub` passed to `g_signal_connect`, so the callback reads the field with `gtk_spin_button_get_value_as_int` into `hub->timer.planned`. The countdown itself is step 3.
+
+### Countdown and state machine (milestone 3, step 3)
+
+**States.** `t_timer_state` (an `enum` in `structs.h`) names the timer's states: `TIMER_PLANNING`, `TIMER_PLAYING`, `TIMER_PAUSED`, `TIMER_BREAK`, `TIMER_ENDED`. The hub is always in exactly one, kept in `hub->timer.state`; events (a click, a tick) look at it and may move to another. The `TIMER_` prefix matters because enum names are global like `# define`s: a bare `BREAK` could clash with a library. So far: planning at start, Start → playing, time up → ended. Paused and break come in steps 4 and 5.
+
+**The clock.** The countdown does not count ticks: `g_timeout_add_seconds` can fire late or group timers, so ticks drift. Start stores `g_get_monotonic_time()` in `hub->timer.started` (a `gint64` in microseconds from a fixed point; only differences mean anything). It is *monotonic*: it never jumps when the wall clock changes (time sync, summer/winter time). Each tick, `hub_update_timer` works out `elapsed = (now - started) / G_USEC_PER_SEC` and `left = planned * 60 - (gint)elapsed`: the cast is the one visible `gint64` → `gint` conversion, so `%d` gets ints. At `left <= 0` it shows `0:00:00` and sets `TIMER_ENDED`; from then on its first line (`if not playing, return`) stops all work.
+
+**Showing it.** `hub_show_time(label, seconds)` splits the seconds with `/` and `%` (3600, 60), formats `"%d:%02d:%02d"` (`%02d` pads with a zero: `0:05:09`), sets the label (which copies the text) and frees the string. It is its own function because the norm allows 5 variables per function, and the countdown needs 7.
+
+**Coming in step 4:** Pause (paused time doesn't count) and an End session button (ends early, added to the plan 17 Nov).
