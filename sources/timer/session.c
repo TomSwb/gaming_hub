@@ -35,3 +35,31 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 	hub->timer.state = TIMER_PLAYING;
 	hub->timer.started = g_get_monotonic_time();
 }
+
+void	hub_update_timer(t_hub *hub)
+{
+	gint64	elapsed;
+	gint	left;
+
+	if (hub->timer.state != TIMER_PLAYING)
+		return ;
+	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
+	left = (hub->timer.planned * 60) - (gint)elapsed;
+	if (left < 0)
+		left = 0;
+	hub_show_time(hub->timer.countdown, left);
+}
+
+void	hub_show_time(GtkWidget *label, gint seconds)
+{
+	gint	hours;
+	gint	minutes;
+	gchar	*text;
+
+	hours = seconds / 3600;
+	minutes = (seconds % 3600) / 60;
+	seconds = seconds % 60;
+	text = g_strdup_printf("%d:%02d:%02d", hours, minutes, seconds);
+	gtk_label_set_text(GTK_LABEL(label), text);
+	g_free(text);
+}
