@@ -68,6 +68,7 @@ typedef struct s_timer
 	t_timer_state	state;
 	gint64			started;
 	gint64			paused_at;
+	gint			next_break;
 }	t_timer;
 
 typedef struct s_hub

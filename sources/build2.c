@@ -33,7 +33,6 @@ GtkWidget	*hub_build_break(t_hub *hub)
 	gtk_box_set_homogeneous(GTK_BOX(icon_row), TRUE);
 	gtk_box_append(GTK_BOX(box), icon_row);
 	gtk_box_append(GTK_BOX(box), hub->timer.done);
-	gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
 	return (box);
 }
 

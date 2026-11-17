@@ -36,9 +36,14 @@ void	hub_update_timer(t_hub *hub)
 	gint64	elapsed;
 	gint	left;
 
-	if (hub->timer.state != TIMER_PLAYING)
+	if (hub->timer.state != TIMER_PLAYING && hub->timer.state != TIMER_BREAK)
 		return ;
 	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
+	if (hub->timer.state == TIMER_PLAYING && elapsed >= hub->timer.next_break)
+	{
+		hub->timer.state = TIMER_BREAK;
+		hub_show_timer_page(hub);
+	}
 	left = (hub->timer.planned * 60) - (gint)elapsed;
 	if (left <= 0)
 	{

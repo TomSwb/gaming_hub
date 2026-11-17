@@ -25,6 +25,7 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 		hub->timer.state = TIMER_PLAYING;
 		hub_show_timer_page(hub);
 		hub->timer.started = g_get_monotonic_time();
+		hub->timer.next_break = hub->setting.break_min * 60;
 		hub_update_timer(hub);
 	}
 }
