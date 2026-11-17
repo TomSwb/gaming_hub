@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–4 done: settings file and session plan 11 Nov, countdown, Pause and End session 17 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–5 done: settings file and session plan 11 Nov; countdown, Pause, End session and the break screen 17 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -38,7 +38,9 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 
 * `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
 * `sources/inits.c`: `hub_struct_init` sets every field to a known value: `hub_computer_init` (stats) and `hub_timer_init` (the settings to their defaults, the timer widgets to `NULL`)
-* `sources/utils.c`: `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, then the timer widgets, once), `hub_build_box` (the window's layout), `hub_free_hub` (frees what the struct owns)
+* `sources/build.c`: the window's layout: `hub_build_box` (a stack of pages above the stats), `hub_build_plan`, `hub_build_session`, `hub_build_stats` (each builds and returns its own box)
+* `sources/build2.c`: `hub_build_break` (the break page) and `hub_image_with_label` (a theme icon at 48 px with an optional wrapping label under it)
+* `sources/utils.c`: `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, then the timer widgets, once), `hub_free_hub` (frees what the struct owns)
 * `sources/computer/`: the live stats (milestone 2)
   * `sysfs.c`: shared readers for `/sys`: `hub_find_dir` (finds a device folder by the content of one of its files, e.g. hwmon `name` = `coretemp`), `hub_find_gpu` (the DRM card that has `gt_act_freq_mhz`), `hub_read_number` and `hub_read_text` (one value from a one-value file)
   * `ram.c`: reads `/proc/meminfo`, shows used / total RAM
@@ -48,10 +50,10 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
-  * `session.c`: `hub_setting_timer` (minutes field, Start, countdown label, Pause, End session), `hub_update_timer` (time left, once a second from `hub_tick`), `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_refresh_buttons` (greys out what can't be used in the current state)
-  * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session)
+  * `session.c`: `hub_setting_timer` (minutes field, Start, countdown label, Pause, End session), `hub_update_timer` (time left, once a second from `hub_tick`), `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_show_timer_page` (shows the page that matches the state)
+  * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
-* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value
+* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack`
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`: prototypes of `sources/computer/` and `sources/timer/`
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
@@ -283,6 +285,32 @@ The GPU has no `name` file, and its connectors (`card1-eDP-1`, `card1-HDMI-A-1`,
 
 **Ended stays a state.** Start works again from ended, but the hub doesn't jump back to planning: the end alert (step 7) and the stop ritual (milestone 7) happen in the ended state; going back to planning will be the ritual's last step.
 
-**Greying out.** `hub_refresh_buttons` sets each widget with `gtk_widget_set_sensitive` from the state: Start and the minutes field when planning or ended, Pause and End session when playing or paused. A comparison is already a `gboolean`, so it goes straight in. It only *looks* at the state when called, so it is called after every state change (window built, Start, End, time up).
+**Greying out (replaced in step 5).** First `hub_refresh_buttons` greyed out what couldn't be used, with `gtk_widget_set_sensitive` (a comparison is already a `gboolean`, so it goes straight in). Step 5 replaced that with pages: a button that can't be used isn't on screen.
 
 **Decided 17 Nov:** End session stays (mainly until milestone 7 notices the game closing). No "close the game" button (killing a game loses everything since the last save; quitting is the game's job) and no extending the planned time.
+
+### Pages and the break screen (milestone 3, step 5)
+
+**One window, several pages.** A `GtkStack` holds several children but shows one; each has a name, and `gtk_stack_set_visible_child_name` switches instantly (no animation, fps rule). The layout:
+
+```
+window
+└── main box (vertical)
+    ├── stack            the part that changes
+    │   ├── "plan"       alarm icon, minutes field + Start
+    │   ├── "session"    countdown, controller icon, Pause/Resume + End session
+    │   └── "break"      "Break", three icons (stand, roll neck & shoulders, drink water), Done
+    └── stats box        always visible, under every page
+```
+
+The stats are outside the stack because a widget has only one parent, so they can't be in two pages; this way they stay visible on every page (and later under the library). Later pages: "ritual" (milestone 7) and "library" (milestone 8). For the styling step: the stats should be visible but not dominant, which one CSS class on their box can do.
+
+**State → page.** `hub_show_timer_page` picks the page from the state (planning or ended → plan, playing or paused → session, break → break) and is called after every state change, including once at the end of `hub_build_box`, the first moment the stack exists (calling it earlier, from `hub_setting_timer`, would pass a `NULL` stack).
+
+**When a break comes.** `hub->timer.next_break` is the elapsed second of the next break: `break_min * 60` at Start. Each tick while playing, `hub_update_timer` checks `elapsed >= next_break` and switches to break. Breaks **count** toward the session (decided 17 Nov): the countdown keeps running in the break state, and the session can end during one. Done sets `next_break = elapsed + break_min * 60`, so every break is followed by a full `break_min` of play. To test without waiting: `break_every_minutes=1` in the settings file.
+
+**Icons.** `gtk_image_new_from_icon_name` takes a name from the icon theme (Adwaita: `alarm-symbolic`, `input-gaming-symbolic`, `preferences-desktop-accessibility-symbolic`, `object-rotate-right-symbolic`, `weather-showers-symbolic`); `gtk_image_new_from_file` takes a file path, relative to the folder the hub was started from. The Adwaita icons are placeholders until custom ones arrive, which will come as a GResource (compiled into the program) or as installed named icons, not as relative paths.
+
+**C or CSS.** Where things go is C (which boxes and pages, orientation, `gtk_widget_set_halign`, `gtk_box_set_homogeneous`, label wrapping); what they look like is CSS (colours, fonts, margins, borders). GTK CSS can't position widgets.
+
+**The tick.** Since step 5 the tick is `g_timeout_add(1000, …)` instead of `g_timeout_add_seconds(1, …)`: the seconds version lines its ticks up with other programs' timers to save power and can fire almost a second late, so the countdown sometimes stayed on a number and then skipped one. Still once a second.
