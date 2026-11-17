@@ -24,6 +24,7 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 				GTK_SPIN_BUTTON(hub->timer.session));
 		hub->timer.state = TIMER_PLAYING;
 		hub->timer.started = g_get_monotonic_time();
+		hub_update_timer(hub);
 	}
 }
 

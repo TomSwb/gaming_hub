@@ -28,6 +28,7 @@ void	hub_setting_timer(t_hub *hub)
 	hub->timer.stop = gtk_button_new_with_label("End Session");
 	g_signal_connect(hub->timer.stop, "clicked",
 			G_CALLBACK(hub_stop_clicked), hub);
+	hub_refresh_buttons(hub);
 }
 
 void	hub_update_timer(t_hub *hub)
@@ -59,4 +60,17 @@ void	hub_show_time(GtkWidget *label, gint seconds)
 	text = g_strdup_printf("%d:%02d:%02d", hours, minutes, seconds);
 	gtk_label_set_text(GTK_LABEL(label), text);
 	g_free(text);
+}
+
+void	hub_refresh_buttons(t_hub *hub)
+{
+	gboolean	planning;
+	gboolean	playing;
+
+	planning = hub->timer.state == TIMER_PLANNING || hub->timer.state == TIMER_ENDED;
+	playing = hub->timer.state == TIMER_PLAYING || hub->timer.state == TIMER_PAUSED;
+	gtk_widget_set_sensitive(hub->timer.start, planning);
+	gtk_widget_set_sensitive(hub->timer.session, planning);
+	gtk_widget_set_sensitive(hub->timer.pause, playing);
+	gtk_widget_set_sensitive(hub->timer.stop, playing);
 }
