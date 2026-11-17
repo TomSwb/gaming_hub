@@ -56,6 +56,7 @@ GtkWidget	*hub_build_session(t_hub *hub)
 	gtk_box_append(GTK_BOX(box2), hub->timer.stop);
 	gtk_widget_set_halign(box2, GTK_ALIGN_CENTER);
 	gtk_box_append(GTK_BOX(box), hub->timer.countdown);
+	gtk_box_append(GTK_BOX(box), hub->timer.eye);
 	gtk_box_append(GTK_BOX(box),
 		hub_image_with_label("input-gaming-symbolic", NULL));
 	gtk_box_append(GTK_BOX(box), box2);

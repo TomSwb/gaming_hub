@@ -31,6 +31,9 @@ void	hub_setting_timer(t_hub *hub)
 	hub->timer.done = gtk_button_new_with_label("Done");
 	g_signal_connect(hub->timer.done, "clicked",
 			G_CALLBACK(hub_done_clicked), hub);
+	gtk_label_set_text(GTK_LABEL(hub->timer.eye),
+		"Look at something 5 m away for 20 seconds");
+	gtk_widget_set_visible(hub->timer.eye, FALSE);
 }
 
 void	hub_update_timer(t_hub *hub)
@@ -41,6 +44,8 @@ void	hub_update_timer(t_hub *hub)
 	if (hub->timer.state != TIMER_PLAYING && hub->timer.state != TIMER_BREAK)
 		return ;
 	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
+	if (hub->timer.state == TIMER_PLAYING)
+		hub_update_eye(hub, (gint)elapsed);
 	if (hub->timer.state == TIMER_PLAYING && elapsed >= hub->timer.next_break)
 	{
 		hub->timer.state = TIMER_BREAK;
@@ -85,4 +90,16 @@ void	hub_show_timer_page(t_hub *hub)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
 	else if (hub->timer.state == TIMER_BREAK)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "break");
+}
+
+void	hub_update_eye(t_hub *hub, gint elapsed)
+{
+	if (elapsed >= hub->timer.next_eye)
+	{
+		gtk_widget_set_visible(hub->timer.eye, TRUE);
+		hub->timer.eye_until = elapsed + hub->setting.eye_sec;
+		hub->timer.next_eye += hub->setting.eye_min * 60;
+	}
+	if (elapsed >= hub->timer.eye_until)
+		gtk_widget_set_visible(hub->timer.eye, FALSE);
 }
