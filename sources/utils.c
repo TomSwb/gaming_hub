@@ -31,7 +31,7 @@ void	hub_setting_hub(t_hub *hub)
 			"type", "Battery");
 	hub->computer.mains_dir = hub_find_dir("/sys/class/power_supply",
 			"type", "Mains");
-	hub_setting_timer(hub);
+	hub_timer_manager(hub);
 }
 
 void	hub_free_hub(t_hub *hub)

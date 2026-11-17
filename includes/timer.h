@@ -29,7 +29,7 @@ void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 				const gchar *key, gint *value);
 
 // session.c
-void		hub_setting_timer(t_hub *hub);
+void		hub_timer_manager(t_hub *hub);
 void		hub_update_timer(t_hub *hub);
 void		hub_update_eye(t_hub *hub, gint elapsed);
 
