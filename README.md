@@ -193,13 +193,13 @@ Never `free()` a GObject, never unref what you don't own. Each widget is stored 
 
 ### Live stats (milestone 2)
 
-**The tick.** `hub_activate` starts a timer with `g_timeout_add_seconds(1, hub_tick, hub)`: the main loop calls `hub_tick` once a second, and `hub_tick` returns `G_SOURCE_CONTINUE` to be called again (`G_SOURCE_REMOVE` would stop it). `hub_activate` also calls `hub_tick` once itself, so the labels are filled at once instead of after one second. Once a second is the fps rule: an interval of 0 would call it nonstop and eat CPU.
+**The tick.** `hub_activate` starts a timer with `g_timeout_add(1000, hub_tick, hub)` (until 17 Nov `g_timeout_add_seconds(1, …)`, see step 5): the main loop calls `hub_tick` once a second, and `hub_tick` returns `G_SOURCE_CONTINUE` to be called again (`G_SOURCE_REMOVE` would stop it). `hub_activate` also calls `hub_tick` once itself, so the labels are filled at once instead of after one second. Once a second is the fps rule: an interval of 0 would call it nonstop and eat CPU.
 
 **One pointer for everything.** A timer callback gets one `gpointer`, so all widgets and state live in one struct, `t_hub` (since milestone 3: stats in `hub->computer`, settings in `hub->setting`), and the timer gets a pointer to it:
 
 ```
 main: t_hub hub  ──&hub──▶  g_signal_connect(... "activate" ...)  ──▶  hub_activate(user_data)
-                                                                          └─ g_timeout_add_seconds(1, hub_tick, hub) ──▶ hub_tick(user_data) every second
+                                                                          └─ g_timeout_add(1000, hub_tick, hub)     ──▶ hub_tick(user_data) every second
 ```
 
 The struct lives in `main`, not in `hub_activate`: `hub_activate` returns right after building the window, so a local there would be gone (dangling pointer) when the first tick comes. `main` stays inside `g_application_run` until the app quits, so its locals live exactly as long as the app. A plain struct comes back from `gpointer` by assignment (`t_hub *hub = user_data;`); a GObject uses its check macro (`GTK_LABEL(...)`), which checks the type at run time.
