@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–3 done: settings file and session plan 11 Nov, countdown 17 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–4 done: settings file and session plan 11 Nov, countdown, Pause and End session 17 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -48,7 +48,8 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
-  * `session.c`: the session plan: `hub_setting_timer` (minutes field + Start button), `hub_start_clicked` (Start's callback), `hub_update_timer` (time left, once a second from `hub_tick`), `hub_show_time` (seconds → `h:mm:ss` on a label)
+  * `session.c`: `hub_setting_timer` (minutes field, Start, countdown label, Pause, End session), `hub_update_timer` (time left, once a second from `hub_tick`), `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_refresh_buttons` (greys out what can't be used in the current state)
+  * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
@@ -266,4 +267,22 @@ The GPU has no `name` file, and its connectors (`card1-eDP-1`, `card1-HDMI-A-1`,
 
 **Showing it.** `hub_show_time(label, seconds)` splits the seconds with `/` and `%` (3600, 60), formats `"%d:%02d:%02d"` (`%02d` pads with a zero: `0:05:09`), sets the label (which copies the text) and frees the string. It is its own function because the norm allows 5 variables per function, and the countdown needs 7.
 
-**Coming in step 4:** Pause (paused time doesn't count) and an End session button (ends early, added to the plan 17 Nov).
+
+### Pause and End session (milestone 3, step 4)
+
+**Every button checks the state.** A click only does something in the states where it makes sense; the others are ignored:
+
+| Button | Acts when | Does |
+| --- | --- | --- |
+| Start | planning or ended | reads the minutes, stores the start time, → playing, shows the time at once |
+| Pause | playing | stores `paused_at`, → paused, label "Resume" |
+| Resume (same button) | paused | `started += now - paused_at`, → playing, label "Pause" |
+| End session | playing or paused | → ended, shows `0:00:00`, label back to "Pause" |
+
+**Leaving paused time out.** `hub_update_timer` stays `elapsed = now - started`. On Resume, `started` moves forward by the length of the pause, so the formula sees a session that started later and counts only played time. While paused, the countdown freezes by itself because `hub_update_timer` returns for every state except playing.
+
+**Ended stays a state.** Start works again from ended, but the hub doesn't jump back to planning: the end alert (step 7) and the stop ritual (milestone 7) happen in the ended state; going back to planning will be the ritual's last step.
+
+**Greying out.** `hub_refresh_buttons` sets each widget with `gtk_widget_set_sensitive` from the state: Start and the minutes field when planning or ended, Pause and End session when playing or paused. A comparison is already a `gboolean`, so it goes straight in. It only *looks* at the state when called, so it is called after every state change (window built, Start, End, time up).
+
+**Decided 17 Nov:** End session stays (mainly until milestone 7 notices the game closing). No "close the game" button (killing a game loses everything since the last save; quitting is the game's job) and no extending the planned time.
