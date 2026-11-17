@@ -38,5 +38,6 @@ void		hub_show_timer_page(t_hub *hub);
 void		hub_start_clicked(GtkButton *self, gpointer user_data);
 void		hub_pause_clicked(GtkButton *self, gpointer user_data);
 void		hub_stop_clicked(GtkButton *self, gpointer user_data);
+void		hub_done_clicked(GtkButton *self, gpointer user_data);
 
 #endif

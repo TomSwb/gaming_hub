@@ -29,6 +29,8 @@ void	hub_setting_timer(t_hub *hub)
 	g_signal_connect(hub->timer.stop, "clicked",
 			G_CALLBACK(hub_stop_clicked), hub);
 	hub->timer.done = gtk_button_new_with_label("Done");
+	g_signal_connect(hub->timer.done, "clicked",
+			G_CALLBACK(hub_done_clicked), hub);
 }
 
 void	hub_update_timer(t_hub *hub)
