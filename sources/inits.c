@@ -48,6 +48,7 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.countdown = NULL;
 	hub->timer.pause = NULL;
 	hub->timer.stop = NULL;
+	hub->timer.done = NULL;
 	hub->timer.planned = 0;
 	hub->timer.state = TIMER_PLANNING;
 	hub->timer.started = 0;

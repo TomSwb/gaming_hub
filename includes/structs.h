@@ -63,6 +63,7 @@ typedef struct s_timer
 	GtkWidget		*countdown;
 	GtkWidget		*pause;
 	GtkWidget		*stop;
+	GtkWidget		*done;
 	gint			planned;
 	t_timer_state	state;
 	gint64			started;

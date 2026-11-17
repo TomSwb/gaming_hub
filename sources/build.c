@@ -22,6 +22,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	hub->stack = stack;
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");
 	gtk_box_append(GTK_BOX(box), hub->stack);
 	gtk_box_append(GTK_BOX(box), hub_build_stats(hub));
 	hub_show_timer_page(hub);
@@ -59,5 +60,17 @@ GtkWidget	*hub_build_stats(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->computer.temp);
 	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
 	gtk_box_append(GTK_BOX(box), hub->computer.bat);
+	return (box);
+}
+
+GtkWidget	*hub_build_break(t_hub *hub)
+{
+	GtkWidget	*box;
+	GtkWidget	*label;
+
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
+	label = gtk_label_new("Break:\nStand up, roll your neck and shoulders, drink some water."); //ignore norm on this line for now
+	gtk_box_append(GTK_BOX(box), label);
+	gtk_box_append(GTK_BOX(box), hub->timer.done);
 	return (box);
 }

@@ -28,6 +28,7 @@ void	hub_setting_timer(t_hub *hub)
 	hub->timer.stop = gtk_button_new_with_label("End Session");
 	g_signal_connect(hub->timer.stop, "clicked",
 			G_CALLBACK(hub_stop_clicked), hub);
+	hub->timer.done = gtk_button_new_with_label("Done");
 }
 
 void	hub_update_timer(t_hub *hub)
@@ -75,4 +76,6 @@ void	hub_show_timer_page(t_hub *hub)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");
 	else if (playing)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
+	else if (hub->timer.state == TIMER_BREAK)
+		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "break")
 }
