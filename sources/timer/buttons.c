@@ -18,10 +18,13 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 
 	(void)self;
 	hub = user_data;
-	hub->timer.planned = gtk_spin_button_get_value_as_int(
-			GTK_SPIN_BUTTON(hub->timer.session));
-	hub->timer.state = TIMER_PLAYING;
-	hub->timer.started = g_get_monotonic_time();
+	if (hub->timer.state == TIMER_PLANNING || hub->timer.state == TIMER_ENDED)
+	{
+		hub->timer.planned = gtk_spin_button_get_value_as_int(
+				GTK_SPIN_BUTTON(hub->timer.session));
+		hub->timer.state = TIMER_PLAYING;
+		hub->timer.started = g_get_monotonic_time();
+	}
 }
 
 void	hub_pause_clicked(GtkButton *self, gpointer user_data)
