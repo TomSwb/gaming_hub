@@ -44,6 +44,7 @@ void	hub_update_timer(t_hub *hub)
 	{
 		left = 0;
 		hub->timer.state = TIMER_ENDED;
+		hub_refresh_buttons(hub);
 	}
 	hub_show_time(hub->timer.countdown, left);
 }
@@ -67,8 +68,10 @@ void	hub_refresh_buttons(t_hub *hub)
 	gboolean	planning;
 	gboolean	playing;
 
-	planning = hub->timer.state == TIMER_PLANNING || hub->timer.state == TIMER_ENDED;
-	playing = hub->timer.state == TIMER_PLAYING || hub->timer.state == TIMER_PAUSED;
+	planning = hub->timer.state == TIMER_PLANNING
+		|| hub->timer.state == TIMER_ENDED;
+	playing = hub->timer.state == TIMER_PLAYING
+		|| hub->timer.state == TIMER_PAUSED;
 	gtk_widget_set_sensitive(hub->timer.start, planning);
 	gtk_widget_set_sensitive(hub->timer.session, planning);
 	gtk_widget_set_sensitive(hub->timer.pause, playing);

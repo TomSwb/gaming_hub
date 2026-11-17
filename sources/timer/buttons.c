@@ -23,6 +23,7 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 		hub->timer.planned = gtk_spin_button_get_value_as_int(
 				GTK_SPIN_BUTTON(hub->timer.session));
 		hub->timer.state = TIMER_PLAYING;
+		hub_refresh_buttons(hub);
 		hub->timer.started = g_get_monotonic_time();
 		hub_update_timer(hub);
 	}
@@ -56,6 +57,7 @@ void	hub_stop_clicked(GtkButton *self, gpointer user_data)
 	if (hub->timer.state == TIMER_PLAYING || hub->timer.state == TIMER_PAUSED)
 	{
 		hub->timer.state = TIMER_ENDED;
+		hub_refresh_buttons(hub);
 		hub_show_time(hub->timer.countdown, 0);
 		gtk_button_set_label(GTK_BUTTON(hub->timer.pause), "Pause");
 	}
