@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–6 done: settings file and session plan 11 Nov; countdown, Pause, End session, break screen and eye cue 17 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–7 done: settings file and session plan 11 Nov; countdown, Pause, End session, break screen and eye cue 17 Nov; notifications and the bell 18 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -51,10 +51,11 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
   * `session.c`: `hub_timer_manager` (all timer widgets), `hub_update_timer` (once a second from `hub_tick`: time left, breaks, eye cue), `hub_update_eye` (shows and hides the eye cue)
+  * `alert.c`: `hub_notify` (a desktop notification), `hub_alert` (notification + the bell), `hub_wind_down_alerts` (the wind-down warning, once per session)
   * `show.c`: what puts values on screen: `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_show_timer_page` (the page that matches the state), `hub_show_eye` (the eye-cue text with `eye_sec`)
   * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
-* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack`
+* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack` and the application (`app`, borrowed: `main` owns it)
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`: prototypes of `sources/computer/` and `sources/timer/`
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
@@ -96,6 +97,18 @@ eye_seconds=20
 ```
 
 The file is read when the window opens; no rebuild needed. Values must be whole numbers above 0. A missing, broken or invalid key gives one line on the terminal and its default is used.
+
+**Notifications need a `.desktop` file** (until `make install` in milestone 4 writes it): GNOME only shows notifications from apps it can match to a `.desktop` file named after the app id. Create `~/.local/share/applications/ch.bitminded.GamingHub.desktop`:
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=Gaming Hub
+Exec=/full/path/to/gaming_hub
+Icon=input-gaming
+```
+
+With Do Not Disturb on, GNOME shows no banners at all (they go to the message list); the bell still rings.
 
 **Coming at milestone 4:** `make install` (app menu entry with an icon) and a guide to start the hub automatically with your games (Steam, Heroic, Lutris, emulators) through GameMode. Packaging (Flatpak or RPM) is a later idea.
 
@@ -327,3 +340,22 @@ The stats are outside the stack because a widget has only one parent, so they ca
 **Text from the setting.** `hub_show_eye` builds the text with `g_strdup_printf` from `eye_sec`, so changing the setting changes the text too.
 
 **Order in Start.** `hub_update_timer` is the last line of `hub_start_clicked`: it reads `next_eye`, so everything it uses has to be set first.
+
+### Notifications and the bell (milestone 3, step 7)
+
+**What reaches you.** The hub sits on the laptop screen while the game is on another, so a change in the window is easy to miss. So:
+
+| Moment | Notification (id) | Bell |
+| --- | --- | --- |
+| Eye cue | "Eye rest" (`eye`) | no (it's meant to be quiet) |
+| Break | "Break time" (`break`) | yes |
+| Wind-down (`wind_down` minutes before the end, once) | "Wind down: N minutes left - head for a save point" (`wind-down`) | yes |
+| Session over (time up; not End session, which is my own choice) | "Session over" (`end`) | yes |
+
+**GNotification.** `g_notification_new(title)` + `g_notification_set_body`, sent with `g_application_send_notification(app, id, n)`, which takes its own reference, so the hub unrefs its one at once. The same id replaces the previous notification instead of stacking (so the eye cues don't pile up). The `GApplication` is kept in `hub->app`, a borrowed pointer: `main` owns it.
+
+**Why nothing showed at first (18 Nov).** Two causes, found one at a time: Do Not Disturb was on (`gsettings get org.gnome.desktop.notifications show-banners` → `false`; `notify-send` showed nothing either), and GNOME drops notifications from an app it can't match to a `.desktop` file named after the app id (tested: removing the file stopped them again). Fullscreen games: GNOME doesn't show banners over a fullscreen window on the same screen either, so the bell is the part that reliably reaches you.
+
+**The bell.** `gtk_media_file_new_for_filename(HUB_SOUND)` (the freedesktop theme's `bell.oga`, chosen by ear with `pw-play`) is created once in `hub_timer_manager`; `hub_alert` rewinds it (`gtk_media_stream_seek(…, 0)`) and plays it; playback runs in the background. The stream is owned by the hub: `hub_free_hub` unrefs it if it was created. If the file is missing, the stream holds an error and plays nothing. Later: the hub's own sound as a GResource.
+
+**Wind-down once.** `hub->timer.wind_warned` is reset at Start and set when the warning fires, so the last `wind_down` minutes don't warn every second. Every text built with `g_strdup_printf` is built and freed inside the `if` where it's used, not on every tick.
