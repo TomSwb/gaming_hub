@@ -39,11 +39,7 @@ void	hub_computer_init(t_hub *hub)
 
 void	hub_timer_init(t_hub *hub)
 {
-	hub->setting.session = HUB_DEF_SESSION;
-	hub->setting.wind_down = HUB_DEF_WIND_DOWN;
-	hub->setting.break_min = HUB_DEF_BREAK_MIN;
-	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
-	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
+	hub_setting_init(hub);
 	hub->timer.session = NULL;
 	hub->timer.start = NULL;
 	hub->timer.countdown = NULL;
@@ -51,6 +47,8 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.stop = NULL;
 	hub->timer.done = NULL;
 	hub->timer.eye = NULL;
+	hub->timer.break_spin = NULL;
+	hub->timer.wind_spin = NULL;
 	hub->timer.planned = 0;
 	hub->timer.state = TIMER_PLANNING;
 	hub->timer.started = 0;
@@ -60,4 +58,13 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.eye_until = 0;
 	hub->timer.wind_warned = FALSE;
 	hub->timer.sound = NULL;
+}
+
+void	hub_setting_init(t_hub *hub)
+{
+	hub->setting.session = HUB_DEF_SESSION;
+	hub->setting.wind_down = HUB_DEF_WIND_DOWN;
+	hub->setting.break_min = HUB_DEF_BREAK_EVERY;
+	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
+	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
 }

@@ -51,8 +51,8 @@ typedef struct s_settings
 {
 	gint	session;
 	gint	wind_down;
-	gint	break_min;
-	gint	eye_min;
+	gint	break_min; // min = minutes
+	gint	eye_min; // min = minutes
 	gint	eye_sec;
 }	t_settings;
 
@@ -65,6 +65,8 @@ typedef struct s_timer
 	GtkWidget		*stop;
 	GtkWidget		*done;
 	GtkWidget		*eye;
+	GtkWidget		*break_spin;
+	GtkWidget		*wind_spin;
 	gint			planned;
 	t_timer_state	state;
 	gint64			started;

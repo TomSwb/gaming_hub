@@ -30,6 +30,7 @@ void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 
 // session.c
 void		hub_timer_manager(t_hub *hub);
+void		hub_create_time_spin_buttons(t_hub *hub);
 void		hub_update_timer(t_hub *hub);
 void		hub_update_eye(t_hub *hub, gint elapsed);
 

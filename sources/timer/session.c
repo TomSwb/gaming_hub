@@ -14,10 +14,7 @@
 
 void	hub_timer_manager(t_hub *hub)
 {
-	hub->timer.session = gtk_spin_button_new_with_range(HUB_SESSION_LOWEST,
-			HUB_SESSION_HIGHEST, HUB_SESSION_STEP);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.session),
-			hub->setting.session);
+	hub_create_time_spin_buttons(hub);
 	hub->timer.start = gtk_button_new_with_label("Start");
 	g_signal_connect(hub->timer.start, "clicked",
 			G_CALLBACK(hub_start_clicked), hub);
@@ -35,6 +32,22 @@ void	hub_timer_manager(t_hub *hub)
 	gtk_widget_set_visible(hub->timer.eye, FALSE);
 	hub_show_eye(hub->timer.eye, hub->setting.eye_sec);
 	hub->timer.sound = gtk_media_file_new_for_filename(HUB_SOUND);
+}
+
+void	hub_create_time_spin_buttons(t_hub *hub)
+{
+	hub->timer.session = gtk_spin_button_new_with_range(HUB_SESSION_LOWEST,
+			HUB_SESSION_HIGHEST, HUB_SESSION_STEP);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.session),
+			hub->setting.session);
+	hub->timer.break_spin = gtk_spin_button_new_with_range(HUB_BREAK_MIN_EVERY,
+			HUB_BREAK_MAX_EVERY, HUB_SESSION_STEP);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.break_spin),
+			hub->setting.break_min);
+	hub->timer.wind_spin = gtk_spin_button_new_with_range(HUB_WIND_DOWN_LOWEST,
+			HUB_WIND_DOWN_HIGHEST, HUB_SESSION_STEP);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.wind_spin),
+			hub->setting.wind_down);
 }
 
 void	hub_update_timer(t_hub *hub)
