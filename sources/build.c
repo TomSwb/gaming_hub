@@ -87,8 +87,6 @@ GtkWidget	*hub_build_stats(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub->computer.temp);
 	gtk_box_append(GTK_BOX(box), hub->computer.gpu);
 	gtk_box_append(GTK_BOX(box), hub->computer.bat);
-	gtk_widget_set_valign(box, GTK_ALIGN_CENTER);
-	gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
 	return (box);
 }
 
