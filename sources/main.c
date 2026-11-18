@@ -36,6 +36,7 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 
 	hub = user_data;
 	window = GTK_WINDOW(gtk_application_window_new(self));
+	hub->app = G_APPLICATION(self); // borrowed pointer mains own app and unref
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
 	hub_setting_hub(hub);

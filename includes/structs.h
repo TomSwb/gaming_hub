@@ -76,10 +76,11 @@ typedef struct s_timer
 
 typedef struct s_hub
 {
-	t_computer	computer;
-	t_settings	setting;
-	t_timer		timer;
-	GtkWidget	*stack;
+	t_computer		computer;
+	t_settings		setting;
+	t_timer			timer;
+	GtkWidget		*stack;
+	GApplication	*app;
 }	t_hub;
 
 #endif

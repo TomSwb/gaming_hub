@@ -44,4 +44,8 @@ void		hub_show_time(GtkWidget *label, gint seconds);
 void		hub_show_timer_page(t_hub *hub);
 void		hub_show_eye(GtkWidget *label, gint seconds);
 
+// alert.c
+void	hub_notify(t_hub *hub, const gchar *id, const gchar *title,
+			const gchar *body);
+
 #endif

@@ -38,7 +38,8 @@ COMPUTER = sources/computer/ram.c \
 TIMER = sources/timer/settings.c \
 	sources/timer/session.c \
 	sources/timer/buttons.c \
-	sources/timer/show.c
+	sources/timer/show.c \
+	sources/timer/alert.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

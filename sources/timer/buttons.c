@@ -29,6 +29,7 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 		hub->timer.next_eye = hub->setting.eye_min * 60;
 		gtk_widget_set_visible(hub->timer.eye, FALSE);
 		hub_update_timer(hub);
+		hub_notify(hub, "test", "Gaming Hub", "Session started");
 	}
 }
 
