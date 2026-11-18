@@ -68,16 +68,16 @@ void	hub_update_eye(t_hub *hub, gint elapsed)
 {
 	gchar	*text;
 
-	text = g_strdup_printf("Look at something 6m away for %d seconds",
-			hub->setting.eye_sec);
 	if (elapsed >= hub->timer.next_eye)
 	{
+		text = g_strdup_printf("Look at something 6m away for %d seconds",
+			hub->setting.eye_sec);
 		gtk_widget_set_visible(hub->timer.eye, TRUE);
 		hub_notify(hub, "eye", "Eye rest", text);
 		hub->timer.eye_until = elapsed + hub->setting.eye_sec;
 		hub->timer.next_eye += hub->setting.eye_min * 60;
+		g_free(text);
 	}
 	if (elapsed >= hub->timer.eye_until)
 		gtk_widget_set_visible(hub->timer.eye, FALSE);
-	g_free(text);
 }

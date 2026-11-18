@@ -27,13 +27,13 @@ void	hub_check_alerts(t_hub *hub, gint left)
 {
 	gchar	*text;
 
-	text = g_strdup_printf("%d minutes left - head for a save point",
-							hub->setting.wind_down);
 	if (hub->timer.wind_warned == FALSE
 		&& left <= hub->setting.wind_down * 60)
 	{
+		text = g_strdup_printf("%d minutes left - head for a save point",
+							hub->setting.wind_down);
 		hub_notify(hub, "wind-down", "Wind down", text);
 		hub->timer.wind_warned = TRUE;
+		g_free(text);
 	}
-	g_free(text);
 }
