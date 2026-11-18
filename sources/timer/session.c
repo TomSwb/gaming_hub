@@ -47,28 +47,37 @@ void	hub_update_timer(t_hub *hub)
 	if (hub->timer.state == TIMER_PLAYING && elapsed >= hub->timer.next_break)
 	{
 		hub->timer.state = TIMER_BREAK;
+		hub_notify(hub, "break", "Break time", "Pause and take a break :)");
 		hub_show_timer_page(hub);
 	}
 	if (hub->timer.state == TIMER_PLAYING)
 		hub_update_eye(hub, (gint)elapsed);
 	left = (hub->timer.planned * 60) - (gint)elapsed;
+	hub_check_alerts(hub, left);
 	if (left <= 0)
 	{
 		left = 0;
 		hub->timer.state = TIMER_ENDED;
 		hub_show_timer_page(hub);
+		hub_notify(hub, "end", "Session over", "End of session, time to go :)");
 	}
 	hub_show_time(hub->timer.countdown, left);
 }
 
 void	hub_update_eye(t_hub *hub, gint elapsed)
 {
+	gchar	*text;
+
+	text = g_strdup_printf("Look at something 6m away for %d seconds",
+			hub->setting.eye_sec);
 	if (elapsed >= hub->timer.next_eye)
 	{
 		gtk_widget_set_visible(hub->timer.eye, TRUE);
+		hub_notify(hub, "eye", "Eye rest", text);
 		hub->timer.eye_until = elapsed + hub->setting.eye_sec;
 		hub->timer.next_eye += hub->setting.eye_min * 60;
 	}
 	if (elapsed >= hub->timer.eye_until)
 		gtk_widget_set_visible(hub->timer.eye, FALSE);
+	g_free(text);
 }

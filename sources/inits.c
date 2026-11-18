@@ -58,4 +58,5 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.next_break = 0;
 	hub->timer.next_eye = 0;
 	hub->timer.eye_until = 0;
+	hub->timer.wind_warned = FALSE;
 }
