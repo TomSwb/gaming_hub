@@ -41,4 +41,6 @@ void	hub_free_hub(t_hub *hub)
 	g_free(hub->computer.gpu_dir);
 	g_free(hub->computer.bat_dir);
 	g_free(hub->computer.mains_dir);
+	if (hub->timer.sound != NULL)
+		g_object_unref(hub->timer.sound);
 }

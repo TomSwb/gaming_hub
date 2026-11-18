@@ -15,15 +15,15 @@
 void	hub_notify(t_hub *hub, const gchar *id, const gchar *title,
 			const gchar *body)
 {
-	GNotification	*n;
+	GNotification	*notif;
 
-	n = g_notification_new(title);
-	g_notification_set_body(n, body);
-	g_application_send_notification(hub->app, id, n);
-	g_object_unref(n);
+	notif = g_notification_new(title);
+	g_notification_set_body(notif, body);
+	g_application_send_notification(hub->app, id, notif);
+	g_object_unref(notif);
 }
 
-void	hub_check_alerts(t_hub *hub, gint left)
+void	hub_wind_down_alerts(t_hub *hub, gint left)
 {
 	gchar	*text;
 
@@ -32,8 +32,16 @@ void	hub_check_alerts(t_hub *hub, gint left)
 	{
 		text = g_strdup_printf("%d minutes left - head for a save point",
 							hub->setting.wind_down);
-		hub_notify(hub, "wind-down", "Wind down", text);
+		hub_alert(hub, "wind-down", "Wind down", text);
 		hub->timer.wind_warned = TRUE;
 		g_free(text);
 	}
+}
+
+void	hub_alert(t_hub *hub, const gchar *id, const gchar *title,
+			const gchar *body)
+{
+	hub_notify(hub, id, title, body);
+	gtk_media_stream_seek(hub->timer.sound, 0);
+	gtk_media_stream_play(hub->timer.sound);
 }

@@ -23,5 +23,6 @@
 # define HUB_SESSION_LOWEST 5
 # define HUB_SESSION_HIGHEST 360
 # define HUB_SESSION_STEP 5
+# define HUB_SOUND "/usr/share/sounds/freedesktop/stereo/bell.oga"
 
 #endif

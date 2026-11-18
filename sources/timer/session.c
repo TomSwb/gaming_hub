@@ -34,6 +34,7 @@ void	hub_timer_manager(t_hub *hub)
 	hub->timer.eye = gtk_label_new("");
 	gtk_widget_set_visible(hub->timer.eye, FALSE);
 	hub_show_eye(hub->timer.eye, hub->setting.eye_sec);
+	hub->timer.sound = gtk_media_file_new_for_filename(HUB_SOUND);
 }
 
 void	hub_update_timer(t_hub *hub)
@@ -47,19 +48,19 @@ void	hub_update_timer(t_hub *hub)
 	if (hub->timer.state == TIMER_PLAYING && elapsed >= hub->timer.next_break)
 	{
 		hub->timer.state = TIMER_BREAK;
-		hub_notify(hub, "break", "Break time", "Pause and take a break :)");
+		hub_alert(hub, "break", "Break time", "Pause and take a break :)");
 		hub_show_timer_page(hub);
 	}
 	if (hub->timer.state == TIMER_PLAYING)
 		hub_update_eye(hub, (gint)elapsed);
 	left = (hub->timer.planned * 60) - (gint)elapsed;
-	hub_check_alerts(hub, left);
+	hub_wind_down_alerts(hub, left);
 	if (left <= 0)
 	{
 		left = 0;
 		hub->timer.state = TIMER_ENDED;
 		hub_show_timer_page(hub);
-		hub_notify(hub, "end", "Session over", "End of session, time to go :)");
+		hub_alert(hub, "end", "Session over", "End of session, time to go :)");
 	}
 	hub_show_time(hub->timer.countdown, left);
 }

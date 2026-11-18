@@ -73,6 +73,7 @@ typedef struct s_timer
 	gint			next_eye;
 	gint			eye_until;
 	gboolean		wind_warned;
+	GtkMediaStream	*sound;
 }	t_timer;
 
 typedef struct s_hub
