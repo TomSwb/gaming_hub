@@ -50,7 +50,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `battery.c`: battery % and status, with the charger as fallback
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
   * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
-  * `session.c`: `hub_setting_timer` (all timer widgets), `hub_update_timer` (once a second from `hub_tick`: time left, breaks, eye cue), `hub_update_eye` (shows and hides the eye cue)
+  * `session.c`: `hub_timer_manager` (all timer widgets), `hub_update_timer` (once a second from `hub_tick`: time left, breaks, eye cue), `hub_update_eye` (shows and hides the eye cue)
   * `show.c`: what puts values on screen: `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_show_timer_page` (the page that matches the state), `hub_show_eye` (the eye-cue text with `eye_sec`)
   * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
@@ -306,7 +306,7 @@ window
 
 The stats are outside the stack because a widget has only one parent, so they can't be in two pages; this way they stay visible on every page (and later under the library). Later pages: "ritual" (milestone 7) and "library" (milestone 8). For the styling step: the stats should be visible but not dominant, which one CSS class on their box can do.
 
-**State → page.** `hub_show_timer_page` picks the page from the state (planning or ended → plan, playing or paused → session, break → break) and is called after every state change, including once at the end of `hub_build_box`, the first moment the stack exists (calling it earlier, from `hub_setting_timer`, would pass a `NULL` stack).
+**State → page.** `hub_show_timer_page` picks the page from the state (planning or ended → plan, playing or paused → session, break → break) and is called after every state change, including once at the end of `hub_build_box`, the first moment the stack exists (calling it earlier, from `hub_timer_manager`, would pass a `NULL` stack).
 
 **When a break comes.** `hub->timer.next_break` is the elapsed second of the next break: `break_min * 60` at Start. Each tick while playing, `hub_update_timer` checks `elapsed >= next_break` and switches to break. Breaks **count** toward the session (decided 17 Nov): the countdown keeps running in the break state, and the session can end during one. Done sets `next_break = elapsed + break_min * 60`, so every break is followed by a full `break_min` of play. To test without waiting: `break_every_minutes=1` in the settings file.
 
@@ -320,7 +320,7 @@ The stats are outside the stack because a widget has only one parent, so they ca
 
 **What it does.** Every `eye_min` minutes of play (20), a line under the countdown, "Look at something 6m away for 20 seconds", shows for `eye_sec` seconds (20), then hides. No page switch, nothing to click: the 20-20-20 rule, quieter than the break.
 
-**Showing and hiding.** `gtk_widget_set_visible(widget, FALSE)` hides a widget: it stays in its box but takes no space and isn't drawn. The label is created hidden in `hub_setting_timer`, and Start hides it again (a cue could still be showing from the last session).
+**Showing and hiding.** `gtk_widget_set_visible(widget, FALSE)` hides a widget: it stays in its box but takes no space and isn't drawn. The label is created hidden in `hub_timer_manager`, and Start hides it again (a cue could still be showing from the last session).
 
 **Two schedules, one idea.** Like `next_break`, `next_eye` is the elapsed second of the next cue (`eye_min * 60` at Start), and `eye_until` the second it hides. Each tick while playing, `hub_update_eye`: if `elapsed >= next_eye`, show it, `eye_until = elapsed + eye_sec`, and `next_eye += eye_min * 60` (*moved on by*, not *set to*: set to, it would fire on every tick after the first cue). If `elapsed >= eye_until`, hide it (hiding a hidden widget changes nothing, so this is harmless before the first cue). The eye check runs **after** the break check, so when both are due on the same second (minute 60 with 20/60) the break wins and no cue shows during it. To test: `eye_every_minutes=1`, `eye_seconds=5`.
 
