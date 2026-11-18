@@ -41,11 +41,11 @@ void	hub_create_time_spin_buttons(t_hub *hub)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.session),
 			hub->setting.session);
 	hub->timer.break_spin = gtk_spin_button_new_with_range(HUB_BREAK_MIN_EVERY,
-			HUB_BREAK_MAX_EVERY, HUB_SESSION_STEP);
+			HUB_BREAK_MAX_EVERY, HUB_BREAK_STEP);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.break_spin),
 			hub->setting.break_min);
 	hub->timer.wind_spin = gtk_spin_button_new_with_range(HUB_WIND_DOWN_LOWEST,
-			HUB_WIND_DOWN_HIGHEST, HUB_SESSION_STEP);
+			HUB_WIND_DOWN_HIGHEST, HUB_WIND_DOWN_STEP);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.wind_spin),
 			hub->setting.wind_down);
 }
