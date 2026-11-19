@@ -54,11 +54,10 @@ GtkWidget	*hub_plan_box_middle(t_hub *hub)
 		hub_labelled("Break every:", hub->timer.break_spin));
 	gtk_box_append(GTK_BOX(box),
 		hub_labelled("Wind down at:", hub->timer.wind_spin));
-	gtk_widget_set_halign(box, GTK_ALIGN_END);
-	gtk_widget_set_valign(box, GTK_ALIGN_CENTER);
 	gtk_box_append(GTK_BOX(box2), box);
 	gtk_box_append(GTK_BOX(box2), label);
-	gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
+	gtk_widget_set_halign(box2, GTK_ALIGN_END);
+	gtk_widget_set_valign(box2, GTK_ALIGN_CENTER);
 	return (box2);
 }
 
