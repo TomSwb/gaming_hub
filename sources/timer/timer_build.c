@@ -42,8 +42,12 @@ GtkWidget	*hub_build_plan(t_hub *hub)
 GtkWidget	*hub_plan_box_middle(t_hub *hub)
 {
 	GtkWidget	*box;
+	GtkWidget	*box2;
+	GtkWidget	*label;
 
+	box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+	label = gtk_label_new("minutes");
 	gtk_box_append(GTK_BOX(box),
 		hub_labelled("Session length:", hub->timer.session));
 	gtk_box_append(GTK_BOX(box),
@@ -52,7 +56,10 @@ GtkWidget	*hub_plan_box_middle(t_hub *hub)
 		hub_labelled("Wind down at:", hub->timer.wind_spin));
 	gtk_widget_set_halign(box, GTK_ALIGN_END);
 	gtk_widget_set_valign(box, GTK_ALIGN_CENTER);
-	return (box);
+	gtk_box_append(GTK_BOX(box2), box);
+	gtk_box_append(GTK_BOX(box2), label);
+	gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
+	return (box2);
 }
 
 GtkWidget	*hub_build_session(t_hub *hub)
