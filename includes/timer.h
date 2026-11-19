@@ -31,11 +31,13 @@ void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 // session.c
 void		hub_timer_manager(t_hub *hub);
 void		hub_create_time_spin_buttons(t_hub *hub);
+void		hub_timer_create_buttons(t_hub *hub);
 void		hub_update_timer(t_hub *hub);
 void		hub_update_eye(t_hub *hub, gint elapsed);
 
 // buttons.c
 void		hub_start_clicked(GtkButton *self, gpointer user_data);
+void		hub_read_plan(t_hub *hub);
 void		hub_pause_clicked(GtkButton *self, gpointer user_data);
 void		hub_stop_clicked(GtkButton *self, gpointer user_data);
 void		hub_done_clicked(GtkButton *self, gpointer user_data);

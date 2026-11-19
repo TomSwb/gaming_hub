@@ -41,7 +41,11 @@ void	hub_wind_down_alerts(t_hub *hub, gint left)
 void	hub_alert(t_hub *hub, const gchar *id, const gchar *title,
 			const gchar *body)
 {
-	hub_notify(hub, id, title, body);
-	gtk_media_stream_seek(hub->timer.sound, 0);
-	gtk_media_stream_play(hub->timer.sound);
+	if (hub->timer.popups)
+		hub_notify(hub, id, title, body);
+	if (hub->timer.sound_on)
+	{
+		gtk_media_stream_seek(hub->timer.sound, 0);
+		gtk_media_stream_play(hub->timer.sound);
+	}
 }

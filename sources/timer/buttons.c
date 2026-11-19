@@ -20,8 +20,7 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 	hub = user_data;
 	if (hub->timer.state == TIMER_PLANNING || hub->timer.state == TIMER_ENDED)
 	{
-		hub->timer.planned = gtk_spin_button_get_value_as_int(
-				GTK_SPIN_BUTTON(hub->timer.session));
+		hub_read_plan(hub);
 		hub->timer.state = TIMER_PLAYING;
 		hub_show_timer_page(hub);
 		hub->timer.started = g_get_monotonic_time();
@@ -31,6 +30,23 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 		hub->timer.wind_warned = FALSE;
 		hub_update_timer(hub);
 	}
+}
+
+void	hub_read_plan(t_hub *hub)
+{
+	GtkCheckButton	*sound;
+	GtkCheckButton	*popups;
+
+	sound = GTK_CHECK_BUTTON(hub->timer.sound_check);
+	popups = GTK_CHECK_BUTTON(hub->timer.popups_check);
+	hub->timer.planned = gtk_spin_button_get_value_as_int(
+			GTK_SPIN_BUTTON(hub->timer.session));
+	hub->setting.wind_down = gtk_spin_button_get_value_as_int(
+			GTK_SPIN_BUTTON(hub->timer.wind_spin));
+	hub->setting.break_min = gtk_spin_button_get_value_as_int(
+			GTK_SPIN_BUTTON(hub->timer.break_spin));
+	hub->timer.popups = gtk_check_button_get_active(popups);
+	hub->timer.sound_on = gtk_check_button_get_active(sound);
 }
 
 void	hub_pause_clicked(GtkButton *self, gpointer user_data)

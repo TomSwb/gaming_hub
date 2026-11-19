@@ -15,19 +15,7 @@
 void	hub_timer_manager(t_hub *hub)
 {
 	hub_create_time_spin_buttons(hub);
-	hub->timer.start = gtk_button_new_with_label("Start");
-	g_signal_connect(hub->timer.start, "clicked",
-			G_CALLBACK(hub_start_clicked), hub);
-	hub->timer.countdown = gtk_label_new("Not Started");
-	hub->timer.pause = gtk_button_new_with_label("Pause");
-	g_signal_connect(hub->timer.pause, "clicked",
-			G_CALLBACK(hub_pause_clicked), hub);
-	hub->timer.stop = gtk_button_new_with_label("End Session");
-	g_signal_connect(hub->timer.stop, "clicked",
-			G_CALLBACK(hub_stop_clicked), hub);
-	hub->timer.done = gtk_button_new_with_label("Done");
-	g_signal_connect(hub->timer.done, "clicked",
-			G_CALLBACK(hub_done_clicked), hub);
+	hub_timer_create_buttons(hub);
 	hub->timer.eye = gtk_label_new("");
 	gtk_widget_set_visible(hub->timer.eye, FALSE);
 	hub_show_eye(hub->timer.eye, hub->setting.eye_sec);
@@ -35,7 +23,7 @@ void	hub_timer_manager(t_hub *hub)
 	hub->timer.popups_check = gtk_check_button_new_with_label("Pop-ups");
 	gtk_check_button_set_active(GTK_CHECK_BUTTON(hub->timer.popups_check),
 		TRUE);
-	hub->timer.sound_check = gtk_check_button_new_with_label("Sounds");
+	hub->timer.sound_check = gtk_check_button_new_with_label("Sound");
 	gtk_check_button_set_active(GTK_CHECK_BUTTON(hub->timer.sound_check),
 		TRUE);
 }
@@ -54,6 +42,23 @@ void	hub_create_time_spin_buttons(t_hub *hub)
 			HUB_WIND_DOWN_HIGHEST, HUB_WIND_DOWN_STEP);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.wind_spin),
 			hub->setting.wind_down);
+}
+
+void	hub_timer_create_buttons(t_hub *hub)
+{
+	hub->timer.start = gtk_button_new_with_label("Start");
+	g_signal_connect(hub->timer.start, "clicked",
+			G_CALLBACK(hub_start_clicked), hub);
+	hub->timer.countdown = gtk_label_new("Not Started");
+	hub->timer.pause = gtk_button_new_with_label("Pause");
+	g_signal_connect(hub->timer.pause, "clicked",
+			G_CALLBACK(hub_pause_clicked), hub);
+	hub->timer.stop = gtk_button_new_with_label("End Session");
+	g_signal_connect(hub->timer.stop, "clicked",
+			G_CALLBACK(hub_stop_clicked), hub);
+	hub->timer.done = gtk_button_new_with_label("Done");
+	g_signal_connect(hub->timer.done, "clicked",
+			G_CALLBACK(hub_done_clicked), hub);
 }
 
 void	hub_update_timer(t_hub *hub)

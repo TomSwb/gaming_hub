@@ -49,7 +49,6 @@ GtkWidget	*hub_image_with_label(const gchar *icon, const gchar *text)
 	return (box);
 }
 
-
 GtkWidget	*hub_labelled(const gchar *text, GtkWidget *widget)
 {
 	GtkWidget	*box;
