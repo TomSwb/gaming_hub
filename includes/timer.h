@@ -52,4 +52,10 @@ void		hub_wind_down_alerts(t_hub *hub, gint left);
 void		hub_alert(t_hub *hub, const gchar *id, const gchar *title,
 				const gchar *body);
 
+// timer_build.c
+GtkWidget	*hub_build_plan(t_hub *hub);
+GtkWidget	*hub_plan_box_middle(t_hub *hub);
+GtkWidget	*hub_build_session(t_hub *hub);
+GtkWidget	*hub_build_break(t_hub *hub);
+
 #endif

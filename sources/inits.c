@@ -49,6 +49,8 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.eye = NULL;
 	hub->timer.break_spin = NULL;
 	hub->timer.wind_spin = NULL;
+	hub->timer.popups_check = NULL;
+	hub->timer.sound_check = NULL;
 	hub->timer.planned = 0;
 	hub->timer.state = TIMER_PLANNING;
 	hub->timer.started = 0;
@@ -58,6 +60,8 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.eye_until = 0;
 	hub->timer.wind_warned = FALSE;
 	hub->timer.sound = NULL;
+	hub->timer.popups = TRUE;
+	hub->timer.sound_on = TRUE;
 }
 
 void	hub_setting_init(t_hub *hub)

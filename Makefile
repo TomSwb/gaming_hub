@@ -33,19 +33,20 @@ COMPUTER = sources/computer/ram.c \
 	sources/computer/temp_fan.c \
 	sources/computer/gpu.c \
 	sources/computer/battery.c \
-	sources/computer/sysfs.c
+	sources/computer/sysfs.c \
+	sources/computer/stats_build.c
 
 TIMER = sources/timer/settings.c \
 	sources/timer/session.c \
 	sources/timer/buttons.c \
 	sources/timer/show.c \
-	sources/timer/alert.c
+	sources/timer/alert.c \
+	sources/timer/timer_build.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \
 	sources/inits.c \
-	sources/build.c \
-	sources/build2.c \
+	sources/main_build.c
 
 FILES = ${SOURCES} \
 	${COMPUTER} \

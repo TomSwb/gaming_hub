@@ -58,4 +58,7 @@ gboolean	hub_read_number(const gchar *dir, const gchar *file,
 				guint64 *value);
 gchar		*hub_read_text(const gchar *dir, const gchar *file);
 
+// stats_build.c
+GtkWidget	*hub_build_stats(t_hub *hub);
+
 #endif

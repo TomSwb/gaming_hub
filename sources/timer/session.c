@@ -32,6 +32,12 @@ void	hub_timer_manager(t_hub *hub)
 	gtk_widget_set_visible(hub->timer.eye, FALSE);
 	hub_show_eye(hub->timer.eye, hub->setting.eye_sec);
 	hub->timer.sound = gtk_media_file_new_for_filename(HUB_SOUND);
+	hub->timer.popups_check = gtk_check_button_new_with_label("Pop-ups");
+	gtk_check_button_set_active(GTK_CHECK_BUTTON(hub->timer.popups_check),
+		TRUE);
+	hub->timer.sound_check = gtk_check_button_new_with_label("Sounds");
+	gtk_check_button_set_active(GTK_CHECK_BUTTON(hub->timer.sound_check),
+		TRUE);
 }
 
 void	hub_create_time_spin_buttons(t_hub *hub)

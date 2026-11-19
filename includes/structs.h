@@ -67,6 +67,8 @@ typedef struct s_timer
 	GtkWidget		*eye;
 	GtkWidget		*break_spin;
 	GtkWidget		*wind_spin;
+	GtkWidget		*popups_check;
+	GtkWidget		*sound_check;
 	gint			planned;
 	t_timer_state	state;
 	gint64			started;
@@ -76,6 +78,8 @@ typedef struct s_timer
 	gint			eye_until;
 	gboolean		wind_warned;
 	GtkMediaStream	*sound;
+	gboolean		popups;
+	gboolean		sound_on;
 }	t_timer;
 
 typedef struct s_hub

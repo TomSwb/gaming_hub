@@ -39,15 +39,9 @@ void		hub_computer_init(t_hub *hub);
 void		hub_timer_init(t_hub *hub);
 void		hub_setting_init(t_hub *hub);
 
-// build.c
+// main_build.c
 GtkWidget	*hub_build_box(t_hub *hub);
-GtkWidget	*hub_build_plan(t_hub *hub);
-GtkWidget	*hub_build_session(t_hub *hub);
-GtkWidget	*hub_build_stats(t_hub *hub);
-GtkWidget	*hub_labelled(const gchar *text, GtkWidget *widget);
-
-// build2.c
-GtkWidget	*hub_build_break(t_hub *hub);
 GtkWidget	*hub_image_with_label(const gchar *icon, const gchar *text);
+GtkWidget	*hub_labelled(const gchar *text, GtkWidget *widget);
 
 #endif
