@@ -55,9 +55,9 @@ void	hub_set_timer_settings(GKeyFile *key_file, t_hub *hub)
 	hub_read_setting(key_file, "timer",
 		"eye_seconds", &hub->setting.eye_sec);
 	hub_read_setting_boolean(key_file, "timer",
-		"eye_seconds", &hub->setting.popups);
+		"popups", &hub->setting.popups);
 	hub_read_setting_boolean(key_file, "timer",
-		"eye_seconds", &hub->setting.sound);
+		"sound", &hub->setting.sound);
 }
 
 void	hub_read_setting(GKeyFile *key_file, const gchar *group,
@@ -91,7 +91,7 @@ void	hub_read_setting(GKeyFile *key_file, const gchar *group,
 }
 
 void	hub_read_setting_boolean(GKeyFile *key_file, const gchar *group,
-			const gchar *key, gint *value)
+			const gchar *key, gboolean *value)
 {
 	GError		*error;
 	gboolean	temp;
@@ -102,7 +102,7 @@ void	hub_read_setting_boolean(GKeyFile *key_file, const gchar *group,
 	missing = g_error_matches(error, G_KEY_FILE_ERROR,
 			G_KEY_FILE_ERROR_GROUP_NOT_FOUND) || g_error_matches(error,
 			G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND);
-	if (!error && temp > 0)
+	if (!error)
 	{
 		*value = temp;
 		return ;
@@ -115,7 +115,5 @@ void	hub_read_setting_boolean(GKeyFile *key_file, const gchar *group,
 			g_printerr("Can't read file: %s %s - using default\n",
 				key, error->message);
 	}
-	else if (temp <= 0)
-		g_printerr("Value must be higher than 0: %s - using default\n", key);
 	g_clear_error(&error);
 }

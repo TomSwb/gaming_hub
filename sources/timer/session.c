@@ -22,10 +22,10 @@ void	hub_timer_manager(t_hub *hub)
 	hub->timer.sound = gtk_media_file_new_for_filename(HUB_SOUND);
 	hub->timer.popups_check = gtk_check_button_new_with_label("Pop-ups");
 	gtk_check_button_set_active(GTK_CHECK_BUTTON(hub->timer.popups_check),
-		TRUE);
+		hub->setting.popups);
 	hub->timer.sound_check = gtk_check_button_new_with_label("Sound");
 	gtk_check_button_set_active(GTK_CHECK_BUTTON(hub->timer.sound_check),
-		TRUE);
+		hub->setting.sound);
 }
 
 void	hub_create_time_spin_buttons(t_hub *hub)

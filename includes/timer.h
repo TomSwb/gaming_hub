@@ -27,6 +27,8 @@ gboolean	hub_key_file_error(GKeyFile *key_file, gchar *path);
 void		hub_set_timer_settings(GKeyFile *key_file, t_hub *hub);
 void		hub_read_setting(GKeyFile *key_file, const gchar *group,
 				const gchar *key, gint *value);
+void		hub_read_setting_boolean(GKeyFile *key_file, const gchar *group,
+				const gchar *key, gboolean *value);
 
 // session.c
 void		hub_timer_manager(t_hub *hub);
