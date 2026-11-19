@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–7 done: settings file and session plan 11 Nov; countdown, Pause, End session, break screen and eye cue 17 Nov; notifications and the bell 18 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–8 done: settings file and session plan 11 Nov; countdown, Pause, End session, break screen and eye cue 17 Nov; notifications and the bell 18 Nov; plan-page choices 19 Nov).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -37,9 +37,8 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 `Files:`
 
 * `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
-* `sources/inits.c`: `hub_struct_init` sets every field to a known value: `hub_computer_init` (stats) and `hub_timer_init` (the settings to their defaults, the timer widgets to `NULL`)
-* `sources/build.c`: the window's layout: `hub_build_box` (a stack of pages above the stats), `hub_build_plan`, `hub_build_session`, `hub_build_stats` (each builds and returns its own box)
-* `sources/build2.c`: `hub_build_break` (the break page) and `hub_image_with_label` (a theme icon at 48 px with an optional wrapping label under it)
+* `sources/inits.c`: `hub_struct_init` sets every field to a known value: `hub_computer_init` (stats), `hub_timer_init` (timer widgets to `NULL`, state) and `hub_setting_init` (the settings to their defaults)
+* `sources/main_build.c`: the window's layout and shared layout helpers: `hub_build_box` (a stack of pages above the stats), `hub_image_with_label` (a theme icon at 48 px with an optional wrapping label under it), `hub_labelled` (a left-aligned label in front of a widget)
 * `sources/utils.c`: `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, then the timer widgets, once), `hub_free_hub` (frees what the struct owns)
 * `sources/computer/`: the live stats (milestone 2)
   * `sysfs.c`: shared readers for `/sys`: `hub_find_dir` (finds a device folder by the content of one of its files, e.g. hwmon `name` = `coretemp`), `hub_find_gpu` (the DRM card that has `gt_act_freq_mhz`), `hub_read_number` and `hub_read_text` (one value from a one-value file)
@@ -48,13 +47,15 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
   * `temp_fan.c`: CPU package temperature (`coretemp`) and fan speed (`thinkpad`) on one line
   * `gpu.c`: GPU frequency (actual / maximum), from `/sys/class/drm`
   * `battery.c`: battery % and status, with the charger as fallback
+  * `stats_build.c`: `hub_build_stats` (the five stat labels in a box)
 * `sources/timer/`: the timer and healthy-gaming features (milestone 3)
-  * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the five keys), `hub_read_setting` (one key, keeps the default on any problem)
-  * `session.c`: `hub_timer_manager` (all timer widgets), `hub_update_timer` (once a second from `hub_tick`: time left, breaks, eye cue), `hub_update_eye` (shows and hides the eye cue)
-  * `alert.c`: `hub_notify` (a desktop notification), `hub_alert` (notification + the bell), `hub_wind_down_alerts` (the wind-down warning, once per session)
+  * `settings.c`: reads `~/.config/gaming_hub/settings.ini` with GKeyFile: `hub_load_timer_settings` (called first in `hub_setting_hub`, so every widget sees the final values), `hub_key_file_error` (loads the file, reports a broken one), `hub_set_timer_settings` (the seven keys), `hub_read_setting` (one number, keeps the default on any problem), `hub_read_setting_boolean` (one `true` / `false`)
+  * `session.c`: `hub_timer_manager` (all timer widgets, with `hub_create_time_spin_buttons` and `hub_timer_create_buttons`), `hub_update_timer` (once a second from `hub_tick`: time left, breaks, eye cue), `hub_update_eye` (shows and hides the eye cue)
+  * `alert.c`: `hub_notify` (a desktop notification), `hub_alert` (notification and/or the bell, as ticked), `hub_wind_down_alerts` (the wind-down warning, once per session)
   * `show.c`: what puts values on screen: `hub_show_time` (seconds → `h:mm:ss` on a label), `hub_show_timer_page` (the page that matches the state), `hub_show_eye` (the eye-cue text with `eye_sec`)
-  * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break)
-* `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c` and `utils.c`
+  * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break), `hub_read_plan` (reads the plan page at Start)
+  * `timer_build.c`: the timer's pages: `hub_build_plan` (three columns: checkboxes, `hub_plan_box_middle` with the three fields, alarm + Start), `hub_build_session`, `hub_build_break`
+* `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c`, `utils.c`, `inits.c` and `main_build.c`
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack` and the application (`app`, borrowed: `main` owns it)
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`: prototypes of `sources/computer/` and `sources/timer/`
@@ -94,9 +95,11 @@ wind_down_minutes=10
 break_every_minutes=50
 eye_every_minutes=20
 eye_seconds=20
+popups=true
+sound=true
 ```
 
-The file is read when the window opens; no rebuild needed. Values must be whole numbers above 0. A missing, broken or invalid key gives one line on the terminal and its default is used.
+The file is read when the window opens; no rebuild needed. It only decides what the plan page shows at first: session length, break interval, wind-down and the two checkboxes can be changed there for each session. Numbers must be whole numbers above 0; `popups` and `sound` take `true` or `false`, **lowercase** (`TRUE` is an invalid value for GLib). A missing, broken or invalid key gives one line on the terminal and its default is used.
 
 **Notifications need a `.desktop` file** (until `make install` in milestone 4 writes it): GNOME only shows notifications from apps it can match to a `.desktop` file named after the app id. Create `~/.local/share/applications/ch.bitminded.GamingHub.desktop`:
 
@@ -359,3 +362,23 @@ The stats are outside the stack because a widget has only one parent, so they ca
 **The bell.** `gtk_media_file_new_for_filename(HUB_SOUND)` (the freedesktop theme's `bell.oga`, chosen by ear with `pw-play`) is created once in `hub_timer_manager`; `hub_alert` rewinds it (`gtk_media_stream_seek(…, 0)`) and plays it; playback runs in the background. The stream is owned by the hub: `hub_free_hub` unrefs it if it was created. If the file is missing, the stream holds an error and plays nothing. Later: the hub's own sound as a GResource.
 
 **Wind-down once.** `hub->timer.wind_warned` is reset at Start and set when the warning fires, so the last `wind_down` minutes don't warn every second. Every text built with `g_strdup_printf` is built and freed inside the `if` where it's used, not on every tick.
+
+### Plan-page choices (milestone 3, step 8)
+
+**The plan page** has three columns, split evenly with `gtk_box_set_homogeneous`:
+
+```
+[ ] Pop-ups     Session length: [120]     [alarm]
+[ ] Sound       Break every:    [ 50]     [Start]
+                Wind down at:   [ 10]
+```
+
+Everything is pre-filled from the settings and read at Start by `hub_read_plan` into the values the session uses (`hub->timer.planned`, `hub->setting.break_min`, `hub->setting.wind_down`, `hub->timer.popups`, `hub->timer.sound_on`). The settings file is only read when the hub opens; after that the fields keep their last values, so the next session starts with what was chosen last. Decided 17 Nov (instead of a Settings page): per-session choices, nothing written back to the file.
+
+**Limits and steps** (`defaults.h`): session 5–360 by 5, break every 5–90 by 5, wind-down 1–30 by 1. `set_value` clamps a file value outside the range (a test file's `break_every_minutes=2` showed 5).
+
+**Checkboxes.** `GtkCheckButton` with `gtk_check_button_set_active` / `get_active`. `hub_alert` notifies only if `popups` and rings only if `sound_on`; the eye cue goes through `hub_notify`, so unticking Pop-ups silences it too. Their defaults (`HUB_DEF_POPUPS`, `HUB_DEF_SOUND`, both `TRUE`) can be set in the file as `popups=` / `sound=`, read with `g_key_file_get_boolean` (no range check: `FALSE` is a valid 0).
+
+**Layout lessons.** Columns lined up with `gtk_widget_set_hexpand(label, TRUE)` + `gtk_label_set_xalign(label, 0)` in `hub_labelled`: every row in a vertical box gets the widest row's width, so the stretching label pushes each field to the same right edge. `valign` only matters when a widget gets more height than it needs (a homogeneous box, or a taller parent); in a normal vertical box each child gets exactly its natural height, so centring does nothing there. A GtkSpinButton's − / + can't be removed; CSS can restyle them at the styling step (`spinbutton > button`), or `GtkDropDown` / `GtkScale` could replace them.
+
+**Breaks vs wind-down, on screen.** The countdown shows time *left*; breaks count time *played*, wind-down counts time *left*. A 6-minute session with "Break every 5" gets its break when the countdown reads 1:00; "Wind down at 5" fires at 5:00 left.
