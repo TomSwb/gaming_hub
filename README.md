@@ -14,6 +14,12 @@ It is also a learning project: event-driven programming in C with GTK4, GLib/GOb
 
 <img src="assets/historic/first_working_prototype.png" alt="Gaming Hub window showing RAM, CPU, temperature and fan, GPU frequency and battery" width="300">
 
+**Milestone 3 (19 Nov):** the timer. Plan a session, play with a countdown, get a break screen, a 20-20-20 eye cue, and notifications with a bell; the stats stay under every page.
+
+| Plan | Playing | Eye cue | Break |
+| --- | --- | --- | --- |
+| <img src="assets/historic/timer_done/planning_page.png" alt="Plan page: Pop-ups and Sound checkboxes, session length, break interval and wind-down fields, an alarm icon and Start" width="200"> | <img src="assets/historic/timer_done/timer_running.png" alt="Session page: countdown 1:59:59, controller icon, Pause and End Session" width="200"> | <img src="assets/historic/timer_done/eye_cue.png" alt="Session page with the eye cue: Look at something 6m away for 20 seconds" width="200"> | <img src="assets/historic/timer_done/break_page.png" alt="Break page: Stand, Roll neck and shoulder, Drink water icons and a Done button" width="200"> |
+
 #### Brief overview:
 
 The window is snapped to one half of the laptop screen (Super+Left/Right), next to the YouTube Music app on the other half.
@@ -60,7 +66,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`: prototypes of `sources/computer/` and `sources/timer/`
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
-* `assets/historic/`: screenshots of the hub at each stage (`first_working_prototype.png`, milestone 2)
+* `assets/historic/`: screenshots of the hub at each stage (`first_working_prototype.png`, milestone 2; `timer_done/`, milestone 3: plan, playing, eye cue, break)
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
 
 `Additionally contains:`
