@@ -54,6 +54,10 @@ void	hub_set_timer_settings(GKeyFile *key_file, t_hub *hub)
 		"eye_every_minutes", &hub->setting.eye_min);
 	hub_read_setting(key_file, "timer",
 		"eye_seconds", &hub->setting.eye_sec);
+	hub_read_setting_boolean(key_file, "timer",
+		"eye_seconds", &hub->setting.popups);
+	hub_read_setting_boolean(key_file, "timer",
+		"eye_seconds", &hub->setting.sound);
 }
 
 void	hub_read_setting(GKeyFile *key_file, const gchar *group,
@@ -65,6 +69,36 @@ void	hub_read_setting(GKeyFile *key_file, const gchar *group,
 
 	error = NULL;
 	temp = g_key_file_get_integer(key_file, group, key, &error);
+	missing = g_error_matches(error, G_KEY_FILE_ERROR,
+			G_KEY_FILE_ERROR_GROUP_NOT_FOUND) || g_error_matches(error,
+			G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND);
+	if (!error && temp > 0)
+	{
+		*value = temp;
+		return ;
+	}
+	if (error)
+	{
+		if (missing)
+			g_printerr("Not found: %s - using default\n", key);
+		else
+			g_printerr("Can't read file: %s %s - using default\n",
+				key, error->message);
+	}
+	else if (temp <= 0)
+		g_printerr("Value must be higher than 0: %s - using default\n", key);
+	g_clear_error(&error);
+}
+
+void	hub_read_setting_boolean(GKeyFile *key_file, const gchar *group,
+			const gchar *key, gint *value)
+{
+	GError		*error;
+	gboolean	temp;
+	gboolean	missing;
+
+	error = NULL;
+	temp = g_key_file_get_boolean(key_file, group, key, &error);
 	missing = g_error_matches(error, G_KEY_FILE_ERROR,
 			G_KEY_FILE_ERROR_GROUP_NOT_FOUND) || g_error_matches(error,
 			G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND);

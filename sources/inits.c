@@ -71,4 +71,6 @@ void	hub_setting_init(t_hub *hub)
 	hub->setting.break_min = HUB_DEF_BREAK_EVERY;
 	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
 	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
+	hub->setting.popups = HUB_DEF_POPUPS;
+	hub->setting.sound = HUB_DEF_SOUND;
 }

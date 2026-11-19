@@ -34,5 +34,7 @@
 # define HUB_DEF_EYE_CUE_LENGTH 20
 
 # define HUB_SOUND "/usr/share/sounds/freedesktop/stereo/bell.oga"
+# define HUB_DEF_POPUPS TRUE
+# define HUB_DEF_SOUND TRUE
 
 #endif

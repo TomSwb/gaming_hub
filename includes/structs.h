@@ -49,11 +49,13 @@ typedef struct s_computer
 
 typedef struct s_settings
 {
-	gint	session;
-	gint	wind_down;
-	gint	break_min; // min = minutes
-	gint	eye_min; // min = minutes
-	gint	eye_sec;
+	gint		session;
+	gint		wind_down;
+	gint		break_min; // min = minutes
+	gint		eye_min; // min = minutes
+	gint		eye_sec;
+	gboolean	popups;
+	gboolean	sound;
 }	t_settings;
 
 typedef struct s_timer
