@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Now: milestone 3, the timer and healthy-gaming features (steps 1–8 done: settings file and session plan 11 Nov; countdown, Pause, End session, break screen and eye cue 17 Nov; notifications and the bell 18 Nov; plan-page choices 19 Nov).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Next: milestone 4, auto-start with games and `make install`.
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -388,3 +388,9 @@ Everything is pre-filled from the settings and read at Start by `hub_read_plan` 
 **Layout lessons.** Columns lined up with `gtk_widget_set_hexpand(label, TRUE)` + `gtk_label_set_xalign(label, 0)` in `hub_labelled`: every row in a vertical box gets the widest row's width, so the stretching label pushes each field to the same right edge. `valign` only matters when a widget gets more height than it needs (a homogeneous box, or a taller parent); in a normal vertical box each child gets exactly its natural height, so centring does nothing there. A GtkSpinButton's − / + can't be removed; CSS can restyle them at the styling step (`spinbutton > button`), or `GtkDropDown` / `GtkScale` could replace them.
 
 **Breaks vs wind-down, on screen.** The countdown shows time *left*; breaks count time *played*, wind-down counts time *left*. A 6-minute session with "Break every 5" gets its break when the countdown reads 1:00; "Wind down at 5" fires at 5:00 left.
+
+### Milestone 3 wrap-up (19 Nov)
+
+**Cost check** (session running, `top -b -n 3 -d 2 -w 200 -p (pidof gaming_hub)`): `%CPU` 0.0–0.5 %, `RES` 114 MB (0.7 % of RAM, of which ~84 MB `SHR`: GTK's shared libraries), 0.7 s of CPU in total. `top -b` cuts its lines at the terminal's width, hence `-w 200`. The full `glmark2` fps check comes after the styling step.
+
+**Left for later:** the hub's own sound and icons (GResource or installed named icons, when the branding arrives); the `.desktop` file by hand until `make install` (milestone 4); styling (stats visible but not dominant; spin buttons; the break title).
