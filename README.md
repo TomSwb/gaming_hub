@@ -128,7 +128,7 @@ Each one is usable on its own. Full plan: [`docs/game-dashboard.md`](https://git
 - [x] 0. Research (no code): headset battery, MangoHud logging (8 Nov, see `docs/research.md`)
 - [x] 1. Hello window: GtkApplication, main loop, signals, GObject basics (8 Nov)
 - [x] 2. Live stats from `/proc` and `/sys` + fps-cost check (8–10 Nov)
-- [ ] 3. Timer and healthy-gaming features, settings file
+- [x] 3. Timer and healthy-gaming features, settings file (10–19 Nov)
 - [ ] 4. Auto-start with GameMode, single instance, `--end`; `make install` (app menu icon) and a guide to hook it to Steam, Heroic, Lutris and emulators
 - [ ] 5. Headset volume and mic with libpulse
 - [ ] 6. Power profile and charger over D-Bus
