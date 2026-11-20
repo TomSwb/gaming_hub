@@ -26,9 +26,9 @@
 # define HUB_WIND_DOWN_STEP 1
 
 # define HUB_DEF_BREAK_EVERY 50
-# define HUB_BREAK_MIN_EVERY 1 // MIN = minimum
+# define HUB_BREAK_MIN_EVERY 5 // MIN = minimum
 # define HUB_BREAK_MAX_EVERY 90
-# define HUB_BREAK_STEP 1
+# define HUB_BREAK_STEP 5
 
 # define HUB_DEF_EYE_CUE_MIN 20
 # define HUB_DEF_EYE_CUE_LENGTH 20
