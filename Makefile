@@ -12,6 +12,14 @@
 
 NAME = gaming_hub
 
+PREFIX ?= ${HOME}/.local
+
+BIN_DIR = ${PREFIX}/bin
+
+DESKTOP = ch.bitminded.GamingHub.desktop
+
+APP_DIR = ${PREFIX}/share/applications
+
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
@@ -78,4 +86,13 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re libft
+install: all
+	install -D -m 755 ${NAME} ${BIN_DIR}/${NAME}
+	mkdir -p ${APP_DIR}
+	printf '%s\n' '[Desktop Entry]' 'Type=Application' 'Name=Gaming Hub' \
+		'Comment=Gaming session companion' \
+		'Exec=${BIN_DIR}/${NAME}' \
+		'Icon=input-gaming' 'Categories=Game;' > ${APP_DIR}/${DESKTOP}
+	-update-desktop-database ${APP_DIR}
+
+.PHONY: all clean fclean re libft install
