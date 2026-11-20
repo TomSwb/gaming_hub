@@ -16,13 +16,13 @@ Single instance, the `--end` command line, starting with GameMode, `make install
 
 **Declaring the option.** `g_application_add_main_option(app, "end", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, "Ends the session", NULL)` before `g_application_run`: a switch (`ARG_NONE`, no value), no short form (`short_name` is a `char`, so `0`, not `NULL`), listed by `gaming_hub --help`. GLib parses it into a `GVariantDict` on the command line: `g_application_command_line_get_options_dict` (borrowed, owned by the command line) and `g_variant_dict_contains(options, "end")`.
 
-**What `--end` does.** It calls `hub_stop_clicked(NULL, hub)`, the End session button's callback (it never uses its button, so `NULL` is safe as long as that stays true). Since 20 Nov that ends a session that is playing, paused **or in a break** (closing the game during a break is natural; before, the countdown would have run on and rung "Session over" for a closed game). The window stays open on the plan page.
+**What `--end` did in step 2** (changed in step 5a, below). It called `hub_stop_clicked(NULL, hub)`, the End session button's callback (it never uses its button, so `NULL` is safe as long as that stays true). Since 20 Nov that ends a session that is playing, paused **or in a break** (closing the game during a break is natural; before, the countdown would have run on and rung "Session over" for a closed game). The window stays open on the plan page.
 
 | Launch | Hub running? | Result |
 | --- | --- | --- |
 | `gaming_hub` | no | opens the window |
 | `gaming_hub` | yes | brings the window to the front (step 1) |
-| `gaming_hub --end` | yes | the running session ends; the command returns at once |
+| `gaming_hub --end` | yes | the running session ends; the command returns at once (until step 5a: since then it moves the session to "Between Games") |
 | `gaming_hub --end` | no | nothing opens: this launch becomes the primary, the state is planning (from `hub_struct_init`), so `hub_stop_clicked` touches no widget (they were never built), and with no window the app quits at once |
 
 ## Starting with GameMode (milestone 4, step 3, 20 Nov)
@@ -72,3 +72,41 @@ end=/full/path/to/gaming_hub --end
 **`uninstall`** removes exactly the two files (`rm -f`: no error if already gone), never the shared folders, and refreshes the index.
 
 **The menu kept the old entry.** After `make install` replaced the hand-made `.desktop` file (same name, new `Exec=`), the app menu still started the repo copy (`pgrep -a gaming_hub` shows each process's full command line). `gio launch <file.desktop>` (reads the file directly) started the installed one, so the file was right: the running GNOME Shell kept its old copy of the entry, even after `update-desktop-database`. After a restart the menu starts `~/.local/bin/gaming_hub`. Only matters when `Exec=` changes, so once. (A first `pgrep` check was misleading: the hub from the GameMode test was still open, so the menu's launch became a remote and just presented that window.)
+
+## A real Steam game (milestone 4, step 5, 20 Nov)
+
+The GameMode lines use the installed hub by name: `systemctl --user show-environment` shows `~/.local/bin` first in the PATH that systemd gives user services (GNOME passes the login environment on), and `readlink /proc/<pid>/exe` (the kernel's link to a process's real program) confirmed `~/.local/bin/gaming_hub`. A Steam game with the launch option `gamemoderun %command%`: the hub opened about half a second before the game's window, and the session reacted about half a second after the game's window closed.
+
+Things learned on the way:
+- **Which screen:** on Wayland an app can't choose where its window opens; GNOME usually uses the screen with the pointer or the focused window, so the hub opened on the TV. Super+Shift+←/→ moves a window to the other screen, then Super+←/→ snaps it.
+- **Launch options are per game:** Steam has no global setting. `gamemoderun %command%` is added when I start playing a game; MangoHud can stay in front of it (`mangohud gamemoderun %command%`) for the fps overlay and log, which the hub doesn't replace (fps is milestone 10, and would read MangoHud's log).
+
+## Between games: `--end` and `--start` (milestone 4, step 5a, 20 Nov)
+
+**Why.** With `--end` ending the session, closing one game to open another started a fresh countdown on every switch: against the charter, where a session is "how long I play tonight". Decided 20 Nov:
+
+| Moment | Command | Hub |
+| --- | --- | --- |
+| A game starts, hub not running | `--start` | opens on the **plan page** (also after milestone 8) |
+| A game closes during a session | `--end` | **"Between Games"** page; the **countdown keeps running**, like during a break. From milestone 8: the library with the timer on top |
+| The next game starts | `--start` | back to the playing page, same session and countdown |
+| From the app menu | (none) | opens or comes to the front, nothing else |
+| End session (any page) or time up | | the session ends |
+
+**A new state, `TIMER_TRANSIT`** (session open, no game running, countdown runs), not a reuse of `TIMER_PAUSED`: a manual pause freezes the countdown and shows Resume, and from milestone 8 the two need different pages. Both commands leave a manual pause alone.
+
+- **`hub_game_closed`** (`--end`, in the new `sources/game/game_events.c`): from playing, paused or break → transit. Coming from paused, the pause is first taken out of the elapsed time (`started += now - paused_at`, as Resume does): `hub_update_timer` computes `elapsed = now - started` again once the countdown runs, so without it the whole pause would suddenly count as played. Also resets the Pause button's label and hides the eye cue.
+- **`hub_game_started`** (`--start`): transit → playing. If the break time passed between games, it counts as taken: `next_break = elapsed + break_min * 60`, but only `if (elapsed >= next_break)`, otherwise switching games often would push the breaks away forever.
+- **`hub_command_line`**: `--end` → `hub_game_closed`, no window; otherwise activate first (so the window exists), then `--start` → `hub_game_started`. On the very first launch the state is planning, so `--start` just shows the plan page.
+- **`hub_timer_running`** (`timer/timer_utils.c`): playing, break or transit; the countdown runs only then (and it kept `hub_update_timer` at 25 lines).
+- **The page** (`hub_build_transit`): "Between Games", its own countdown label and its own End session button. A widget has one parent: `countdown` and `done` were already on other pages, so appending them again is refused (a `gtk_widget_get_parent (child) == NULL` CRITICAL) and the page got neither. `hub_update_timer` writes the time to both countdown labels; a label on a hidden page isn't drawn, so it costs nothing.
+- **Between games:** no break and no eye cue start (both need playing); wind-down and "Session over" still fire.
+- `sources/game/` is a new area: games coming and going (milestone 7's game detection and milestone 8's launcher go there too).
+
+Tested with two fake games in a row (`gamemoderun sleep 20` twice): plan page on the first launch, Between Games when it ended, the same countdown when the second started, End session from the Between Games page back to the plan page. The GameMode lines:
+
+```ini
+[custom]
+start=gaming_hub --start > /dev/null 2>&1 &
+end=gaming_hub --end
+```

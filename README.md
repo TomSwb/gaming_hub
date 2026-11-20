@@ -63,7 +63,8 @@ make
 | Command | What it does |
 | --- | --- |
 | `gaming_hub` | opens the hub, or brings the open one to the front (one instance only) |
-| `gaming_hub --end` | ends the running session (the window stays open); opens nothing if the hub isn't running |
+| `gaming_hub --start` | a game started: opens the hub (on the plan page) or brings it forward; a session that is between games carries on |
+| `gaming_hub --end` | a game closed: a running session goes to the "Between Games" page, its countdown keeps running; opens nothing if the hub isn't running |
 | `gaming_hub --help` | lists the options |
 
 The Makefile gets GTK's compiler and linker flags from `pkg-config`, so it builds on any distribution without editing paths.
@@ -115,7 +116,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 | [`docs/basics.md`](docs/basics.md) | Milestone 1: app id, how the program runs (main loop, callbacks), who frees what |
 | [`docs/live-stats.md`](docs/live-stats.md) | Milestone 2: the tick, reading `/proc` and `/sys`, finding devices by name, fps-cost check |
 | [`docs/timer.md`](docs/timer.md) | Milestone 3: settings file, countdown and states, pages, eye cue, notifications, plan page |
-| [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4 (in progress): single instance, `--end`, starting with GameMode, `make install` |
+| [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4 (in progress): single instance, `--end` / `--start`, starting with GameMode, `make install`, between games |
 
 ## Resources
 
