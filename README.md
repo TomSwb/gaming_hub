@@ -4,7 +4,7 @@
 
 #### Goal:
 
-A small GTK4 window for my laptop screen while I game on the TV or projector. It opens when a game starts, shows what I care about during a session (system stats, headset, break timer, power), keeps a log of my sessions, and acts as the break reminder of my Healthy Gaming Charter.
+A small GTK4 window for my laptop screen while I game on the TV or projector. It opens when a game starts, shows what I care about during a session (system stats, headset, break timer, power), and acts as the break reminder of my Healthy Gaming Charter.
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
@@ -30,8 +30,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Headset | Volume, mute, mic volume and mute, battery (if Linux can read it) | PipeWire through libpulse; battery TBD in milestone 0 |
 | Timer | Session plan, breaks, wind-down warning, 20-20-20 eye cue, pause button | GLib timers, GtkMediaFile, GNotification |
 | Power | Balanced ↔ Performance switch, charger warning | power-profiles D-Bus API (tuned-ppd), UPower |
-| Session log | Game (detected, then confirmed by me at the end), start/end, play time, average fps, max temperature → CSV | Own code, `~/.local/share/gaming_hub/` |
-| Game notes | Per-game card: settings that worked, "where I was / what's next" | Text files per game |
+| Session log | Silent: game, date and play time of library games, for the library's play history (milestone 8) | Own code, `~/.local/share/gaming_hub/` |
 | Library | All my games (Steam, GOG/Epic through Heroic, emulators) in one list, started from the hub | Steam `appmanifest_*.acf`, Heroic's library JSON, ROM folders |
 | Temp graph | Temperature over the whole session | GtkDrawingArea + Cairo |
 | FPS (stretch) | Frame rate and frame time | MangoHud's log, if it can be read live |
@@ -140,7 +139,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 4. Auto-start with GameMode, single instance, `--start` / `--end`, between games; `make install` (app menu entry) and a guide to hook it to Steam, Heroic, Lutris and emulators (20 Nov)
 - [ ] 5. Headset volume and mic with libpulse
 - [ ] 6. Power profile and charger over D-Bus
-- [ ] 7. Session log, game notes, stop ritual, monthly review
+- [x] ~~7. Session log, game notes, stop ritual, monthly review~~ dropped 20 Nov 2026 (a silent session log for the library's play history moves into milestone 8)
 - [ ] 8. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub
 - [ ] 9. Temperature graph with Cairo
 - [ ] 10. FPS from MangoHud (stretch)
