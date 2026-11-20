@@ -31,7 +31,7 @@ void	hub_wind_down_alerts(t_hub *hub, gint left)
 		&& left <= hub->setting.wind_down * 60)
 	{
 		text = g_strdup_printf("%d minutes left - head for a save point",
-							hub->setting.wind_down);
+				hub->setting.wind_down);
 		hub_alert(hub, "wind-down", "Wind down", text);
 		hub->timer.wind_warned = TRUE;
 		g_free(text);

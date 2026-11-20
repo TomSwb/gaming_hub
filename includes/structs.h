@@ -26,7 +26,7 @@ typedef enum e_timer_state
 	TIMER_PAUSED,
 	TIMER_BREAK,
 	TIMER_ENDED,
-	TIMER_TRANSIT // session open, no game running, countdown runs
+	TIMER_TRANSIT
 }	t_timer_state;
 
 // === Struct === //

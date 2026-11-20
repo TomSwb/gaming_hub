@@ -33,36 +33,36 @@ void	hub_create_time_spin_buttons(t_hub *hub)
 	hub->timer.session = gtk_spin_button_new_with_range(HUB_SESSION_LOWEST,
 			HUB_SESSION_HIGHEST, HUB_SESSION_STEP);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.session),
-			hub->setting.session);
+		hub->setting.session);
 	hub->timer.break_spin = gtk_spin_button_new_with_range(HUB_BREAK_MIN_EVERY,
 			HUB_BREAK_MAX_EVERY, HUB_BREAK_STEP);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.break_spin),
-			hub->setting.break_min);
+		hub->setting.break_min);
 	hub->timer.wind_spin = gtk_spin_button_new_with_range(HUB_WIND_DOWN_LOWEST,
 			HUB_WIND_DOWN_HIGHEST, HUB_WIND_DOWN_STEP);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(hub->timer.wind_spin),
-			hub->setting.wind_down);
+		hub->setting.wind_down);
 }
 
 void	hub_timer_create_buttons(t_hub *hub)
 {
 	hub->timer.start = gtk_button_new_with_label("Start");
 	g_signal_connect(hub->timer.start, "clicked",
-			G_CALLBACK(hub_start_clicked), hub);
+		G_CALLBACK(hub_start_clicked), hub);
 	hub->timer.countdown = gtk_label_new("Not Started");
 	hub->timer.transit_countdown = gtk_label_new("Not Started");
 	hub->timer.pause = gtk_button_new_with_label("Pause");
 	g_signal_connect(hub->timer.pause, "clicked",
-			G_CALLBACK(hub_pause_clicked), hub);
+		G_CALLBACK(hub_pause_clicked), hub);
 	hub->timer.stop = gtk_button_new_with_label("End Session");
 	g_signal_connect(hub->timer.stop, "clicked",
-			G_CALLBACK(hub_stop_clicked), hub);
+		G_CALLBACK(hub_stop_clicked), hub);
 	hub->timer.transit_end = gtk_button_new_with_label("End Session");
 	g_signal_connect(hub->timer.transit_end, "clicked",
-			G_CALLBACK(hub_stop_clicked), hub);
+		G_CALLBACK(hub_stop_clicked), hub);
 	hub->timer.done = gtk_button_new_with_label("Done");
 	g_signal_connect(hub->timer.done, "clicked",
-			G_CALLBACK(hub_done_clicked), hub);
+		G_CALLBACK(hub_done_clicked), hub);
 }
 
 void	hub_update_timer(t_hub *hub)
@@ -101,7 +101,7 @@ void	hub_update_eye(t_hub *hub, gint elapsed)
 	if (elapsed >= hub->timer.next_eye)
 	{
 		text = g_strdup_printf("Look at something 6m away for %d seconds",
-			hub->setting.eye_sec);
+				hub->setting.eye_sec);
 		gtk_widget_set_visible(hub->timer.eye, TRUE);
 		hub_notify(hub, "eye", "Eye rest", text);
 		hub->timer.eye_until = elapsed + hub->setting.eye_sec;

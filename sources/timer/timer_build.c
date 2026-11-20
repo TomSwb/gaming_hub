@@ -93,10 +93,10 @@ GtkWidget	*hub_build_break(t_hub *hub)
 	icon_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_box_append(GTK_BOX(icon_row),
 		hub_image_with_label("preferences-desktop-accessibility-symbolic",
-				"Stand"));
+			"Stand"));
 	gtk_box_append(GTK_BOX(icon_row),
 		hub_image_with_label("object-rotate-right-symbolic",
-				"Roll neck & shoulder"));
+			"Roll neck & shoulder"));
 	gtk_box_append(GTK_BOX(icon_row),
 		hub_image_with_label("weather-showers-symbolic", "Drink water"));
 	gtk_widget_set_halign(icon_row, GTK_ALIGN_CENTER);

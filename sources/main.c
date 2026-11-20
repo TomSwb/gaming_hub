@@ -24,9 +24,11 @@ int	main(int ac, char **av)
 	g_signal_connect(app, "activate", G_CALLBACK(hub_activate), &hub);
 	g_signal_connect(app, "command-line", G_CALLBACK(hub_command_line), &hub);
 	g_application_add_main_option(G_APPLICATION(app), "end", 0,
-		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, "Ends the session", NULL);
+		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE,
+		"A game closed: the session goes between games", NULL);
 	g_application_add_main_option(G_APPLICATION(app), "start", 0,
-		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, "Starts the session", NULL);
+		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE,
+		"A game started: the session carries on", NULL);
 	status = g_application_run(G_APPLICATION(app), ac, av);
 	g_object_unref(app);
 	hub_free_hub(&hub);
@@ -47,7 +49,7 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 		return ;
 	}
 	window = GTK_WINDOW(gtk_application_window_new(self));
-	hub->app = G_APPLICATION(self); // borrowed pointer mains own app and unref
+	hub->app = G_APPLICATION(self);
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
 	hub_setting_hub(hub);
