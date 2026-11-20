@@ -95,4 +95,9 @@ install: all
 		'Icon=input-gaming' 'Categories=Game;' > ${APP_DIR}/${DESKTOP}
 	-update-desktop-database ${APP_DIR}
 
-.PHONY: all clean fclean re libft install
+uninstall:
+	rm -f ${APP_DIR}/${DESKTOP}
+	rm -f ${BIN_DIR}/${NAME}
+	-update-desktop-database ${APP_DIR}
+
+.PHONY: all clean fclean re libft install uninstall
