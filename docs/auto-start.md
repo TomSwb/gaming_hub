@@ -50,3 +50,25 @@ end=/full/path/to/gaming_hub --end
 `end=` needs no `&`: `--end` is a remote launch that returns at once (step 2). Tested with `time gamemoderun sleep 60`: the hub opened at once (GameMode's service can open windows: it runs in my graphical session), a session started in it ended by itself when the fake game ended, the window stayed open, and the game was not delayed.
 
 **Seen on the way (not the hub's problem):** GameMode's own tweaks need root through polkit, and `pkexec` refuses them (`Not authorized`, exit code 127): the CPU governor (`desiredgov=powersave` in `[general]`) and `split_lock_mitigate` never applied. Noted in the set_up log to look into separately.
+
+## `make install` and `make uninstall` (milestone 4, step 4, 20 Nov)
+
+**Where things go** (the XDG layout, per user, no root), all under a **prefix**, `~/.local` by default:
+
+| What | Where |
+| --- | --- |
+| The program | `${PREFIX}/bin/gaming_hub` (`~/.local/bin` is on the PATH on Fedora) |
+| The menu entry | `${PREFIX}/share/applications/ch.bitminded.GamingHub.desktop` (named after the app id: notifications need that) |
+| The icon (when the logo arrives) | `${PREFIX}/share/icons/hicolor/scalable/apps/ch.bitminded.GamingHub.svg` |
+
+**Variables.** `PREFIX ?= ${HOME}/.local` (`?=`: only if not already set, so `make install PREFIX=…` wins; `${HOME}` comes from the environment, which make turns into variables; `~` is a shell shortcut and isn't expanded in make variables), then `BIN_DIR`, `APP_DIR` (folders, no trailing `/`) and `DESKTOP` (only the file name); a rule glues them: `${APP_DIR}/${DESKTOP}`.
+
+**`install: all`.** First tried as `install: ${NAME}`: after `make fclean`, `make install` stopped with `No rule to make target 'libft/libft.a'`, because only the phony `libft` rule builds it and only `all` asks for that. Depending on `all` builds exactly what `make` builds. Then:
+
+- `install -D -m 755` copies the program: `-D` creates missing parent folders, `-m 755` makes it executable (`rwxr-xr-x`).
+- `mkdir -p` + `printf '%s\n' '[Desktop Entry]' 'Type=Application' 'Name=Gaming Hub' 'Comment=Gaming session companion' 'Exec=${BIN_DIR}/${NAME}' 'Icon=input-gaming' 'Categories=Game;' > …`: the `.desktop` file is written by the Makefile, not kept in git, because `Exec=` needs the installed path, known only at install time (make replaces the variables before the shell sees the single quotes). Checked with `desktop-file-validate` (silent = valid). `Categories` is plural and the list ends with `;`.
+- `-update-desktop-database ${APP_DIR}`: refreshes the folder's index; the `-` lets make carry on if the tool is missing.
+
+**`uninstall`** removes exactly the two files (`rm -f`: no error if already gone), never the shared folders, and refreshes the index.
+
+**The menu kept the old entry.** After `make install` replaced the hand-made `.desktop` file (same name, new `Exec=`), the app menu still started the repo copy (`pgrep -a gaming_hub` shows each process's full command line). `gio launch <file.desktop>` (reads the file directly) started the installed one, so the file was right: the running GNOME Shell kept its old copy of the entry, even after `update-desktop-database`. After a restart the menu starts `~/.local/bin/gaming_hub`. Only matters when `Exec=` changes, so once. (A first `pgrep` check was misleading: the hub from the GameMode test was still open, so the menu's launch became a remote and just presented that window.)

@@ -56,6 +56,16 @@ make
 ./gaming_hub
 ```
 
+**Install** (for your user only, no root): `make install` builds the hub, copies it to `~/.local/bin/gaming_hub` and writes `~/.local/share/applications/ch.bitminded.GamingHub.desktop`, so the hub is in the app menu and can be started as `gaming_hub`. `make uninstall` removes exactly those two files. Another location: `make install PREFIX=/some/where`. A running GNOME may keep showing an older menu entry until you log out and back in.
+
+**Command line:**
+
+| Command | What it does |
+| --- | --- |
+| `gaming_hub` | opens the hub, or brings the open one to the front (one instance only) |
+| `gaming_hub --end` | ends the running session (the window stays open); opens nothing if the hub isn't running |
+| `gaming_hub --help` | lists the options |
+
 The Makefile gets GTK's compiler and linker flags from `pkg-config`, so it builds on any distribution without editing paths.
 
 **Editor support:** `make` also writes `compile_flags.txt` (one flag per line, from the same `pkg-config` output) so clangd finds GTK's headers. It is generated for each machine and not tracked in git.
@@ -76,19 +86,9 @@ sound=true
 
 The file is read when the window opens; no rebuild needed. It only decides what the plan page shows at first: session length, break interval, wind-down and the two checkboxes can be changed there for each session. Numbers must be whole numbers above 0; `popups` and `sound` take `true` or `false`, **lowercase** (`TRUE` is an invalid value for GLib). A missing, broken or invalid key gives one line on the terminal and its default is used.
 
-**Notifications need a `.desktop` file** (until `make install` in milestone 4 writes it): GNOME only shows notifications from apps it can match to a `.desktop` file named after the app id. Create `~/.local/share/applications/ch.bitminded.GamingHub.desktop`:
+**Notifications need the `.desktop` file** that `make install` writes: GNOME only shows notifications from apps it can match to a `.desktop` file named after the app id, so a hub run from the repo without installing shows none. With Do Not Disturb on, GNOME shows no banners at all (they go to the message list); the bell still rings.
 
-```ini
-[Desktop Entry]
-Type=Application
-Name=Gaming Hub
-Exec=/full/path/to/gaming_hub
-Icon=input-gaming
-```
-
-With Do Not Disturb on, GNOME shows no banners at all (they go to the message list); the bell still rings.
-
-**Coming at milestone 4:** `make install` (app menu entry with an icon) and a guide to start the hub automatically with your games (Steam, Heroic, Lutris, emulators) through GameMode. Packaging (Flatpak or RPM) is a later idea.
+**Coming at milestone 4:** a guide to start the hub automatically with your games (Steam, Heroic, Lutris, emulators) through GameMode. Packaging (Flatpak or RPM) is a later idea.
 
 ## Milestones
 
@@ -115,7 +115,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 | [`docs/basics.md`](docs/basics.md) | Milestone 1: app id, how the program runs (main loop, callbacks), who frees what |
 | [`docs/live-stats.md`](docs/live-stats.md) | Milestone 2: the tick, reading `/proc` and `/sys`, finding devices by name, fps-cost check |
 | [`docs/timer.md`](docs/timer.md) | Milestone 3: settings file, countdown and states, pages, eye cue, notifications, plan page |
-| [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4 (in progress): single instance, `--end`, starting with GameMode |
+| [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4 (in progress): single instance, `--end`, starting with GameMode, `make install` |
 
 ## Resources
 

@@ -27,7 +27,7 @@ What each file does. Back to the [README](../README.md).
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack` and the application (`app`, borrowed: `main` owns it)
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`: prototypes of `sources/computer/` and `sources/timer/`
-* `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
+* `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor; `make install` / `make uninstall` (program in `~/.local/bin`, `.desktop` file in `~/.local/share/applications`)
 * `assets/historic/`: screenshots of the hub at each stage (`first_working_prototype.png`, milestone 2; `timer_done/`, milestone 3: plan, playing, eye cue, break)
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
 * `docs/files.md`, `docs/basics.md`, `docs/live-stats.md`, `docs/timer.md`, `docs/auto-start.md`: this file and how each part of the hub works, moved out of the README on 19 Nov 2026
