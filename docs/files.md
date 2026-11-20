@@ -4,7 +4,7 @@ What each file does. Back to the [README](../README.md).
 
 ## Project files
 
-* `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window when the app is activated, starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
+* `sources/main.c`: creates the application (`ch.bitminded.GamingHub`) and the hub's state struct, runs GTK's main loop, builds the window on the first activation (a later launch only brings the existing window to the front), starts the once-a-second timer (`hub_tick`), frees the struct's strings when the app ends
 * `sources/inits.c`: `hub_struct_init` sets every field to a known value: `hub_computer_init` (stats), `hub_timer_init` (timer widgets to `NULL`, state) and `hub_setting_init` (the settings to their defaults)
 * `sources/main_build.c`: the window's layout and shared layout helpers: `hub_build_box` (a stack of pages above the stats), `hub_image_with_label` (a theme icon at 48 px with an optional wrapping label under it), `hub_labelled` (a left-aligned label in front of a widget)
 * `sources/utils.c`: `hub_setting_hub` (loads the timer settings, then labels + finding the sensor folders, then the timer widgets, once), `hub_free_hub` (frees what the struct owns)
@@ -30,7 +30,7 @@ What each file does. Back to the [README](../README.md).
 * `Makefile`: builds the hub and libft, with GTK4's flags from `pkg-config`; also writes `compile_flags.txt` for the editor
 * `assets/historic/`: screenshots of the hub at each stage (`first_working_prototype.png`, milestone 2; `timer_done/`, milestone 3: plan, playing, eye cue, break)
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
-* `docs/files.md`, `docs/basics.md`, `docs/live-stats.md`, `docs/timer.md`: this file and how each part of the hub works, moved out of the README on 19 Nov 2026
+* `docs/files.md`, `docs/basics.md`, `docs/live-stats.md`, `docs/timer.md`, `docs/auto-start.md`: this file and how each part of the hub works, moved out of the README on 19 Nov 2026
 
 ## Also included
 
