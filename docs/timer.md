@@ -50,11 +50,11 @@ Settings file, session plan, countdown, pages, eye cue, notifications and plan-p
 
 **Leaving paused time out.** `hub_update_timer` stays `elapsed = now - started`. On Resume, `started` moves forward by the length of the pause, so the formula sees a session that started later and counts only played time. While paused, the countdown freezes by itself because `hub_update_timer` returns for every state except playing.
 
-**Ended stays a state.** Start works again from ended, but the hub doesn't jump back to planning: the end alert (step 7) and the stop ritual (milestone 7) happen in the ended state; going back to planning will be the ritual's last step.
+**Ended stays a state.** Start works again from ended, but the hub doesn't jump back to planning: the end alert (step 7) and the stop ritual (planned then as milestone 7, dropped 20 Nov) happen in the ended state; going back to planning will be the ritual's last step.
 
 **Greying out (replaced in step 5).** First `hub_refresh_buttons` greyed out what couldn't be used, with `gtk_widget_set_sensitive` (a comparison is already a `gboolean`, so it goes straight in). Step 5 replaced that with pages: a button that can't be used isn't on screen.
 
-**Decided 17 Nov:** End session stays (mainly until milestone 7 notices the game closing). No "close the game" button (killing a game loses everything since the last save; quitting is the game's job) and no extending the planned time.
+**Decided 17 Nov:** End session stays (mainly until the hub notices the game closing: done in milestone 4, where a closing game moves the session to "Between Games"). No "close the game" button (killing a game loses everything since the last save; quitting is the game's job) and no extending the planned time.
 
 ## Pages and the break screen (milestone 3, step 5)
 
@@ -70,7 +70,7 @@ window
     └── stats box        always visible, under every page
 ```
 
-The stats are outside the stack because a widget has only one parent, so they can't be in two pages; this way they stay visible on every page (and later under the library). Later pages: "ritual" (milestone 7) and "library" (milestone 8). For the styling step: the stats should be visible but not dominant, which one CSS class on their box can do.
+The stats are outside the stack because a widget has only one parent, so they can't be in two pages; this way they stay visible on every page (and later under the library). Later pages: "transit" (between games, added in milestone 4) and "library" (milestone 7); a "ritual" page was planned too, dropped 20 Nov. For the styling step: the stats should be visible but not dominant, which one CSS class on their box can do.
 
 **State → page.** `hub_show_timer_page` picks the page from the state (planning or ended → plan, playing or paused → session, break → break) and is called after every state change, including once at the end of `hub_build_box`, the first moment the stack exists (calling it earlier, from `hub_timer_manager`, would pass a `NULL` stack).
 

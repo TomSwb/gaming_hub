@@ -24,7 +24,7 @@ What each file does. Back to the [README](../README.md).
   * `buttons.c`: the button callbacks: `hub_start_clicked`, `hub_pause_clicked` (Pause ↔ Resume), `hub_stop_clicked` (End session), `hub_done_clicked` (back from a break), `hub_read_plan` (reads the plan page at Start)
   * `timer_build.c`: the timer's pages: `hub_build_plan` (three columns: checkboxes, `hub_plan_box_middle` with the three fields, alarm + Start), `hub_build_session`, `hub_build_break`, `hub_build_transit` (the "Between Games" page)
   * `timer_utils.c`: `hub_timer_running` (the states in which the countdown runs: playing, break, between games)
-* `sources/game/`: games coming and going (milestone 4, later the game detection of milestone 7 and the launcher of milestone 8)
+* `sources/game/`: games coming and going (milestone 4, later the launcher of milestone 7, the library)
   * `game_events.c`: `hub_game_closed` (`--end`: a running session → between games) and `hub_game_started` (`--start`: between games → playing)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c`, `utils.c`, `inits.c` and `main_build.c`
 * `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) and a `t_timer` (timer widgets and state), all by value, plus the window's `stack` and the application (`app`, borrowed: `main` owns it)

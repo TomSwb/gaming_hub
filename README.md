@@ -30,7 +30,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Headset | Volume, mute, mic volume and mute, battery (if Linux can read it) | PipeWire through libpulse; battery TBD in milestone 0 |
 | Timer | Session plan, breaks, wind-down warning, 20-20-20 eye cue, pause button | GLib timers, GtkMediaFile, GNotification |
 | Power | Balanced ↔ Performance switch, charger warning | power-profiles D-Bus API (tuned-ppd), UPower |
-| Session log | Silent: game, date and play time of library games, for the library's play history (milestone 8) | Own code, `~/.local/share/gaming_hub/` |
+| Session log | Silent: game, date and play time of library games, for the library's play history (milestone 7) | Own code, `~/.local/share/gaming_hub/` |
 | Library | All my games (Steam, GOG/Epic through Heroic, emulators) in one list, started from the hub | Steam `appmanifest_*.acf`, Heroic's library JSON, ROM folders |
 | Temp graph | Temperature over the whole session | GtkDrawingArea + Cairo |
 | FPS (stretch) | Frame rate and frame time | MangoHud's log, if it can be read live |
@@ -139,10 +139,11 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 4. Auto-start with GameMode, single instance, `--start` / `--end`, between games; `make install` (app menu entry) and a guide to hook it to Steam, Heroic, Lutris and emulators (20 Nov)
 - [ ] 5. Headset volume and mic with libpulse
 - [ ] 6. Power profile and charger over D-Bus
-- [x] ~~7. Session log, game notes, stop ritual, monthly review~~ dropped 20 Nov 2026 (a silent session log for the library's play history moves into milestone 8)
-- [ ] 8. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub
-- [ ] 9. Temperature graph with Cairo
-- [ ] 10. FPS from MangoHud (stretch)
+- [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub
+- [ ] 8. Temperature graph with Cairo
+- [ ] 9. FPS from MangoHud (stretch)
+
+Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, monthly review); only a silent session log for the library's play history stays, inside milestone 7. The milestones after it were renumbered (old 8–10 are now 7–9; commits and docs before 20 Nov use the old numbers).
 
 ## Documentation
 

@@ -79,7 +79,7 @@ The GameMode lines use the installed hub by name: `systemctl --user show-environ
 
 Things learned on the way:
 - **Which screen:** on Wayland an app can't choose where its window opens; GNOME usually uses the screen with the pointer or the focused window, so the hub opened on the TV. Super+Shift+←/→ moves a window to the other screen, then Super+←/→ snaps it.
-- **Launch options are per game:** Steam has no global setting. `gamemoderun %command%` is added when I start playing a game; MangoHud can stay in front of it (`mangohud gamemoderun %command%`) for the fps overlay and log, which the hub doesn't replace (fps is milestone 10, and would read MangoHud's log).
+- **Launch options are per game:** Steam has no global setting. `gamemoderun %command%` is added when I start playing a game; MangoHud can stay in front of it (`mangohud gamemoderun %command%`) for the fps overlay and log, which the hub doesn't replace (fps is milestone 9, and would read MangoHud's log).
 
 ## Between games: `--end` and `--start` (milestone 4, step 5a, 20 Nov)
 
@@ -87,13 +87,13 @@ Things learned on the way:
 
 | Moment | Command | Hub |
 | --- | --- | --- |
-| A game starts, hub not running | `--start` | opens on the **plan page** (also after milestone 8) |
-| A game closes during a session | `--end` | **"Between Games"** page; the **countdown keeps running**, like during a break. From milestone 8: the library with the timer on top |
+| A game starts, hub not running | `--start` | opens on the **plan page** (also after milestone 7) |
+| A game closes during a session | `--end` | **"Between Games"** page; the **countdown keeps running**, like during a break. From milestone 7: the library with the timer on top |
 | The next game starts | `--start` | back to the playing page, same session and countdown |
 | From the app menu | (none) | opens or comes to the front, nothing else |
 | End session (any page) or time up | | the session ends |
 
-**A new state, `TIMER_TRANSIT`** (session open, no game running, countdown runs), not a reuse of `TIMER_PAUSED`: a manual pause freezes the countdown and shows Resume, and from milestone 8 the two need different pages. Both commands leave a manual pause alone.
+**A new state, `TIMER_TRANSIT`** (session open, no game running, countdown runs), not a reuse of `TIMER_PAUSED`: a manual pause freezes the countdown and shows Resume, and from milestone 7 the two need different pages. Both commands leave a manual pause alone.
 
 - **`hub_game_closed`** (`--end`, in the new `sources/game/game_events.c`): from playing, paused or break → transit. Coming from paused, the pause is first taken out of the elapsed time (`started += now - paused_at`, as Resume does): `hub_update_timer` computes `elapsed = now - started` again once the countdown runs, so without it the whole pause would suddenly count as played. Also resets the Pause button's label and hides the eye cue.
 - **`hub_game_started`** (`--start`): transit → playing. If the break time passed between games, it counts as taken: `next_break = elapsed + break_min * 60`, but only `if (elapsed >= next_break)`, otherwise switching games often would push the breaks away forever.
@@ -101,7 +101,7 @@ Things learned on the way:
 - **`hub_timer_running`** (`timer/timer_utils.c`): playing, break or transit; the countdown runs only then (and it kept `hub_update_timer` at 25 lines).
 - **The page** (`hub_build_transit`): "Between Games", its own countdown label and its own End session button. A widget has one parent: `countdown` and `done` were already on other pages, so appending them again is refused (a `gtk_widget_get_parent (child) == NULL` CRITICAL) and the page got neither. `hub_update_timer` writes the time to both countdown labels; a label on a hidden page isn't drawn, so it costs nothing.
 - **Between games:** no break and no eye cue start (both need playing); wind-down and "Session over" still fire.
-- `sources/game/` is a new area: games coming and going (milestone 7's game detection and milestone 8's launcher go there too).
+- `sources/game/` is a new area: games coming and going (milestone 7's launcher goes there too).
 
 Tested with two fake games in a row (`gamemoderun sleep 20` twice): plan page on the first launch, Between Games when it ended, the same countdown when the second started, End session from the Between Games page back to the plan page. The GameMode lines:
 
@@ -118,11 +118,11 @@ Emulators don't go through Steam, so their app-menu entries start them through G
 - **Does `gamemoderun` reach a Flatpak?** It works by `LD_PRELOAD`, which may not get into the sandbox. Tested: `gamemoderun flatpak run org.DolphinEmu.dolphin-emu` opened the hub, `gamemoded -s` said `gamemode is active`, and about 10 s after Dolphin closed `inactive` (a first check right after closing still said active: GameMode notices a process that didn't unregister itself with a periodic check, every 5 s by default). So GameMode follows the emulator.
 - **The menu entries:** a `.desktop` file in `~/.local/share/applications/` with the same name **overrides** the system one, which stays untouched. Checked first: none of them has `DBusActivatable=true` (GNOME would start it over D-Bus and ignore `Exec=`) or extra actions, and no file of the same name existed in my folder. Then, for each id, `sed 's|^Exec=/usr/bin/flatpak|Exec=gamemoderun /usr/bin/flatpak|' <system file> > ~/.local/share/applications/<id>.desktop`: Dolphin, PrimeHack, PCSX2, PPSSPP, RetroArch, RMG and mGBA. OpenGOAL's launcher entry was already my own file (an AppImage): dated backup, then `sed -i` in place. The launcher starts the game as a child, which inherits GameMode, so its session goes between games when both are closed.
 - **Tested from the app menu:** each one opened the hub (this time GNOME Shell picked up the changed entries without a re-login).
-- **Not hooked:** ES-DE (an emulator front end): not used; the hub's own library (milestone 8) stays as planned.
+- **Not hooked:** ES-DE (an emulator front end): not used; the hub's own library (milestone 7) stays as planned.
 - fish note: a wildcard that matches nothing is an error in fish (`No matches for wildcard`), not an empty list as in bash.
 
 ## Wrap-up (20 Nov)
 
 - `--help` texts say what the options do now ("A game closed: the session goes between games", "A game started: the session carries on"), and a norminette pass over the code (a comment after the last value of an enum confused norminette's parser into about 70 follow-up errors).
 - **Time:** about 3.5 h of focused work for the whole milestone (17:23 – 21:11, with a short detour to make the Steam drive mount itself again after a replug), estimate 6–8 h. Step 1 ~0.25 h, step 2 ~0.5 h, step 3 ~0.5 h, step 4 ~0.75 h, step 5 (Steam and emulators) ~0.5 h, step 5a (between games, designed during the session) ~1 h.
-- **Left for later:** the app icon is the theme's `input-gaming` until the logo arrives (then `make install` also installs `ch.bitminded.GamingHub.svg` into `${PREFIX}/share/icons/hicolor/scalable/apps/`); from milestone 8 the "Between Games" page becomes the library with the timer on top.
+- **Left for later:** the app icon is the theme's `input-gaming` until the logo arrives (then `make install` also installs `ch.bitminded.GamingHub.svg` into `${PREFIX}/share/icons/hicolor/scalable/apps/`); from milestone 7 the "Between Games" page becomes the library with the timer on top.
