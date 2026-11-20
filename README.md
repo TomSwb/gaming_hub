@@ -111,10 +111,10 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 | File | What it covers |
 | --- | --- |
 | [`docs/files.md`](docs/files.md) | What each source file, header and folder does |
+| [`docs/research.md`](docs/research.md) | Milestone 0: what I tested by hand before coding (headset battery, MangoHud) |
 | [`docs/basics.md`](docs/basics.md) | Milestone 1: app id, how the program runs (main loop, callbacks), who frees what |
 | [`docs/live-stats.md`](docs/live-stats.md) | Milestone 2: the tick, reading `/proc` and `/sys`, finding devices by name, fps-cost check |
 | [`docs/timer.md`](docs/timer.md) | Milestone 3: settings file, countdown and states, pages, eye cue, notifications, plan page |
-| [`docs/research.md`](docs/research.md) | Milestone 0: what I tested by hand before coding (headset battery, MangoHud) |
 
 ## Resources
 
