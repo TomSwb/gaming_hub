@@ -110,3 +110,19 @@ Tested with two fake games in a row (`gamemoderun sleep 20` twice): plan page on
 start=gaming_hub --start > /dev/null 2>&1 &
 end=gaming_hub --end
 ```
+
+## Emulators (milestone 4, step 5, 20 Nov)
+
+Emulators don't go through Steam, so their app-menu entries start them through GameMode. All of mine but OpenGOAL are system Flatpaks (`flatpak list --app`), whose `.desktop` files are in `/var/lib/flatpak/exports/share/applications/` with `Exec=/usr/bin/flatpak run …`.
+
+- **Does `gamemoderun` reach a Flatpak?** It works by `LD_PRELOAD`, which may not get into the sandbox. Tested: `gamemoderun flatpak run org.DolphinEmu.dolphin-emu` opened the hub, `gamemoded -s` said `gamemode is active`, and about 10 s after Dolphin closed `inactive` (a first check right after closing still said active: GameMode notices a process that didn't unregister itself with a periodic check, every 5 s by default). So GameMode follows the emulator.
+- **The menu entries:** a `.desktop` file in `~/.local/share/applications/` with the same name **overrides** the system one, which stays untouched. Checked first: none of them has `DBusActivatable=true` (GNOME would start it over D-Bus and ignore `Exec=`) or extra actions, and no file of the same name existed in my folder. Then, for each id, `sed 's|^Exec=/usr/bin/flatpak|Exec=gamemoderun /usr/bin/flatpak|' <system file> > ~/.local/share/applications/<id>.desktop`: Dolphin, PrimeHack, PCSX2, PPSSPP, RetroArch, RMG and mGBA. OpenGOAL's launcher entry was already my own file (an AppImage): dated backup, then `sed -i` in place. The launcher starts the game as a child, which inherits GameMode, so its session goes between games when both are closed.
+- **Tested from the app menu:** each one opened the hub (this time GNOME Shell picked up the changed entries without a re-login).
+- **Not hooked:** ES-DE (an emulator front end): not used; the hub's own library (milestone 8) stays as planned.
+- fish note: a wildcard that matches nothing is an error in fish (`No matches for wildcard`), not an empty list as in bash.
+
+## Wrap-up (20 Nov)
+
+- `--help` texts say what the options do now ("A game closed: the session goes between games", "A game started: the session carries on"), and a norminette pass over the code (a comment after the last value of an enum confused norminette's parser into about 70 follow-up errors).
+- **Time:** about 3.5 h of focused work for the whole milestone (17:23 – 21:11, with a short detour to make the Steam drive mount itself again after a replug), estimate 6–8 h. Step 1 ~0.25 h, step 2 ~0.5 h, step 3 ~0.5 h, step 4 ~0.75 h, step 5 (Steam and emulators) ~0.5 h, step 5a (between games, designed during the session) ~1 h.
+- **Left for later:** the app icon is the theme's `input-gaming` until the logo arrives (then `make install` also installs `ch.bitminded.GamingHub.svg` into `${PREFIX}/share/icons/hicolor/scalable/apps/`); from milestone 8 the "Between Games" page becomes the library with the timer on top.

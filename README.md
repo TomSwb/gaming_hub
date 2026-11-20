@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Next: milestone 4, auto-start with games and `make install`.
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Milestone 4 (auto-start and install) done on 20 Nov: `make install` puts the hub in the app menu, and through GameMode it opens when a game starts, shows a "Between Games" page when one closes (the session's countdown keeps running) and carries on when the next one starts. Next: milestone 5, headset volume and mic (and the styling step when the palette arrives).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -89,7 +89,45 @@ The file is read when the window opens; no rebuild needed. It only decides what 
 
 **Notifications need the `.desktop` file** that `make install` writes: GNOME only shows notifications from apps it can match to a `.desktop` file named after the app id, so a hub run from the repo without installing shows none. With Do Not Disturb on, GNOME shows no banners at all (they go to the message list); the bell still rings.
 
-**Coming at milestone 4:** a guide to start the hub automatically with your games (Steam, Heroic, Lutris, emulators) through GameMode. Packaging (Flatpak or RPM) is a later idea.
+Packaging (Flatpak or RPM) is a later idea.
+
+## Hook it to your games
+
+The hub opens and follows your games through [GameMode](https://github.com/FeralInteractive/gamemode) (`sudo dnf install gamemode` on Fedora, `sudo apt install gamemode` on Debian / Ubuntu). GameMode switches on when a game started through `gamemoderun` runs, and can run a command when the first game starts and when the last one closes.
+
+**1. Install the hub** with `make install` (see above), so GameMode finds it as `gaming_hub`. Check that GameMode's service sees `~/.local/bin`: `systemctl --user show-environment | grep '^PATH='`; if it doesn't, use the full path `~/.local/bin/gaming_hub` (written out, e.g. `/home/you/.local/bin/gaming_hub`) in the lines below.
+
+**2. Add the two lines** to `~/.config/gamemode.ini` (create the file if it doesn't exist):
+
+```ini
+[custom]
+start=gaming_hub --start > /dev/null 2>&1 &
+end=gaming_hub --end
+```
+
+Copy the `start=` line exactly: GameMode waits for its commands (and kills them after 10 s), so the hub must go to the background (`&`) **and** give back GameMode's output (`> /dev/null 2>&1`), or every game starts 10 seconds late and the hub is closed. Why: [`docs/auto-start.md`](docs/auto-start.md), step 3.
+
+**3. Start your games through GameMode:**
+
+| Launcher | How |
+| --- | --- |
+| Steam | per game: Properties → General → Launch options: `gamemoderun %command%` (with MangoHud: `mangohud gamemoderun %command%`). Steam has no setting for all games at once. |
+| Heroic (GOG, Epic) | per game: its settings, the GameMode switch |
+| Lutris | the "Enable Feral GameMode" switch in the system options |
+| Emulators and other apps | copy the app's `.desktop` file into `~/.local/share/applications/` (same name: your copy overrides the system one, the system file stays untouched) and put `gamemoderun ` in front of its `Exec=` line. Flatpak apps' files are in `/var/lib/flatpak/exports/share/applications/` (or `~/.local/share/flatpak/exports/share/applications/`). Skip files with `DBusActivatable=true`: GNOME ignores their `Exec=` line. |
+
+Tested on Fedora 44 with GameMode 1.8.2: Steam games, the Flatpaks of Dolphin, PrimeHack, PCSX2, PPSSPP, RetroArch, RMG and mGBA (`gamemoderun flatpak run …` works: GameMode switches on and off with the emulator), and the OpenGOAL launcher (an AppImage). With an emulator or a launcher, the "game" is the emulator: the hub sees it close when you quit the emulator, not a game inside it.
+
+**What happens:**
+
+| Moment | Hub |
+| --- | --- |
+| A game starts, hub not running | opens on the plan page |
+| A game closes during a session | "Between Games" page; the session's countdown keeps running |
+| The next game starts | back to the playing page, same session |
+| End session, or the planned time is up | the session ends |
+
+On Wayland an app can't choose its screen: GNOME opens the hub where the pointer or the focused window is. Move it with Super+Shift+←/→, snap it with Super+←/→.
 
 ## Milestones
 
@@ -99,7 +137,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 1. Hello window: GtkApplication, main loop, signals, GObject basics (8 Nov)
 - [x] 2. Live stats from `/proc` and `/sys` + fps-cost check (8–10 Nov)
 - [x] 3. Timer and healthy-gaming features, settings file (10–19 Nov)
-- [ ] 4. Auto-start with GameMode, single instance, `--end`; `make install` (app menu icon) and a guide to hook it to Steam, Heroic, Lutris and emulators
+- [x] 4. Auto-start with GameMode, single instance, `--start` / `--end`, between games; `make install` (app menu entry) and a guide to hook it to Steam, Heroic, Lutris and emulators (20 Nov)
 - [ ] 5. Headset volume and mic with libpulse
 - [ ] 6. Power profile and charger over D-Bus
 - [ ] 7. Session log, game notes, stop ritual, monthly review
@@ -116,7 +154,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 | [`docs/basics.md`](docs/basics.md) | Milestone 1: app id, how the program runs (main loop, callbacks), who frees what |
 | [`docs/live-stats.md`](docs/live-stats.md) | Milestone 2: the tick, reading `/proc` and `/sys`, finding devices by name, fps-cost check |
 | [`docs/timer.md`](docs/timer.md) | Milestone 3: settings file, countdown and states, pages, eye cue, notifications, plan page |
-| [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4 (in progress): single instance, `--end` / `--start`, starting with GameMode, `make install`, between games |
+| [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4: single instance, `--start` / `--end`, starting with GameMode, `make install`, between games, emulators |
 
 ## Resources
 
