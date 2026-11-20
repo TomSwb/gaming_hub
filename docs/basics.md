@@ -1,4 +1,4 @@
-# Basics: app id, main loop, memory
+# Milestone 1: app id, main loop, who frees what
 
 How the program is put together (milestone 1) and who frees what. Back to the [README](../README.md).
 
