@@ -107,3 +107,23 @@ GtkWidget	*hub_build_break(t_hub *hub)
 	gtk_widget_set_valign(box, GTK_ALIGN_CENTER);
 	return (box);
 }
+
+GtkWidget	*hub_build_transit(t_hub *hub)
+{
+	GtkWidget	*box;
+	GtkWidget	*text;
+	GtkWidget	*label;
+
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	label = gtk_label_new("Between Games");
+	text = gtk_label_new("Start your next game, or end the session");
+	gtk_box_append(GTK_BOX(box), label);
+	gtk_box_append(GTK_BOX(box), hub->timer.transit_countdown);
+	gtk_box_append(GTK_BOX(box),
+		hub_image_with_label("input-gaming-symbolic", NULL));
+	gtk_box_append(GTK_BOX(box), text);
+	gtk_box_append(GTK_BOX(box), hub->timer.transit_end);
+	gtk_widget_set_halign(hub->timer.transit_end, GTK_ALIGN_CENTER);
+	gtk_widget_set_valign(box, GTK_ALIGN_CENTER);
+	return (box);
+}

@@ -25,7 +25,8 @@ typedef enum e_timer_state
 	TIMER_PLAYING,
 	TIMER_PAUSED,
 	TIMER_BREAK,
-	TIMER_ENDED
+	TIMER_ENDED,
+	TIMER_TRANSIT // session open, no game running, countdown runs
 }	t_timer_state;
 
 // === Struct === //
@@ -63,8 +64,10 @@ typedef struct s_timer
 	GtkWidget		*session;
 	GtkWidget		*start;
 	GtkWidget		*countdown;
+	GtkWidget		*transit_countdown;
 	GtkWidget		*pause;
 	GtkWidget		*stop;
+	GtkWidget		*transit_end;
 	GtkWidget		*done;
 	GtkWidget		*eye;
 	GtkWidget		*break_spin;

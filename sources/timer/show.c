@@ -41,6 +41,8 @@ void	hub_show_timer_page(t_hub *hub)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
 	else if (hub->timer.state == TIMER_BREAK)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "break");
+	else if (hub->timer.state == TIMER_TRANSIT)
+		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "transit");
 }
 
 void	hub_show_eye(GtkWidget *label, gint seconds)

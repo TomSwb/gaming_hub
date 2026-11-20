@@ -61,5 +61,9 @@ GtkWidget	*hub_build_plan(t_hub *hub);
 GtkWidget	*hub_plan_box_middle(t_hub *hub);
 GtkWidget	*hub_build_session(t_hub *hub);
 GtkWidget	*hub_build_break(t_hub *hub);
+GtkWidget	*hub_build_transit(t_hub *hub);
+
+// timer_utils.c
+gboolean	hub_timer_running(t_hub *hub);
 
 #endif

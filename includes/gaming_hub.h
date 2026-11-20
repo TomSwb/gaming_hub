@@ -20,6 +20,7 @@
 # include "defaults.h"
 # include "computer.h"
 # include "timer.h"
+# include "game.h"
 
 // === Functions === //
 

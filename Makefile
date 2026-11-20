@@ -31,7 +31,7 @@ INCLUDES = -I${INC_DIR} -I${LIBFT_DIR}
 HEADERS = ${INC_DIR}/gaming_hub.h \
 		${INC_DIR}/structs.h ${INC_DIR}/defaults.h \
 		${INC_DIR}/computer.h ${INC_DIR}/timer.h \
-		${LIBFT_DIR}/libft.h
+		${INC_DIR}/game.h ${LIBFT_DIR}/libft.h
 
 GTK_CFLAGS := ${shell pkg-config --cflags gtk4}
 GTK_LIBS := ${shell pkg-config --libs gtk4}
@@ -49,7 +49,10 @@ TIMER = sources/timer/settings.c \
 	sources/timer/buttons.c \
 	sources/timer/show.c \
 	sources/timer/alert.c \
-	sources/timer/timer_build.c
+	sources/timer/timer_build.c \
+	sources/timer/timer_utils.c
+
+GAME = sources/game/game_events.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \
@@ -58,7 +61,8 @@ SOURCES = sources/main.c \
 
 FILES = ${SOURCES} \
 	${COMPUTER} \
-	${TIMER}
+	${TIMER} \
+	${GAME}
 
 OBJS = ${FILES:.c=.o}
 

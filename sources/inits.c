@@ -43,8 +43,10 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.session = NULL;
 	hub->timer.start = NULL;
 	hub->timer.countdown = NULL;
+	hub->timer.transit_countdown = NULL;
 	hub->timer.pause = NULL;
 	hub->timer.stop = NULL;
+	hub->timer.transit_end = NULL;
 	hub->timer.done = NULL;
 	hub->timer.eye = NULL;
 	hub->timer.break_spin = NULL;

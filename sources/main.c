@@ -77,7 +77,7 @@ int	hub_command_line(GApplication *self,
 
 	option = g_application_command_line_get_options_dict(command_line);
 	if (g_variant_dict_contains(option, "end"))
-		hub_stop_clicked(NULL, user_data);
+		hub_game_closed(user_data);
 	else
 		g_application_activate(self);
 	return (0);

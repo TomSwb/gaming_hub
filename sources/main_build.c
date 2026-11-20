@@ -23,6 +23,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_transit(hub), "transit");
 	gtk_box_append(GTK_BOX(box), hub->stack);
 	gtk_box_append(GTK_BOX(box), hub_build_stats(hub));
 	hub_show_timer_page(hub);

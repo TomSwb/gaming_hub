@@ -50,11 +50,15 @@ void	hub_timer_create_buttons(t_hub *hub)
 	g_signal_connect(hub->timer.start, "clicked",
 			G_CALLBACK(hub_start_clicked), hub);
 	hub->timer.countdown = gtk_label_new("Not Started");
+	hub->timer.transit_countdown = gtk_label_new("Not Started");
 	hub->timer.pause = gtk_button_new_with_label("Pause");
 	g_signal_connect(hub->timer.pause, "clicked",
 			G_CALLBACK(hub_pause_clicked), hub);
 	hub->timer.stop = gtk_button_new_with_label("End Session");
 	g_signal_connect(hub->timer.stop, "clicked",
+			G_CALLBACK(hub_stop_clicked), hub);
+	hub->timer.transit_end = gtk_button_new_with_label("End Session");
+	g_signal_connect(hub->timer.transit_end, "clicked",
 			G_CALLBACK(hub_stop_clicked), hub);
 	hub->timer.done = gtk_button_new_with_label("Done");
 	g_signal_connect(hub->timer.done, "clicked",
@@ -66,7 +70,7 @@ void	hub_update_timer(t_hub *hub)
 	gint64	elapsed;
 	gint	left;
 
-	if (hub->timer.state != TIMER_PLAYING && hub->timer.state != TIMER_BREAK)
+	if (!hub_timer_running(hub))
 		return ;
 	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
 	if (hub->timer.state == TIMER_PLAYING && elapsed >= hub->timer.next_break)
@@ -87,6 +91,7 @@ void	hub_update_timer(t_hub *hub)
 		hub_alert(hub, "end", "Session over", "End of session, time to go :)");
 	}
 	hub_show_time(hub->timer.countdown, left);
+	hub_show_time(hub->timer.transit_countdown, left);
 }
 
 void	hub_update_eye(t_hub *hub, gint elapsed)
