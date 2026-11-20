@@ -21,7 +21,8 @@
 
 // sources/game/
 
-//game_events.c
+// game_events.c
 void	hub_game_closed(t_hub *hub);
+void	hub_game_started(t_hub *hub);
 
 #endif

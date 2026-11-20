@@ -25,6 +25,8 @@ int	main(int ac, char **av)
 	g_signal_connect(app, "command-line", G_CALLBACK(hub_command_line), &hub);
 	g_application_add_main_option(G_APPLICATION(app), "end", 0,
 		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, "Ends the session", NULL);
+	g_application_add_main_option(G_APPLICATION(app), "start", 0,
+		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, "Starts the session", NULL);
 	status = g_application_run(G_APPLICATION(app), ac, av);
 	g_object_unref(app);
 	hub_free_hub(&hub);
@@ -80,5 +82,7 @@ int	hub_command_line(GApplication *self,
 		hub_game_closed(user_data);
 	else
 		g_application_activate(self);
+	if (g_variant_dict_contains(option, "start"))
+		hub_game_started(user_data);
 	return (0);
 }

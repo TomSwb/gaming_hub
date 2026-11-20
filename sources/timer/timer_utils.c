@@ -19,4 +19,3 @@ gboolean	hub_timer_running(t_hub *hub)
 		return (FALSE);
 	return (TRUE);
 }
-

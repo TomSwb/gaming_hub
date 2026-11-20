@@ -25,3 +25,17 @@ void	hub_game_closed(t_hub *hub)
 		hub_show_timer_page(hub);
 	}
 }
+
+void	hub_game_started(t_hub *hub)
+{
+	gint64	elapsed;
+
+	elapsed = (g_get_monotonic_time() - hub->timer.started) / G_USEC_PER_SEC;
+	if (hub->timer.state == TIMER_TRANSIT)
+	{
+		hub->timer.state = TIMER_PLAYING;
+		if (elapsed >= hub->timer.next_break)
+			hub->timer.next_break = (gint)elapsed + hub->setting.break_min * 60;
+		hub_show_timer_page(hub);
+	}
+}
