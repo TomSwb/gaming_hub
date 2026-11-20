@@ -35,6 +35,12 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	t_hub		*hub;
 
 	hub = user_data;
+	window = gtk_application_get_active_window(self);
+	if (window != NULL)
+	{
+		gtk_window_present(window);
+		return ;
+	}
 	window = GTK_WINDOW(gtk_application_window_new(self));
 	hub->app = G_APPLICATION(self); // borrowed pointer mains own app and unref
 	gtk_window_set_title(window, "Gaming Hub");
