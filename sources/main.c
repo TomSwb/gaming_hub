@@ -20,8 +20,11 @@ int	main(int ac, char **av)
 
 	hub_struct_init(&hub);
 	app = gtk_application_new("ch.bitminded.GamingHub",
-			G_APPLICATION_DEFAULT_FLAGS);
+			G_APPLICATION_HANDLES_COMMAND_LINE);
 	g_signal_connect(app, "activate", G_CALLBACK(hub_activate), &hub);
+	g_signal_connect(app, "command-line", G_CALLBACK(hub_command_line), &hub);
+	g_application_add_main_option(G_APPLICATION(app), "end", 0,
+		G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, "Ends the session", NULL);
 	status = g_application_run(G_APPLICATION(app), ac, av);
 	g_object_unref(app);
 	hub_free_hub(&hub);
@@ -65,4 +68,17 @@ gboolean	hub_tick(gpointer user_data)
 	hub_update_battery(hub);
 	hub_update_timer(hub);
 	return (G_SOURCE_CONTINUE);
+}
+
+int	hub_command_line(GApplication *self,
+		GApplicationCommandLine *command_line, gpointer user_data)
+{
+	GVariantDict	*option;
+
+	option = g_application_command_line_get_options_dict(command_line);
+	if (g_variant_dict_contains(option, "end"))
+		hub_stop_clicked(NULL, user_data);
+	else
+		g_application_activate(self);
+	return (0);
 }

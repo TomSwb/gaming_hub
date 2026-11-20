@@ -28,6 +28,8 @@
 // main.c
 void		hub_activate(GtkApplication *self, gpointer user_data);
 gboolean	hub_tick(gpointer user_data);
+int			hub_command_line(GApplication *self,
+				GApplicationCommandLine *command_line, gpointer user_data);
 
 // utils.c
 void		hub_setting_hub(t_hub *hub);

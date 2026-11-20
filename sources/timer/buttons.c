@@ -74,7 +74,8 @@ void	hub_stop_clicked(GtkButton *self, gpointer user_data)
 
 	(void)self;
 	hub = user_data;
-	if (hub->timer.state == TIMER_PLAYING || hub->timer.state == TIMER_PAUSED)
+	if (hub->timer.state == TIMER_PLAYING
+		|| hub->timer.state == TIMER_PAUSED || hub->timer.state == TIMER_BREAK)
 	{
 		hub->timer.state = TIMER_ENDED;
 		hub_show_timer_page(hub);
