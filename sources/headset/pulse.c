@@ -35,5 +35,6 @@ void	hub_pulse_connect(t_hub *hub)
 	pa_context_set_state_callback(hub->headset.context, hub_pulse_state, hub);
 	if (pa_context_connect(hub->headset.context, NULL,
 		PA_CONTEXT_NOFLAGS, NULL) < 0)
-		g_print("%s\n", pa_strerror(pa_context_errno(hub->headset.context)));
+		g_print("pulse: %s\n",
+				pa_strerror(pa_context_errno(hub->headset.context)));
 }
