@@ -82,8 +82,10 @@ void	hub_headset_init(t_hub *hub)
 {
 	hub->headset.volume = NULL;
 	hub->headset.sld_vol = NULL;
+	hub->headset.mute_vol = NULL;
 	hub->headset.mic = NULL;
 	hub->headset.sld_mic = NULL;
+	hub->headset.mute_mic = NULL;
 	hub->headset.adapter = NULL;
 	hub->headset.context = NULL;
 	hub->headset.sink_index = PA_INVALID_INDEX;

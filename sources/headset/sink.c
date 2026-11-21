@@ -45,23 +45,30 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 	{
 		text = g_strdup("No device found ...");
 		gtk_widget_set_sensitive(hub->headset.sld_vol, FALSE);
+		gtk_widget_set_sensitive(hub->headset.mute_vol, FALSE);
 	}
 	else
 	{
 		per_vol = hub_volume_percent(&i->volume);
-		hub->headset.sink_vol = i->volume;
-		gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
-		gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
+		hub_sink_set_buttons(hub, per_vol, i);
 		if (i->mute == 0)
-			text = g_strdup_printf("Volume: %d%%",
-				per_vol);
+			text = g_strdup_printf("Volume: %d%%", per_vol);
 		else
-			text = g_strdup_printf("Volume: %d%% (muted)",
-				per_vol);
+			text = g_strdup_printf("Volume: %d%% (muted)", per_vol);
 	}
-	gtk_label_set_text(GTK_LABEL(hub->headset.volume),
-		text);
+	gtk_label_set_text(GTK_LABEL(hub->headset.volume),text);
 	g_free(text);
+}
+
+void	hub_sink_set_buttons(t_hub *hub, gint	per_vol,
+			const pa_sink_info *i)
+{
+	hub->headset.sink_vol = i->volume;
+	gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
+	gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(hub->headset.mute_vol),
+				i->mute);
+	gtk_widget_set_sensitive(hub->headset.mute_vol, TRUE);
 }
 
 void	hub_sink_slider_moved(GtkRange *self, gpointer user_data)
@@ -81,6 +88,22 @@ void	hub_sink_slider_moved(GtkRange *self, gpointer user_data)
 	pa_cvolume_scale(&volume, new_max);
 	op = pa_context_set_sink_volume_by_index(hub->headset.context,
 			hub->headset.sink_index, &volume, NULL, NULL);
+	if (op)
+		pa_operation_unref(op);
+}
+
+void	hub_sink_mute_toggled(GtkToggleButton *self, gpointer user_data)
+{
+	t_hub			*hub;
+	gboolean		state;
+	pa_operation	*op;
+
+	hub = user_data;
+	if (hub->headset.sink_index == PA_INVALID_INDEX)
+		return ;
+	state = gtk_toggle_button_get_active(self);
+	op = pa_context_set_sink_mute_by_index(hub->headset.context,
+		hub->headset.sink_index, state, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
 }

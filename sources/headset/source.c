@@ -45,21 +45,30 @@ void	hub_show_source(t_hub *hub, const pa_source_info *i)
 	{
 		text = g_strdup("No device found ...");
 		gtk_widget_set_sensitive(hub->headset.sld_mic, FALSE);
+		gtk_widget_set_sensitive(hub->headset.mute_mic, FALSE);
 	}
 	else
 	{
 		per_mic = hub_volume_percent(&i->volume);
-		hub->headset.src_vol = i->volume;
-		gtk_range_set_value(GTK_RANGE(hub->headset.sld_mic), per_mic);
-		gtk_widget_set_sensitive(hub->headset.sld_mic, TRUE);
+		hub_source_set_buttons(hub, per_mic, i);
 		if (i->mute == 0)
 			text = g_strdup_printf("Mic: %d%%", per_mic);
 		else
 			text = g_strdup_printf("Mic: %d%% (muted)", per_mic);
 	}
-	gtk_label_set_text(GTK_LABEL(hub->headset.mic),
-		text);
+	gtk_label_set_text(GTK_LABEL(hub->headset.mic),text);
 	g_free(text);
+}
+
+void	hub_source_set_buttons(t_hub *hub, gint	per_mic,
+			const pa_source_info *i)
+{
+	hub->headset.src_vol = i->volume;
+	gtk_range_set_value(GTK_RANGE(hub->headset.sld_mic), per_mic);
+	gtk_widget_set_sensitive(hub->headset.sld_mic, TRUE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(hub->headset.mute_mic),
+				i->mute);
+	gtk_widget_set_sensitive(hub->headset.mute_mic, TRUE);
 }
 
 void	hub_source_slider_moved(GtkRange *self, gpointer user_data)
@@ -79,6 +88,22 @@ void	hub_source_slider_moved(GtkRange *self, gpointer user_data)
 	pa_cvolume_scale(&volume, new_max);
 	op = pa_context_set_source_volume_by_index(hub->headset.context,
 			hub->headset.source_index, &volume, NULL, NULL);
+	if (op)
+		pa_operation_unref(op);
+}
+
+void	hub_source_mute_toggled(GtkToggleButton *self, gpointer user_data)
+{
+	t_hub			*hub;
+	gboolean		state;
+	pa_operation	*op;
+
+	hub = user_data;
+	if (hub->headset.source_index == PA_INVALID_INDEX)
+		return ;
+	state = gtk_toggle_button_get_active(self);
+	op = pa_context_set_source_mute_by_index(hub->headset.context,
+		hub->headset.source_index, state, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
 }
