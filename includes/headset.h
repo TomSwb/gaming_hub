@@ -29,4 +29,7 @@ void	hub_pulse_connect(t_hub *hub);
 void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 			void *user_data);
 
+// volume.c
+int		hub_volume_percent(const pa_cvolume *volume);
+
 #endif

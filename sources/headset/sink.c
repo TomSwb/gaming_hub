@@ -27,6 +27,8 @@ void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 		{
 			hub->headset.sink_index = i->index;
 			g_print("Pulse: Headset Found\n");
+			g_print("Pulse: Volume: %d\n", hub_volume_percent(&i->volume));
+			g_print("Pulse: Mute: %d\n", i->mute);
 		}
 	}
 	else if (eol > 0 && hub->headset.sink_index == PA_INVALID_INDEX)

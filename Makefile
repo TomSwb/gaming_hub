@@ -56,7 +56,8 @@ TIMER = sources/timer/settings.c \
 GAME = sources/game/game_events.c
 
 HEADSET = sources/headset/pulse.c \
-	sources/headset/sink.c
+	sources/headset/sink.c \
+	sources/headset/volume.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \
