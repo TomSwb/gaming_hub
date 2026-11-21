@@ -44,7 +44,10 @@ void	hub_free_hub(t_hub *hub)
 	if (hub->timer.sound != NULL)
 		g_object_unref(hub->timer.sound);
 	if (hub->headset.context != NULL)
+	{
+		pa_context_disconnect(hub->headset.context);
 		pa_context_unref(hub->headset.context);
+	}
 	if (hub->headset.adapter != NULL)
 		pa_glib_mainloop_free(hub->headset.adapter);
 }
