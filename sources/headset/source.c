@@ -40,16 +40,17 @@ void	hub_show_source(t_hub *hub, const pa_source_info *i)
 {
 	gchar	*text;
 
+	hub->headset.per_mic = hub_volume_percent(&i->volume);
 	if (i == NULL)
 		text = g_strdup("No device found ...");
 	else
 	{
 		if (i->mute == 0)
 			text = g_strdup_printf("Mic: %d%%",
-				hub_volume_percent(&i->volume));
+				hub->headset.per_mic);
 		else
 			text = g_strdup_printf("Mic: %d%% (muted)",
-				hub_volume_percent(&i->volume));
+				hub->headset.per_mic);
 	}
 	gtk_label_set_text(GTK_LABEL(hub->headset.mic),
 		text);

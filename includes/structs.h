@@ -92,11 +92,15 @@ typedef struct s_timer
 typedef struct s_headset
 {
 	GtkWidget			*volume;
+	GtkWidget			*sld_vol;
 	GtkWidget			*mic;
+	GtkWidget			*sld_mic;
 	pa_glib_mainloop	*adapter;
 	pa_context			*context;
 	uint32_t			sink_index;
 	uint32_t			source_index;
+	gint				per_vol;
+	gint				per_mic;
 }	t_headset;
 
 typedef struct s_hub

@@ -40,5 +40,6 @@ int			hub_volume_percent(const pa_cvolume *volume);
 
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);
+void		hub_build_sliders(t_hub	*hub);
 
 #endif
