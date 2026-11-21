@@ -19,8 +19,10 @@
 
 // === Functions === //
 
-// sources/headset
+// sources/headset/
 
 // pulse.c
+void	hub_pulse_state(pa_context *c, void *user_data);
+void	hub_pulse_connect(t_hub *hub);
 
 #endif
