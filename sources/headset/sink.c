@@ -49,6 +49,7 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 	else
 	{
 		per_vol = hub_volume_percent(&i->volume);
+		hub->headset.sink_vol = i->volume;
 		gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
 		gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
 		if (i->mute == 0)
@@ -61,4 +62,25 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 	gtk_label_set_text(GTK_LABEL(hub->headset.volume),
 		text);
 	g_free(text);
+}
+
+void	hub_sink_slider_moved(GtkRange *self, gpointer user_data)
+{
+	t_hub			*hub;
+	double			value;
+	pa_cvolume		volume;
+	pa_volume_t		new_max;
+	pa_operation	*op;
+
+	hub = user_data;
+	if (hub->headset.sink_index == PA_INVALID_INDEX)
+		return ;
+	value = gtk_range_get_value(self);
+	volume = hub->headset.sink_vol;
+	new_max = ((value * PA_VOLUME_NORM) + 50) / 100;
+	pa_cvolume_scale(&volume, new_max);
+	op = pa_context_set_sink_volume_by_index(hub->headset.context,
+			hub->headset.sink_index, &volume, NULL, NULL);
+	if (op)
+		pa_operation_unref(op);
 }
