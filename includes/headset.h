@@ -24,6 +24,11 @@
 // pulse.c
 void		hub_pulse_state(pa_context *c, void *user_data);
 void		hub_pulse_connect(t_hub *hub);
+void		hub_pulse_ready(pa_context *c, void *user_data);
+
+// events.c
+void	hub_pulse_event(pa_context *c, pa_subscription_event_type_t t,
+			uint32_t idx, void *user_data);
 
 // sink.c
 void		hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,

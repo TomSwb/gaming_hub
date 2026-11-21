@@ -15,21 +15,10 @@
 void	hub_pulse_state(pa_context *c, void *user_data)
 {
 	pa_context_state_t	state;
-	pa_operation		*sink_op;
-	pa_operation		*source_op;
 
 	state = pa_context_get_state(c);
 	if (state == PA_CONTEXT_READY)
-	{
-		sink_op = pa_context_get_sink_info_list(c,
-				hub_sink_list, user_data);
-		if (sink_op)
-			pa_operation_unref(sink_op);
-		source_op = pa_context_get_source_info_list(c,
-				hub_source_list, user_data);
-		if (source_op)
-			pa_operation_unref(source_op);
-	}
+		hub_pulse_ready(c, user_data);
 	g_print("pulse: state %d\n", state);
 }
 
@@ -49,4 +38,23 @@ void	hub_pulse_connect(t_hub *hub)
 		PA_CONTEXT_NOFLAGS, NULL) < 0)
 		g_print("pulse: %s\n",
 				pa_strerror(pa_context_errno(hub->headset.context)));
+}
+
+void	hub_pulse_ready(pa_context *c, void *user_data)
+{
+	pa_operation	*op;
+
+	op = pa_context_get_sink_info_list(c,
+			hub_sink_list, user_data);
+	if (op)
+		pa_operation_unref(op);
+	op = pa_context_get_source_info_list(c,
+			hub_source_list, user_data);
+	if (op)
+		pa_operation_unref(op);
+	pa_context_set_subscribe_callback(c, hub_pulse_event, user_data);
+	op = pa_context_subscribe(c,
+		PA_SUBSCRIPTION_MASK_SINK | PA_SUBSCRIPTION_MASK_SOURCE, NULL, NULL);
+	if (op)
+		pa_operation_unref(op);
 }
