@@ -93,6 +93,7 @@ typedef struct s_headset
 {
 	pa_glib_mainloop	*adapter;
 	pa_context			*context;
+	uint32_t			sink_index;
 }	t_headset;
 
 typedef struct s_hub

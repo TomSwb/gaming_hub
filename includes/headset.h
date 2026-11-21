@@ -25,4 +25,8 @@
 void	hub_pulse_state(pa_context *c, void *user_data);
 void	hub_pulse_connect(t_hub *hub);
 
+// sink.c
+void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
+			void *user_data);
+
 #endif

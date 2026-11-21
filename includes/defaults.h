@@ -37,4 +37,6 @@
 # define HUB_DEF_POPUPS TRUE
 # define HUB_DEF_SOUND TRUE
 
+# define HUB_HEADSET_NAME "Xbox Wireless Headset"
+
 #endif
