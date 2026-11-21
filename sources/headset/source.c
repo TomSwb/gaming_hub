@@ -64,11 +64,19 @@ void	hub_source_set_buttons(t_hub *hub, gint per_mic,
 			const pa_source_info *i)
 {
 	hub->headset.src_vol = i->volume;
+	g_signal_handlers_block_by_func(hub->headset.sld_mic,
+			G_CALLBACK(hub_source_slider_moved), hub);
 	gtk_range_set_value(GTK_RANGE(hub->headset.sld_mic), per_mic);
 	gtk_widget_set_sensitive(hub->headset.sld_mic, TRUE);
+	g_signal_handlers_unblock_by_func(hub->headset.sld_mic,
+			G_CALLBACK(hub_source_slider_moved), hub);
+	g_signal_handlers_block_by_func(hub->headset.mute_mic,
+			G_CALLBACK(hub_source_mute_toggled), hub);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(hub->headset.mute_mic),
 				i->mute);
 	gtk_widget_set_sensitive(hub->headset.mute_mic, TRUE);
+	g_signal_handlers_unblock_by_func(hub->headset.mute_mic,
+			G_CALLBACK(hub_source_mute_toggled), hub);
 }
 
 void	hub_source_slider_moved(GtkRange *self, gpointer user_data)

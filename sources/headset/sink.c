@@ -64,11 +64,19 @@ void	hub_sink_set_buttons(t_hub *hub, gint per_vol,
 			const pa_sink_info *i)
 {
 	hub->headset.sink_vol = i->volume;
+	g_signal_handlers_block_by_func(hub->headset.sld_vol,
+			G_CALLBACK(hub_sink_slider_moved), hub);
 	gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
 	gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
+	g_signal_handlers_unblock_by_func(hub->headset.sld_vol,
+			G_CALLBACK(hub_sink_slider_moved), hub);
+	g_signal_handlers_block_by_func(hub->headset.mute_vol,
+			G_CALLBACK(hub_sink_mute_toggled), hub);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(hub->headset.mute_vol),
 				i->mute);
 	gtk_widget_set_sensitive(hub->headset.mute_vol, TRUE);
+	g_signal_handlers_unblock_by_func(hub->headset.mute_vol,
+			G_CALLBACK(hub_sink_mute_toggled), hub);
 }
 
 void	hub_sink_slider_moved(GtkRange *self, gpointer user_data)
