@@ -15,15 +15,20 @@
 void	hub_pulse_state(pa_context *c, void *user_data)
 {
 	pa_context_state_t	state;
-	pa_operation		*op;
+	pa_operation		*sink_op;
+	pa_operation		*source_op;
 
 	state = pa_context_get_state(c);
 	if (state == PA_CONTEXT_READY)
 	{
-		op = pa_context_get_sink_info_list(c,
+		sink_op = pa_context_get_sink_info_list(c,
 				hub_sink_list, user_data);
-		if (op)
-			pa_operation_unref(op);
+		if (sink_op)
+			pa_operation_unref(sink_op);
+		source_op = pa_context_get_source_info_list(c,
+				hub_source_list, user_data);
+		if (source_op)
+			pa_operation_unref(source_op);
 	}
 	g_print("pulse: state %d\n", state);
 }

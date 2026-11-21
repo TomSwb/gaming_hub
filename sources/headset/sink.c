@@ -41,11 +41,7 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 	gchar	*text;
 
 	if (i == NULL)
-	{
 		text = g_strdup("No device found ...");
-		gtk_label_set_text(GTK_LABEL(hub->headset.volume),
-		text);
-	}
 	else
 	{
 		if (i->mute == 0)
@@ -54,8 +50,8 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 		else
 			text = g_strdup_printf("Volume: %d%% (muted)",
 				hub_volume_percent(&i->volume));
-		gtk_label_set_text(GTK_LABEL(hub->headset.volume),
-		text);
 	}
+	gtk_label_set_text(GTK_LABEL(hub->headset.volume),
+		text);
 	g_free(text);
 }

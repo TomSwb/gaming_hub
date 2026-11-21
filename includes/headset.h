@@ -30,6 +30,11 @@ void		hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 				void *user_data);
 void		hub_show_sink(t_hub *hub, const pa_sink_info *i);
 
+// source.c
+void		hub_source_list(pa_context *c, const pa_source_info *i, int eol,
+				void *user_data);
+void		hub_show_source(t_hub *hub, const pa_source_info *i);
+
 // volume.c
 int			hub_volume_percent(const pa_cvolume *volume);
 
