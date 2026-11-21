@@ -71,7 +71,7 @@ Seen with `gdbus monitor --system --dest org.bluez --object-path <path>` while t
 ### Audio (milestone 5)
 
 - PipeWire sees the headset as a sound card named **"Xbox Wireless Headset"** (the card number changes, don't rely on it).
-- Over Bluetooth, using the mic switches the headset to the hands-free profile (phone-call sound quality). Not an issue for solo games without voice chat.
+- Over Bluetooth, using the mic switches the headset to the hands-free profile (phone-call sound quality). Not an issue for solo games without voice chat. *21 Nov: PipeWire lists the mic even in music mode (`a2dp-sink`) and switches only when a program records; details in [`headset.md`](headset.md).*
 
 ### Docs
 

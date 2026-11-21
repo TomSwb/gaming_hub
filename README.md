@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Milestone 4 (auto-start and install) done on 20 Nov: `make install` puts the hub in the app menu, and through GameMode it opens when a game starts, shows a "Between Games" page when one closes (the session's countdown keeps running) and carries on when the next one starts. Next: milestone 5, headset volume and mic (and the styling step when the palette arrives).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Milestone 4 (auto-start and install) done on 20 Nov: `make install` puts the hub in the app menu, and through GameMode it opens when a game starts, shows a "Between Games" page when one closes (the session's countdown keeps running) and carries on when the next one starts. Now: milestone 5, headset volume and mic (started 21 Nov; and the styling step when the palette arrives).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -155,6 +155,7 @@ Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, 
 | [`docs/live-stats.md`](docs/live-stats.md) | Milestone 2: the tick, reading `/proc` and `/sys`, finding devices by name, fps-cost check |
 | [`docs/timer.md`](docs/timer.md) | Milestone 3: settings file, countdown and states, pages, eye cue, notifications, plan page |
 | [`docs/auto-start.md`](docs/auto-start.md) | Milestone 4: single instance, `--start` / `--end`, starting with GameMode, `make install`, between games, emulators |
+| [`docs/headset.md`](docs/headset.md) | Milestone 5: how PipeWire shows the headset, libpulse in the main loop, volume and mute, events |
 
 ## Resources
 
