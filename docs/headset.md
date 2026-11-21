@@ -87,3 +87,31 @@ Volume and mute of the headset's output and mic, through libpulse (PipeWire spea
 | `env PULSE_SERVER=unix:/tmp/nothing-here ./gaming_hub` | `state 1`, `state 5`, then `pulse: Connection refused`; the window works, clean exit |
 
 The failure test shows that **the state callback can run inside `pa_context_connect`**, before it returns: state 5 is printed before the connect's own error line. So the callback must never rely on something set up after the connect call. After a failure, the disconnect at quit prints nothing (it only announces "terminated" for a connection that was still good).
+
+## Find the headset, read it (milestone 5, step 3, 21 Nov)
+
+**How a list arrives.** `pa_context_get_sink_info_list(context, hub_sink_list, hub)` (and `pa_context_get_source_info_list` for the mic) is sent from the state callback once the state is `PA_CONTEXT_READY`. It returns a `pa_operation *` at once, a handle on the request in progress, owned by the hub: not needed here, so it is dropped right away with `pa_operation_unref` (the request still completes). It is `NULL` if the request couldn't be sent, and `pa_operation_unref` asserts on `NULL`, hence the check.
+
+The list callback is then called **many times**:
+
+| `eol` | `i` | Meaning |
+| --- | --- | --- |
+| `0` | one device's info | once per sink (or source) |
+| `> 0` | `NULL` | end of the list: everything has been seen ("no headset" is decided here) |
+| `< 0` | `NULL` | the request failed |
+
+**`i` is borrowed for that one call**: libpulse frees it when the callback returns. The hub copies what it keeps (the index) and never stores the pointer.
+
+**Matching.** `g_strcmp0(i->description, HUB_HEADSET_NAME) == 0` (`HUB_HEADSET_NAME` in `defaults.h`): `g_strcmp0` is `strcmp` that accepts `NULL`. Equal, not "contains", so "Monitor of Xbox Wireless Headset" never matches; only one mic is found. The found index goes into `t_headset` (`sink_index`, `source_index`), which start at **`PA_INVALID_INDEX`** (`0xFFFFFFFF`, "no index"; `0` could be a real one). At the end of the list, an index still at `PA_INVALID_INDEX` means no headset.
+
+Bugs on the way (17:42): the name in quotes (`"HUB_HEADSET_NAME"` is that 16-letter text, the preprocessor doesn't replace inside quotes) and `if (g_strcmp0(…))` without `== 0` (true when **different**): every sink was "found", and the index kept was the last sink's. The clue was the count: 5 "found" lines for 5 sinks.
+
+**Volume as a %:** `hub_volume_percent` (`volume.c`, shared by output and mic): `pa_cvolume_avg` averages the channels (2 for the output, 1 for the mic), then `(average × 100 + PA_VOLUME_NORM / 2) / PA_VOLUME_NORM`; adding half the divisor rounds to the nearest instead of down. No clamping: GNOME's over-amplification goes above 100 %.
+
+**Mute is separate from the volume:** muted at 61 % still reads 61 %, only `mute` changes (that's why unmuting returns to the same level). The labels show both: `Volume: 61%` / `Volume: 61% (muted)`. GNOME's slider at the bottom gives 0 % and mutes as well.
+
+**On screen.** `hub_build_headset` (`headset_build.c`) builds a "Headset" section between the timer pages and the stats: a title and two labels (output, mic), starting at `...`. `hub_show_sink` / `hub_show_source` make the text (`NULL` = nothing found) and set it once. `hub_activate` builds the window **before** `hub_pulse_connect`, so the labels exist before any libpulse callback can touch them.
+
+**The mic and GNOME.** In music mode (A2DP, "Portable" in GNOME) GNOME Settings shows **"No Input Devices"**: it doesn't list PipeWire's virtual headset mic. libpulse does, so the hub finds it, and step 4's controls will be the only easy way to set or mute it in that mode. By hand: `pactl set-source-mute bluez_input.54:4C:8A:E1:83:E0 toggle`, `pactl set-source-volume … 80%`. GNOME lists the headset twice as an output, "Portable" (A2DP, good sound) and "Handsfree" (HFP, mic on, phone-call sound for everything); choosing one switches the card's profile (also `pactl set-card-profile bluez_card.<address> a2dp-sink`). Decided 21 Nov: stay on Portable for games. After a switch the headset's sink and source get new indexes: the hub sees that from step 5.
+
+**Tested (21 Nov):** headset on (`Volume: 70%`, then 61 %, muted, 0 % muted), headset off (no device), mic found once (the monitor skipped) and its mute toggled with `pactl`.
