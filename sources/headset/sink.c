@@ -31,7 +31,7 @@ void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 		}
 	}
 	else if (eol > 0 && hub->headset.sink_index == PA_INVALID_INDEX)
-		g_print("Pulse: No headset - end of list\n");
+		hub_show_sink(hub, NULL);
 	else
 		g_print("Pulse: End of list\n");
 }
@@ -42,19 +42,19 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 
 	if (i == NULL)
 	{
-		text = g_strdup("Headset: off\n");
-		gtk_label_set_text(GTK_LABEL(hub->headset.headset),
+		text = g_strdup("No device found ...");
+		gtk_label_set_text(GTK_LABEL(hub->headset.volume),
 		text);
 	}
 	else
 	{
 		if (i->mute == 0)
-			text = g_strdup_printf("Headset: %d%%\n",
+			text = g_strdup_printf("Volume: %d%%",
 				hub_volume_percent(&i->volume));
 		else
-		 	text = g_strdup_printf("Headset: %d%% (muted)\n",
+			text = g_strdup_printf("Volume: %d%% (muted)",
 				hub_volume_percent(&i->volume));
-		gtk_label_set_text(GTK_LABEL(hub->headset.headset),
+		gtk_label_set_text(GTK_LABEL(hub->headset.volume),
 		text);
 	}
 	g_free(text);

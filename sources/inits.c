@@ -80,7 +80,7 @@ void	hub_timer_init(t_hub *hub)
 
 void	hub_headset_init(t_hub *hub)
 {
-	hub->headset.headset = NULL;
+	hub->headset.volume = NULL;
 	hub->headset.adapter = NULL;
 	hub->headset.context = NULL;
 	hub->headset.sink_index = PA_INVALID_INDEX;
