@@ -50,3 +50,40 @@ Volume and mute of the headset's output and mic, through libpulse (PipeWire spea
 - The mic can arrive **before** the output: the two are found independently.
 - `server #4294967295` is `0xFFFFFFFF`, libpulse's `PA_INVALID_INDEX` (the server has no index): the server's defaults changed (the default output moved to the headset and back).
 - The hub subscribes only to sinks and sources (and maybe the server), so sink-inputs and clients never reach it.
+
+## Connect to the sound server (milestone 5, step 2, 21 Nov)
+
+**Build.** The Makefile asks `pkg-config` for both packages in one call, `pkg-config --cflags gtk4 libpulse-mainloop-glib` (and `--libs`): it merges their flags and drops what both share (GLib). libpulse adds `-D_REENTRANT -pthread` (it is thread-safe) and links `-lpulse-mainloop-glib -lpulse`; its headers are in `/usr/include/pulse/`, already on the compiler's path, so they are included as `<pulse/...>`. The variables are named `PKG_CFLAGS` / `PKG_LIBS` since they no longer hold only GTK. New area: `sources/headset/`, `includes/headset.h`, the `HEADSET` list.
+
+**Asynchronous, like GTK.** libpulse never waits for the server: a request returns at once, and the answer comes later in a callback, called from the main loop. So the window never blocks.
+
+| Piece | Created with | Owner |
+| --- | --- | --- |
+| GLib adapter (`pa_glib_mainloop`) | `pa_glib_mainloop_new(NULL)`: `NULL` = GLib's default context, the one GTK runs | the hub, `pa_glib_mainloop_free`, **last** |
+| API table (`pa_mainloop_api *`) | `pa_glib_mainloop_get_api(adapter)`: how libpulse adds timers and watches sockets | borrowed from the adapter, never freed |
+| Context (`pa_context`) | `pa_context_new(api, "Gaming Hub")`: the one connection; the name is what `pactl list clients` shows | the hub, reference-counted, `pa_context_unref` |
+| State callback | `pa_context_set_state_callback(context, hub_pulse_state, hub)`: `hub` comes back as `user_data` | — |
+
+`pa_context_connect(context, NULL, PA_CONTEXT_NOFLAGS, NULL)` (`NULL` = the default server, PipeWire) starts connecting and returns at once; negative = failed right away (`pa_strerror(pa_context_errno(context))` says why). From then on the state callback is called at each change; `pa_context_get_state` gives `UNCONNECTED` (0), `CONNECTING` (1), `AUTHORIZING` (2), `SETTING_NAME` (3), **`READY` (4)**, **`FAILED` (5)**, `TERMINATED` (6). Ready = sinks and sources can be asked for (step 3); failed and terminated never come back by themselves.
+
+`hub_pulse_connect` runs once, in `hub_activate` after the early return (like the tick). It stores the adapter and the context in `t_hub`'s new `t_headset` and stops at the first `NULL`, without freeing: `hub_free_hub` frees whatever isn't `NULL`. It returns nothing: if the sound server can't be reached, the hub still runs, only without headset control.
+
+**Freeing, in reverse order** (found the hard way, 21 Nov):
+
+1. `pa_context_disconnect`: closes the connection on purpose; the state callback hears it one last time (state 6).
+2. `pa_context_unref`: drops the hub's reference.
+3. `pa_glib_mainloop_free`: the adapter, **last**.
+
+- **Adapter first = abort.** The first version freed the adapter, then unref'd the context: `ERROR:…glib-mainloop.c:256:glib_io_free: assertion failed: (!e->dead)`, SIGABRT at quit. A connected context has its socket registered with the adapter; freeing the adapter marks every registration dead, and the context then tries to remove its socket from an adapter that's gone.
+- **No `NULL`.** Unlike `g_free`, libpulse's free functions assert on `NULL`. Each call has its own check: `gaming_hub --end` with no hub running builds nothing, so both pointers stay `NULL`.
+- Without the disconnect it also worked (the last unref closes the connection silently), but the state callback never heard it.
+
+**Tested (21 Nov):**
+
+| Run | Output |
+| --- | --- |
+| `./gaming_hub`, close the window | `pulse: state 1`, `2`, `3`, `4`, at quit `6`; clean exit |
+| `./gaming_hub --end`, no hub running | nothing printed, exit code 0 |
+| `env PULSE_SERVER=unix:/tmp/nothing-here ./gaming_hub` | `state 1`, `state 5`, then `pulse: Connection refused`; the window works, clean exit |
+
+The failure test shows that **the state callback can run inside `pa_context_connect`**, before it returns: state 5 is printed before the connect's own error line. So the callback must never rely on something set up after the connect call. After a failure, the disconnect at quit prints nothing (it only announces "terminated" for a connection that was still good).
