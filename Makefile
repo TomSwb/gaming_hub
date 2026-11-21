@@ -57,7 +57,8 @@ GAME = sources/game/game_events.c
 
 HEADSET = sources/headset/pulse.c \
 	sources/headset/sink.c \
-	sources/headset/volume.c
+	sources/headset/volume.c \
+	sources/headset/headset_build.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

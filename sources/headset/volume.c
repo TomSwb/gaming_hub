@@ -14,10 +14,10 @@
 
 int	hub_volume_percent(const pa_cvolume *volume)
 {
-	pa_volume_t	channels;
+	pa_volume_t	average;
 	int			result;
 
-	channels = pa_cvolume_avg(volume);
-	result = ((channels * 100) + (PA_VOLUME_NORM / 2)) / PA_VOLUME_NORM;
+	average = pa_cvolume_avg(volume);
+	result = ((average * 100) + (PA_VOLUME_NORM / 2)) / PA_VOLUME_NORM;
 	return (result);
 }

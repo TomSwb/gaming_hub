@@ -22,14 +22,18 @@
 // sources/headset/
 
 // pulse.c
-void	hub_pulse_state(pa_context *c, void *user_data);
-void	hub_pulse_connect(t_hub *hub);
+void		hub_pulse_state(pa_context *c, void *user_data);
+void		hub_pulse_connect(t_hub *hub);
 
 // sink.c
-void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
-			void *user_data);
+void		hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
+				void *user_data);
+void		hub_show_sink(t_hub *hub, const pa_sink_info *i);
 
 // volume.c
-int		hub_volume_percent(const pa_cvolume *volume);
+int			hub_volume_percent(const pa_cvolume *volume);
+
+// headset_build.c
+GtkWidget	*hub_build_headset(t_hub *hub);
 
 #endif
