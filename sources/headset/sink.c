@@ -98,6 +98,10 @@ void	hub_sink_slider_moved(GtkRange *self, gpointer user_data)
 			hub->headset.sink_index, &volume, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
+	op = pa_context_set_sink_mute_by_index(hub->headset.context,
+		hub->headset.sink_index, new_max == 0, NULL, NULL);
+	if (op)
+		pa_operation_unref(op);
 }
 
 void	hub_sink_mute_toggled(GtkToggleButton *self, gpointer user_data)
