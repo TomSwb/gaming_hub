@@ -115,3 +115,32 @@ Bugs on the way (17:42): the name in quotes (`"HUB_HEADSET_NAME"` is that 16-let
 **The mic and GNOME.** In music mode (A2DP, "Portable" in GNOME) GNOME Settings shows **"No Input Devices"**: it doesn't list PipeWire's virtual headset mic. libpulse does, so the hub finds it, and step 4's controls will be the only easy way to set or mute it in that mode. By hand: `pactl set-source-mute bluez_input.54:4C:8A:E1:83:E0 toggle`, `pactl set-source-volume … 80%`. GNOME lists the headset twice as an output, "Portable" (A2DP, good sound) and "Handsfree" (HFP, mic on, phone-call sound for everything); choosing one switches the card's profile (also `pactl set-card-profile bluez_card.<address> a2dp-sink`). Decided 21 Nov: stay on Portable for games. After a switch the headset's sink and source get new indexes: the hub sees that from step 5.
 
 **Tested (21 Nov):** headset on (`Volume: 70%`, then 61 %, muted, 0 % muted), headset off (no device), mic found once (the monitor skipped) and its mute toggled with `pactl`.
+
+## Controls (milestone 5, step 4, 21 Nov)
+
+**The layout.** The headset section has the "Headset" title centred, then two columns side by side, output and mic, each with its label, a slider (GtkScale, 0–100, step 1) and a **Mute** toggle button (`hub_build_sliders`, `hub_build_mute`, `hub_headset_build_box` in `headset_build.c`). The sliders and buttons start **greyed out** (`gtk_widget_set_sensitive(…, FALSE)`), so before libpulse answers, or if the server can't be reached, nothing can be moved while the labels say "off". `hub_sink_set_buttons` / `hub_source_set_buttons` put the device's values on its controls and make them sensitive; `hub_show_*` greys them out again when the device is gone.
+
+**Slider → volume** (`hub_sink_slider_moved`, `hub_source_slider_moved`, on `"value-changed"`):
+
+1. No device (index still `PA_INVALID_INDEX`) → return.
+2. `gtk_range_get_value` → the % (a `double`).
+3. The new loudest value: `(% × PA_VOLUME_NORM + 50) / 100` (adding half of 100 rounds to the nearest), the reverse of `hub_volume_percent`.
+4. **The balance is kept:** the hub stores a **copy** of the device's `pa_cvolume` in `t_headset` (`sink_vol`, `src_vol`: struct fields, not pointers, copied with `=` from `i->volume` when the device is shown, so they stay valid after libpulse frees `i`; `pa_cvolume_init` in the init = 0 channels, "empty"). The callback copies it into a local `pa_cvolume` and calls `pa_cvolume_scale(&local, new_max)`: the loudest channel becomes `new_max` and the others keep their ratio. A fresh volume with every channel set equal would wipe the left/right balance.
+5. `pa_context_set_sink_volume_by_index(context, sink_index, &local, NULL, NULL)` (`…_source_…` with `source_index` for the mic): no success callback, the answer isn't needed. The `pa_operation *` is unref'd behind a `NULL` check.
+
+**Order matters in `hub_*_set_buttons`:** the volume is copied **before** `gtk_range_set_value`, because `set_value` emits `"value-changed"` at once: the callback runs during that line and would otherwise scale the empty `pa_cvolume`.
+
+**Mute** (`hub_sink_mute_toggled`, `hub_source_mute_toggled`, on `"toggled"`): `pa_context_set_sink_mute_by_index(context, sink_index, gtk_toggle_button_get_active(self), NULL, NULL)` (and `…_source_…`). The button's state (`TRUE`/`FALSE` = 1/0) is the `mute` argument itself, no `if`. Shown with `gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), i->mute)`. A GtkToggleButton rather than a GtkSwitch: its `"toggled"` callback has the simple `(self, user_data)` shape.
+
+**Echo, for step 5:** showing a value (`gtk_range_set_value`, `gtk_toggle_button_set_active`) emits the same signal as the user moving it, so each show sends the same value back to the server once. Harmless here; with events it would loop.
+
+**Bugs on the way (21 Nov):**
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| SIGSEGV right after `pulse: state 4` | `hub_volume_percent(&i->volume)` above `if (i == NULL)`: a device not found → `&i->volume` near address 0 | read the volume only in the branch where `i` is valid |
+| sliders never followed the headset | values and sensitivity set once at **build**, before libpulse answered; and `if (source_index)` is true for `PA_INVALID_INDEX` (`0xFFFFFFFF`, not 0) | set them in `show`, when the answer arrives; "found" is `!= PA_INVALID_INDEX` |
+| "the mic works" but the mic never changed | copy-paste: the mic handler connected to the output slider, and the mic callback checked `sink_index` and called `…_set_sink_volume…` with `sink_index` (each output move set the output twice, the second time with the mic's mono volume) | the four places changed to the source; checked with `pactl get-source-volume` |
+| a mute that only ever mutes | `gtk_toggle_button_get_active(self);` alone on a line (answer thrown away), then a fixed `1` | the call's result as the `mute` argument |
+
+**Tested (21 Nov):** output slider → the sound and GNOME's slider follow; mic slider → `pactl get-source-volume bluez_input.54:4C:8A:E1:83:E0` follows, the output doesn't move; output Mute → silence, GNOME shows muted; mic Mute → `pactl get-source-mute …` says `Mute: yes`. The labels don't follow the controls yet: step 5.

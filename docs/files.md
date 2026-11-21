@@ -28,12 +28,12 @@ What each file does. Back to the [README](../README.md).
   * `game_events.c`: `hub_game_closed` (`--end`: a running session → between games) and `hub_game_started` (`--start`: between games → playing)
 * `sources/headset/`: the headset's output and mic through libpulse (milestone 5)
   * `pulse.c`: `hub_pulse_connect` (the GLib adapter, the context, the connection to the sound server, once, from `hub_activate`), `hub_pulse_state` (the context's state callback; when ready, asks for the sink and source lists)
-  * `sink.c`: `hub_sink_list` (called once per output, then at the end: finds the headset by description, keeps its index), `hub_show_sink` (its volume and mute on the output label, or "no device")
-  * `source.c`: `hub_source_list` and `hub_show_source`, the same for the mic
+  * `sink.c`: `hub_sink_list` (called once per output, then at the end: finds the headset by description, keeps its index), `hub_show_sink` (its volume and mute on the output label, or "no device" and the controls greyed out), `hub_sink_set_buttons` (keeps a copy of its volume, puts it on the slider and the Mute button), `hub_sink_slider_moved` (the slider sets the volume, balance kept), `hub_sink_mute_toggled` (the Mute button sets the mute)
+  * `source.c`: the same five for the mic (`hub_source_…`)
   * `volume.c`: `hub_volume_percent` (a `pa_cvolume`, any number of channels, as a rounded %)
-  * `headset_build.c`: `hub_build_headset` (the "Headset" section: title, output label, mic label)
+  * `headset_build.c`: `hub_build_headset` (the "Headset" section), `hub_build_sliders` and `hub_build_mute` (the controls, greyed out until the headset is found, with their signals), `hub_headset_build_box` (the title, then two columns: output and mic, each label + slider + Mute)
 * `includes/gaming_hub.h`: the header every `.c` file includes; pulls in the others and holds the prototypes of `main.c`, `utils.c`, `inits.c` and `main_build.c`
-* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) a `t_timer` (timer widgets and state) and a `t_headset` (libpulse's GLib adapter and context, the headset's output and mic indexes and labels), all by value, plus the window's `stack` and the application (`app`, borrowed: `main` owns it)
+* `includes/structs.h`: the structs: `t_hub` holds a `t_computer` (stat labels, sensor folders, CPU samples), a `t_settings` (timer values) a `t_timer` (timer widgets and state) and a `t_headset` (libpulse's GLib adapter and context, the headset's output and mic indexes, copies of their volumes, and their labels, sliders and Mute buttons), all by value, plus the window's `stack` and the application (`app`, borrowed: `main` owns it)
 * `includes/defaults.h`: the values the hub uses when the settings file doesn't set them (`HUB_DEF_…`)
 * `includes/computer.h`, `includes/timer.h`, `includes/game.h`, `includes/headset.h`: prototypes of `sources/computer/`, `sources/timer/`, `sources/game/` and `sources/headset/`
 * `Makefile`: builds the hub and libft, with GTK4's and libpulse's flags from `pkg-config`; also writes `compile_flags.txt` for the editor; `make install` / `make uninstall` (program in `~/.local/bin`, `.desktop` file in `~/.local/share/applications`)
