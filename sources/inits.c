@@ -89,7 +89,7 @@ void	hub_headset_init(t_hub *hub)
 	hub->headset.adapter = NULL;
 	hub->headset.context = NULL;
 	hub->headset.sink_index = PA_INVALID_INDEX;
-	hub->headset.source_index = PA_INVALID_INDEX;
+	hub->headset.src_index = PA_INVALID_INDEX;
 	pa_cvolume_init(&hub->headset.sink_vol);
 	pa_cvolume_init(&hub->headset.src_vol);
 }

@@ -25,12 +25,12 @@ void	hub_source_list(pa_context *c, const pa_source_info *i, int eol,
 	{
 		if (g_strcmp0(i->description, HUB_HEADSET_NAME) == 0)
 		{
-			hub->headset.source_index = i->index;
+			hub->headset.src_index = i->index;
 			g_print("Pulse: Mic Found\n");
 			hub_show_source(hub, i);
 		}
 	}
-	else if (eol > 0 && hub->headset.source_index == PA_INVALID_INDEX)
+	else if (eol > 0 && hub->headset.src_index == PA_INVALID_INDEX)
 		hub_show_source(hub, NULL);
 	else
 		g_print("Pulse: End of list\n");
@@ -80,14 +80,14 @@ void	hub_source_slider_moved(GtkRange *self, gpointer user_data)
 	pa_operation	*op;
 
 	hub = user_data;
-	if (hub->headset.source_index == PA_INVALID_INDEX)
+	if (hub->headset.src_index == PA_INVALID_INDEX)
 		return ;
 	value = gtk_range_get_value(self);
 	volume = hub->headset.src_vol;
 	new_max = ((value * PA_VOLUME_NORM) + 50) / 100;
 	pa_cvolume_scale(&volume, new_max);
 	op = pa_context_set_source_volume_by_index(hub->headset.context,
-			hub->headset.source_index, &volume, NULL, NULL);
+			hub->headset.src_index, &volume, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
 }
@@ -99,11 +99,11 @@ void	hub_source_mute_toggled(GtkToggleButton *self, gpointer user_data)
 	pa_operation	*op;
 
 	hub = user_data;
-	if (hub->headset.source_index == PA_INVALID_INDEX)
+	if (hub->headset.src_index == PA_INVALID_INDEX)
 		return ;
 	state = gtk_toggle_button_get_active(self);
 	op = pa_context_set_source_mute_by_index(hub->headset.context,
-		hub->headset.source_index, state, NULL, NULL);
+		hub->headset.src_index, state, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
 }
