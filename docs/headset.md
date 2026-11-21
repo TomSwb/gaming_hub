@@ -144,3 +144,32 @@ Bugs on the way (17:42): the name in quotes (`"HUB_HEADSET_NAME"` is that 16-let
 | a mute that only ever mutes | `gtk_toggle_button_get_active(self);` alone on a line (answer thrown away), then a fixed `1` | the call's result as the `mute` argument |
 
 **Tested (21 Nov):** output slider → the sound and GNOME's slider follow; mic slider → `pactl get-source-volume bluez_input.54:4C:8A:E1:83:E0` follows, the output doesn't move; output Mute → silence, GNOME shows muted; mic Mute → `pactl get-source-mute …` says `Mute: yes`. The labels don't follow the controls yet: step 5.
+
+## Stay in sync (milestone 5, step 5, 21–22 Nov)
+
+**Subscribing.** When the context is ready, `hub_pulse_ready` (`pulse.c`) asks for the two lists, then sets the event callback (`pa_context_set_subscribe_callback(c, hub_pulse_event, hub)`, first) and subscribes (`pa_context_subscribe(c, PA_SUBSCRIPTION_MASK_SINK | PA_SUBSCRIPTION_MASK_SOURCE, NULL, NULL)`): the mask **chooses** which objects the server reports; clients, sink-inputs (GNOME's "pop"), cards never reach the hub. One `pa_operation *op` is reused for the three requests, each unref'd before the next.
+
+**Reading an event.** The event's `t` packs two things, read with masks: `t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK` = which kind of object (`…_SINK` 0, `…_SOURCE` 1), `t & PA_SUBSCRIPTION_EVENT_TYPE_MASK` = what happened (`…_NEW` 0, `…_CHANGE` 16, `…_REMOVE` 32); `idx` = the object's index. A source change printed unmasked reads 17 (1 + 16). **Facility and index together** name an object: the output's monitor is a source with the **same number** as the sink (sink 1411, source 1411).
+
+**What the hub does** (`events.c`: `hub_pulse_event` dispatches by facility to `hub_sink_event` / `hub_source_event`):
+
+| Event | Hub |
+| --- | --- |
+| `REMOVE` of the headset's index | index back to `PA_INVALID_INDEX`, show "off" (controls greyed out) |
+| `NEW` (any index) | ask for that one device (`pa_context_get_sink_info_by_index` / `…source…`); the answer goes to the same `hub_sink_list` / `hub_source_list` (same callback type), which checks the description: that's how a reconnected headset is found again, with its new number |
+| `CHANGE` of the headset's index | ask for it again, show it: labels, sliders and Mute follow GNOME's menu, the volume keys and the hub's own controls |
+| anything else (other devices, the monitor) | ignored |
+
+Bug on the way: `(NEW || CHANGE) && idx == index` never matched a reconnect (a new device has a new number and the index had been reset); the rule is `NEW || (CHANGE && idx == index)`. And a copy-paste: the mic's remove showed the output as off.
+
+**No echo.** `gtk_range_set_value` and `gtk_toggle_button_set_active` emit the same signals as a user's move, so showing a value sent it straight back to the server. `hub_*_set_buttons` switch the control's own handler off around the set: `g_signal_handlers_block_by_func(widget, G_CALLBACK(callback), hub)` … `g_signal_handlers_unblock_by_func(…)` with exactly the callback and data given to `g_signal_connect` (a block with the wrong callback matches nothing and blocks nothing, silently; the function returns how many handlers it matched).
+
+**Hands off while dragging.** Answers to the hub's own moves arrive a little late: dragging to 40, the answer for 46 arrived and moved the knob back under the finger (jitter; sometimes the last value sent wasn't the 0 the drag ended on). `hub_*_slider_moved` stores the time of the user's move (`moved_vol`, `moved_mic`, `g_get_monotonic_time()`, µs); `hub_*_set_buttons` only moves the knob when **more than 300 ms** have passed since (`now − moved > 300000`; `0` at start, so the first value goes through). Labels and Mute are always updated. The first try compared the stored time itself with 300000 (a point in time, billions): always true.
+
+**Mute at zero** (like GNOME): each slider move also sends `…_set_…_mute_by_index(…, new_max == 0, …)`: the comparison is the `mute` value itself. Any move above 0 unmutes.
+
+**Seen, not bugs:**
+- On **reconnect** the controls flash to 100 % and back: PipeWire creates the device at its default volume, then WirePlumber restores the last level (a `new` followed by `change` events).
+- The **mic** settles less smoothly than the output: a Bluetooth headset's mic gain has coarse steps, so the value reported back can differ from the one set and the knob snaps to it 300 ms after letting go.
+
+**Tested (22 Nov):** GNOME's slider → the hub's label and slider follow; the hub's sliders → labels follow; fast drags without jumping; 0 → muted, up → unmuted; headset off → both columns "off", on → values back and the controls work.
