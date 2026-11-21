@@ -47,7 +47,6 @@ void	hub_sink_event(t_hub *hub, pa_context *c,
 	}
 }
 
-
 void	hub_source_event(t_hub *hub, pa_context *c,
 			pa_subscription_event_type_t type, uint32_t idx)
 {
@@ -56,7 +55,7 @@ void	hub_source_event(t_hub *hub, pa_context *c,
 	if (type == PA_SUBSCRIPTION_EVENT_REMOVE && idx == hub->headset.src_index)
 	{
 		hub->headset.src_index = PA_INVALID_INDEX;
-		hub_show_sink(hub, NULL);
+		hub_show_source(hub, NULL);
 	}
 	else if (type == PA_SUBSCRIPTION_EVENT_NEW
 			|| (type == PA_SUBSCRIPTION_EVENT_CHANGE
