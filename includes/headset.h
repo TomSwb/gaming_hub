@@ -29,7 +29,7 @@ void		hub_pulse_connect(t_hub *hub);
 void		hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 				void *user_data);
 void		hub_show_sink(t_hub *hub, const pa_sink_info *i);
-void		hub_sink_set_buttons(t_hub *hub, gint	per_vol,
+void		hub_sink_set_buttons(t_hub *hub, gint per_vol,
 				const pa_sink_info *i);
 void		hub_sink_slider_moved(GtkRange *self, gpointer user_data);
 void		hub_sink_mute_toggled(GtkToggleButton *self, gpointer user_data);
@@ -38,7 +38,7 @@ void		hub_sink_mute_toggled(GtkToggleButton *self, gpointer user_data);
 void		hub_source_list(pa_context *c, const pa_source_info *i, int eol,
 				void *user_data);
 void		hub_show_source(t_hub *hub, const pa_source_info *i);
-void		hub_source_set_buttons(t_hub *hub, gint	per_mic,
+void		hub_source_set_buttons(t_hub *hub, gint per_mic,
 				const pa_source_info *i);
 void		hub_source_slider_moved(GtkRange *self, gpointer user_data);
 void		hub_source_mute_toggled(GtkToggleButton *self, gpointer user_data);

@@ -57,28 +57,22 @@ void	hub_build_mute(t_hub *hub)
 
 void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 {
-	GtkWidget	*box1;
-	GtkWidget	*box_title;
-	GtkWidget	*box2;
-	GtkWidget	*box3;
-	GtkWidget	*box4;
+	GtkWidget	*setting_box;
+	GtkWidget	*vol_box;
+	GtkWidget	*mic_box;
 
-	box1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
-	box_title = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
-	box3 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	box4 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	gtk_box_append(GTK_BOX(box_title), label);
-	gtk_box_append(GTK_BOX(box3), hub->headset.volume);
-	gtk_box_append(GTK_BOX(box3), hub->headset.sld_vol);
-	gtk_box_append(GTK_BOX(box3), hub->headset.mute_vol);
-	gtk_box_append(GTK_BOX(box4), hub->headset.mic);
-	gtk_box_append(GTK_BOX(box4), hub->headset.sld_mic);
-	gtk_box_append(GTK_BOX(box4), hub->headset.mute_mic);
-	gtk_box_append(GTK_BOX(box1), box_title);
-	gtk_box_append(GTK_BOX(box2), box3);
-	gtk_box_append(GTK_BOX(box2), box4);
-	gtk_box_append(GTK_BOX(box), box1);
-	gtk_box_append(GTK_BOX(box), box2);
-	gtk_widget_set_halign(box1, GTK_ALIGN_CENTER);
+	setting_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
+	vol_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	mic_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	gtk_box_append(GTK_BOX(vol_box), hub->headset.volume);
+	gtk_box_append(GTK_BOX(vol_box), hub->headset.sld_vol);
+	gtk_box_append(GTK_BOX(vol_box), hub->headset.mute_vol);
+	gtk_box_append(GTK_BOX(mic_box), hub->headset.mic);
+	gtk_box_append(GTK_BOX(mic_box), hub->headset.sld_mic);
+	gtk_box_append(GTK_BOX(mic_box), hub->headset.mute_mic);
+	gtk_box_append(GTK_BOX(setting_box), vol_box);
+	gtk_box_append(GTK_BOX(setting_box), mic_box);
+	gtk_box_append(GTK_BOX(box), label);
+	gtk_box_append(GTK_BOX(box), setting_box);
+	gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
 }
