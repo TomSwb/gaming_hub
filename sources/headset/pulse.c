@@ -37,8 +37,7 @@ void	hub_pulse_connect(t_hub *hub)
 		return ;
 	pa_context_set_state_callback(hub->headset.context, hub_pulse_state, hub);
 	pa_context_connect(hub->headset.context, NULL,
-			PA_CONTEXT_NOFLAGS, NULL);
-
+		PA_CONTEXT_NOFLAGS, NULL);
 }
 
 void	hub_pulse_ready(pa_context *c, void *user_data)
