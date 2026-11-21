@@ -50,5 +50,6 @@ int			hub_volume_percent(const pa_cvolume *volume);
 GtkWidget	*hub_build_headset(t_hub *hub);
 void		hub_build_sliders(t_hub *hub);
 void		hub_build_mute(t_hub *hub);
+void		hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label);
 
 #endif

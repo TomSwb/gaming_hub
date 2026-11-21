@@ -56,11 +56,11 @@ void	hub_show_source(t_hub *hub, const pa_source_info *i)
 		else
 			text = g_strdup_printf("Mic: %d%% (muted)", per_mic);
 	}
-	gtk_label_set_text(GTK_LABEL(hub->headset.mic),text);
+	gtk_label_set_text(GTK_LABEL(hub->headset.mic), text);
 	g_free(text);
 }
 
-void	hub_source_set_buttons(t_hub *hub, gint	per_mic,
+void	hub_source_set_buttons(t_hub *hub, gint per_mic,
 			const pa_source_info *i)
 {
 	hub->headset.src_vol = i->volume;

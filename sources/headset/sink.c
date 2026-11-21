@@ -56,11 +56,11 @@ void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 		else
 			text = g_strdup_printf("Volume: %d%% (muted)", per_vol);
 	}
-	gtk_label_set_text(GTK_LABEL(hub->headset.volume),text);
+	gtk_label_set_text(GTK_LABEL(hub->headset.volume), text);
 	g_free(text);
 }
 
-void	hub_sink_set_buttons(t_hub *hub, gint	per_vol,
+void	hub_sink_set_buttons(t_hub *hub, gint per_vol,
 			const pa_sink_info *i)
 {
 	hub->headset.sink_vol = i->volume;

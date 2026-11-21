@@ -23,13 +23,7 @@ GtkWidget	*hub_build_headset(t_hub *hub)
 	hub->headset.mic = gtk_label_new("Mic: off");
 	hub_build_sliders(hub);
 	hub_build_mute(hub);
-	gtk_box_append(GTK_BOX(box), label);
-	gtk_box_append(GTK_BOX(box), hub->headset.volume);
-	gtk_box_append(GTK_BOX(box), hub->headset.sld_vol);
-	gtk_box_append(GTK_BOX(box), hub->headset.mute_vol);
-	gtk_box_append(GTK_BOX(box), hub->headset.mic);
-	gtk_box_append(GTK_BOX(box), hub->headset.sld_mic);
-	gtk_box_append(GTK_BOX(box), hub->headset.mute_mic);
+	hub_headset_build_box(hub, box, label);
 	return (box);
 }
 
@@ -61,3 +55,30 @@ void	hub_build_mute(t_hub *hub)
 			G_CALLBACK(hub_source_mute_toggled), hub);
 }
 
+void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
+{
+	GtkWidget	*box1;
+	GtkWidget	*box_title;
+	GtkWidget	*box2;
+	GtkWidget	*box3;
+	GtkWidget	*box4;
+
+	box1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
+	box_title = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
+	box3 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	box4 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	gtk_box_append(GTK_BOX(box_title), label);
+	gtk_box_append(GTK_BOX(box3), hub->headset.volume);
+	gtk_box_append(GTK_BOX(box3), hub->headset.sld_vol);
+	gtk_box_append(GTK_BOX(box3), hub->headset.mute_vol);
+	gtk_box_append(GTK_BOX(box4), hub->headset.mic);
+	gtk_box_append(GTK_BOX(box4), hub->headset.sld_mic);
+	gtk_box_append(GTK_BOX(box4), hub->headset.mute_mic);
+	gtk_box_append(GTK_BOX(box1), box_title);
+	gtk_box_append(GTK_BOX(box2), box3);
+	gtk_box_append(GTK_BOX(box2), box4);
+	gtk_box_append(GTK_BOX(box), box1);
+	gtk_box_append(GTK_BOX(box), box2);
+	gtk_widget_set_halign(box1, GTK_ALIGN_CENTER);
+}
