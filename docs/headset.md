@@ -173,3 +173,13 @@ Bug on the way: `(NEW || CHANGE) && idx == index` never matched a reconnect (a n
 - The **mic** settles less smoothly than the output: a Bluetooth headset's mic gain has coarse steps, so the value reported back can differ from the one set and the knob snaps to it 300 ms after letting go.
 
 **Tested (22 Nov):** GNOME's slider → the hub's label and slider follow; the hub's sliders → labels follow; fast drags without jumping; 0 → muted, up → unmuted; headset off → both columns "off", on → values back and the controls work.
+
+## Wrap-up (milestone 5, step 6, 22 Nov)
+
+**Output.** The debug prints are gone. What's left goes to **stderr** (`g_printerr`), only for real errors: a list request that failed (`eol < 0`; can also happen harmlessly when a device disappears between an event and the answer) and a connection that failed (`PA_CONTEXT_FAILED`, with `pa_strerror(pa_context_errno(c))`). `pa_context_connect`'s return value is ignored **on purpose**: when it fails, libpulse sets the state to `FAILED` itself (inside the call), so the state callback reports it, once; the state callback also sees failures later on (PipeWire restarting). `env PULSE_SERVER=unix:/tmp/nothing-here ./gaming_hub` → one line, `pulse: Connection refused`, and the window works without headset controls.
+
+**Cost** (`top -b -n 3 -d 2 -p (pgrep -x gaming_hub) | grep -A 1 PID`, hub open, headset connected, 22 Nov; `top` shortens the name to `gaming_+`, so grep the header): **0.0 % CPU**, **~112 MB** resident (114660 KiB), the same as after milestone 3: libpulse adds nothing measurable. It does no work between events.
+
+**After pulling:** `make install` again, so the copy GameMode starts (`~/.local/bin/gaming_hub`) has the headset section.
+
+**Time:** ~5.3 h over 21–22 Nov (estimate 9–10 h): look by hand ~0.2 h, connect ~0.75 h, find + read ~1.5 h, controls ~1.7 h, sync ~1 h, wrap-up ~0.25 h.
