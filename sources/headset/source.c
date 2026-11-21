@@ -39,18 +39,22 @@ void	hub_source_list(pa_context *c, const pa_source_info *i, int eol,
 void	hub_show_source(t_hub *hub, const pa_source_info *i)
 {
 	gchar	*text;
+	gint	per_mic;
 
-	hub->headset.per_mic = hub_volume_percent(&i->volume);
 	if (i == NULL)
+	{
 		text = g_strdup("No device found ...");
+		gtk_widget_set_sensitive(hub->headset.sld_mic, FALSE);
+	}
 	else
 	{
+		per_mic = hub_volume_percent(&i->volume);
+		gtk_range_set_value(GTK_RANGE(hub->headset.sld_mic), per_mic);
+		gtk_widget_set_sensitive(hub->headset.sld_mic, TRUE);
 		if (i->mute == 0)
-			text = g_strdup_printf("Mic: %d%%",
-				hub->headset.per_mic);
+			text = g_strdup_printf("Mic: %d%%", per_mic);
 		else
-			text = g_strdup_printf("Mic: %d%% (muted)",
-				hub->headset.per_mic);
+			text = g_strdup_printf("Mic: %d%% (muted)", per_mic);
 	}
 	gtk_label_set_text(GTK_LABEL(hub->headset.mic),
 		text);

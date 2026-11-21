@@ -39,18 +39,24 @@ void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 void	hub_show_sink(t_hub *hub, const pa_sink_info *i)
 {
 	gchar	*text;
+	gint	per_vol;
 
-	hub->headset.per_vol = hub_volume_percent(&i->volume);
 	if (i == NULL)
+	{
 		text = g_strdup("No device found ...");
+		gtk_widget_set_sensitive(hub->headset.sld_vol, FALSE);
+	}
 	else
 	{
+		per_vol = hub_volume_percent(&i->volume);
+		gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
+		gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
 		if (i->mute == 0)
 			text = g_strdup_printf("Volume: %d%%",
-				hub->headset.per_vol);
+				per_vol);
 		else
 			text = g_strdup_printf("Volume: %d%% (muted)",
-				hub->headset.per_vol);
+				per_vol);
 	}
 	gtk_label_set_text(GTK_LABEL(hub->headset.volume),
 		text);

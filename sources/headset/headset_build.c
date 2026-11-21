@@ -21,33 +21,16 @@ GtkWidget	*hub_build_headset(t_hub *hub)
 	label = gtk_label_new("Headset");
 	hub->headset.volume = gtk_label_new("Volume: off");
 	hub->headset.mic = gtk_label_new("Mic: off");
-	hub_build_sliders(hub);
-	gtk_box_append(GTK_BOX(box), label);
-	gtk_box_append(GTK_BOX(box), hub->headset.volume);
-	gtk_box_append(GTK_BOX(box), hub->headset.sld_vol);
-	gtk_box_append(GTK_BOX(box), hub->headset.mic);
-	gtk_box_append(GTK_BOX(box), hub->headset.sld_mic);
-	return (box);
-}
-
-void	hub_build_sliders(t_hub	*hub)
-{
 	hub->headset.sld_vol = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
 			0, 100, 1);
 	gtk_widget_set_hexpand(hub->headset.sld_vol, TRUE);
 	hub->headset.sld_mic = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
 			0, 100, 1);
 	gtk_widget_set_hexpand(hub->headset.sld_mic, TRUE);
-	if (hub->headset.source_index)
-	{
-		gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), hub->headset.per_vol);
-		gtk_range_set_value(GTK_RANGE(hub->headset.sld_mic), hub->headset.per_mic);
-		gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
-		gtk_widget_set_sensitive(hub->headset.sld_mic, TRUE);
-	}
-	else
-	{
-		gtk_widget_set_sensitive(hub->headset.sld_vol, FALSE);
-		gtk_widget_set_sensitive(hub->headset.sld_mic, FALSE);
-	}
+	gtk_box_append(GTK_BOX(box), label);
+	gtk_box_append(GTK_BOX(box), hub->headset.volume);
+	gtk_box_append(GTK_BOX(box), hub->headset.sld_vol);
+	gtk_box_append(GTK_BOX(box), hub->headset.mic);
+	gtk_box_append(GTK_BOX(box), hub->headset.sld_mic);
+	return (box);
 }

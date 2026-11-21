@@ -99,8 +99,6 @@ typedef struct s_headset
 	pa_context			*context;
 	uint32_t			sink_index;
 	uint32_t			source_index;
-	gint				per_vol;
-	gint				per_mic;
 }	t_headset;
 
 typedef struct s_hub
