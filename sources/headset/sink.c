@@ -26,7 +26,6 @@ void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 		if (g_strcmp0(i->description, HUB_HEADSET_NAME) == 0)
 		{
 			hub->headset.sink_index = i->index;
-			g_print("pulse: Headset Found\n");
 			hub_show_sink(hub, i);
 		}
 	}

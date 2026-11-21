@@ -15,15 +15,13 @@
 void	hub_pulse_state(pa_context *c, void *user_data)
 {
 	pa_context_state_t	state;
-	t_hub				*hub;
 
-	hub = user_data;
 	state = pa_context_get_state(c);
 	if (state == PA_CONTEXT_READY)
 		hub_pulse_ready(c, user_data);
 	else if (state == PA_CONTEXT_FAILED)
-		g_printerr("pulse: states: %d, %s\n", state,
-			pa_strerror(pa_context_errno(hub->headset.context)));
+		g_printerr("pulse: %s\n",
+			pa_strerror(pa_context_errno(c)));
 }
 
 void	hub_pulse_connect(t_hub *hub)
@@ -38,10 +36,9 @@ void	hub_pulse_connect(t_hub *hub)
 	if (!hub->headset.context)
 		return ;
 	pa_context_set_state_callback(hub->headset.context, hub_pulse_state, hub);
-	if (pa_context_connect(hub->headset.context, NULL,
-			PA_CONTEXT_NOFLAGS, NULL) < 0)
-		g_printerr("pulse: %s\n",
-			pa_strerror(pa_context_errno(hub->headset.context)));
+	pa_context_connect(hub->headset.context, NULL,
+			PA_CONTEXT_NOFLAGS, NULL);
+
 }
 
 void	hub_pulse_ready(pa_context *c, void *user_data)
