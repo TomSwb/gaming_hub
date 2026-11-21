@@ -37,11 +37,11 @@ void	hub_sink_event(t_hub *hub, pa_context *c,
 		hub_show_sink(hub, NULL);
 	}
 	else if (type == PA_SUBSCRIPTION_EVENT_NEW
-			|| (type == PA_SUBSCRIPTION_EVENT_CHANGE
+		|| (type == PA_SUBSCRIPTION_EVENT_CHANGE
 			&& idx == hub->headset.sink_index))
 	{
 		op = pa_context_get_sink_info_by_index(c, idx,
-			hub_sink_list, hub);
+				hub_sink_list, hub);
 		if (op)
 			pa_operation_unref(op);
 	}
@@ -58,11 +58,11 @@ void	hub_source_event(t_hub *hub, pa_context *c,
 		hub_show_source(hub, NULL);
 	}
 	else if (type == PA_SUBSCRIPTION_EVENT_NEW
-			|| (type == PA_SUBSCRIPTION_EVENT_CHANGE
+		|| (type == PA_SUBSCRIPTION_EVENT_CHANGE
 			&& idx == hub->headset.src_index))
 	{
 		op = pa_context_get_source_info_by_index(c, idx,
-			hub_source_list, hub);
+				hub_source_list, hub);
 		if (op)
 			pa_operation_unref(op);
 	}

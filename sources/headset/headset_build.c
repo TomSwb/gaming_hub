@@ -34,13 +34,13 @@ void	hub_build_sliders(t_hub *hub)
 	gtk_widget_set_hexpand(hub->headset.sld_vol, TRUE);
 	gtk_widget_set_sensitive(hub->headset.sld_vol, FALSE);
 	g_signal_connect(hub->headset.sld_vol, "value-changed",
-			G_CALLBACK(hub_sink_slider_moved), hub);
+		G_CALLBACK(hub_sink_slider_moved), hub);
 	hub->headset.sld_mic = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
 			0, 100, 1);
 	gtk_widget_set_hexpand(hub->headset.sld_mic, TRUE);
 	gtk_widget_set_sensitive(hub->headset.sld_mic, FALSE);
 	g_signal_connect(hub->headset.sld_mic, "value-changed",
-			G_CALLBACK(hub_source_slider_moved), hub);
+		G_CALLBACK(hub_source_slider_moved), hub);
 }
 
 void	hub_build_mute(t_hub *hub)
@@ -48,11 +48,11 @@ void	hub_build_mute(t_hub *hub)
 	hub->headset.mute_vol = gtk_toggle_button_new_with_label("Mute");
 	gtk_widget_set_sensitive(hub->headset.mute_vol, FALSE);
 	g_signal_connect(hub->headset.mute_vol, "toggled",
-			G_CALLBACK(hub_sink_mute_toggled), hub);
+		G_CALLBACK(hub_sink_mute_toggled), hub);
 	hub->headset.mute_mic = gtk_toggle_button_new_with_label("Mute");
 	gtk_widget_set_sensitive(hub->headset.mute_mic, FALSE);
 	g_signal_connect(hub->headset.mute_mic, "toggled",
-			G_CALLBACK(hub_source_mute_toggled), hub);
+		G_CALLBACK(hub_source_mute_toggled), hub);
 }
 
 void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
