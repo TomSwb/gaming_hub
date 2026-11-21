@@ -42,6 +42,6 @@ void	hub_build_sliders(t_hub *hub)
 			0, 100, 1);
 	gtk_widget_set_hexpand(hub->headset.sld_mic, TRUE);
 	gtk_widget_set_sensitive(hub->headset.sld_mic, FALSE);
-	g_signal_connect(hub->headset.sld_vol, "value-changed",
+	g_signal_connect(hub->headset.sld_mic, "value-changed",
 			G_CALLBACK(hub_source_slider_moved), hub);
 }

@@ -71,14 +71,14 @@ void	hub_source_slider_moved(GtkRange *self, gpointer user_data)
 	pa_operation	*op;
 
 	hub = user_data;
-	if (hub->headset.sink_index == PA_INVALID_INDEX)
+	if (hub->headset.source_index == PA_INVALID_INDEX)
 		return ;
 	value = gtk_range_get_value(self);
 	volume = hub->headset.src_vol;
 	new_max = ((value * PA_VOLUME_NORM) + 50) / 100;
 	pa_cvolume_scale(&volume, new_max);
-	op = pa_context_set_sink_volume_by_index(hub->headset.context,
-			hub->headset.sink_index, &volume, NULL, NULL);
+	op = pa_context_set_source_volume_by_index(hub->headset.context,
+			hub->headset.source_index, &volume, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
 }
