@@ -103,6 +103,8 @@ typedef struct s_headset
 	uint32_t			src_index;
 	pa_cvolume			sink_vol;
 	pa_cvolume			src_vol;
+	gint64				moved_vol;
+	gint64				moved_mic;
 }	t_headset;
 
 typedef struct s_hub

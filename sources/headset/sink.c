@@ -66,7 +66,8 @@ void	hub_sink_set_buttons(t_hub *hub, gint per_vol,
 	hub->headset.sink_vol = i->volume;
 	g_signal_handlers_block_by_func(hub->headset.sld_vol,
 			G_CALLBACK(hub_sink_slider_moved), hub);
-	gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
+	if (g_get_monotonic_time() - hub->headset.moved_vol > 300000)
+		gtk_range_set_value(GTK_RANGE(hub->headset.sld_vol), per_vol);
 	gtk_widget_set_sensitive(hub->headset.sld_vol, TRUE);
 	g_signal_handlers_unblock_by_func(hub->headset.sld_vol,
 			G_CALLBACK(hub_sink_slider_moved), hub);
@@ -90,6 +91,7 @@ void	hub_sink_slider_moved(GtkRange *self, gpointer user_data)
 	hub = user_data;
 	if (hub->headset.sink_index == PA_INVALID_INDEX)
 		return ;
+	hub->headset.moved_vol = g_get_monotonic_time();
 	value = gtk_range_get_value(self);
 	volume = hub->headset.sink_vol;
 	new_max = ((value * PA_VOLUME_NORM) + 50) / 100;

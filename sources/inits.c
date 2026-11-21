@@ -92,4 +92,6 @@ void	hub_headset_init(t_hub *hub)
 	hub->headset.src_index = PA_INVALID_INDEX;
 	pa_cvolume_init(&hub->headset.sink_vol);
 	pa_cvolume_init(&hub->headset.src_vol);
+	hub->headset.moved_vol = 0;
+	hub->headset.moved_mic = 0;
 }
