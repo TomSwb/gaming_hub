@@ -15,7 +15,9 @@
 void	hub_struct_init(t_hub *hub)
 {
 	hub_computer_init(hub);
+	hub_setting_init(hub);
 	hub_timer_init(hub);
+	hub_headset_init(hub);
 	hub->stack = NULL;
 	hub->app = NULL;
 }
@@ -37,9 +39,19 @@ void	hub_computer_init(t_hub *hub)
 	hub->computer.mains_dir = NULL;
 }
 
+void	hub_setting_init(t_hub *hub)
+{
+	hub->setting.session = HUB_DEF_SESSION;
+	hub->setting.wind_down = HUB_DEF_WIND_DOWN;
+	hub->setting.break_min = HUB_DEF_BREAK_EVERY;
+	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
+	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
+	hub->setting.popups = HUB_DEF_POPUPS;
+	hub->setting.sound = HUB_DEF_SOUND;
+}
+
 void	hub_timer_init(t_hub *hub)
 {
-	hub_setting_init(hub);
 	hub->timer.session = NULL;
 	hub->timer.start = NULL;
 	hub->timer.countdown = NULL;
@@ -66,13 +78,8 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.sound_on = TRUE;
 }
 
-void	hub_setting_init(t_hub *hub)
+void	hub_headset_init(t_hub *hub)
 {
-	hub->setting.session = HUB_DEF_SESSION;
-	hub->setting.wind_down = HUB_DEF_WIND_DOWN;
-	hub->setting.break_min = HUB_DEF_BREAK_EVERY;
-	hub->setting.eye_min = HUB_DEF_EYE_CUE_MIN;
-	hub->setting.eye_sec = HUB_DEF_EYE_CUE_LENGTH;
-	hub->setting.popups = HUB_DEF_POPUPS;
-	hub->setting.sound = HUB_DEF_SOUND;
+	hub->headset.adapter = NULL;
+	hub->headset.context = NULL;
 }

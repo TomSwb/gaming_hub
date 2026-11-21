@@ -16,6 +16,8 @@
 // === Libraries === //
 
 # include <gtk/gtk.h>
+# include <pulse/pulseaudio.h>
+# include <pulse/glib-mainloop.h>
 
 // === Enum === //
 
@@ -87,11 +89,18 @@ typedef struct s_timer
 	gboolean		sound_on;
 }	t_timer;
 
+typedef struct s_headset
+{
+	pa_glib_mainloop	*adapter;
+	pa_context			*context;
+}	t_headset;
+
 typedef struct s_hub
 {
 	t_computer		computer;
 	t_settings		setting;
 	t_timer			timer;
+	t_headset		headset;
 	GtkWidget		*stack;
 	GApplication	*app;
 }	t_hub;

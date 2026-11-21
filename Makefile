@@ -31,10 +31,11 @@ INCLUDES = -I${INC_DIR} -I${LIBFT_DIR}
 HEADERS = ${INC_DIR}/gaming_hub.h \
 		${INC_DIR}/structs.h ${INC_DIR}/defaults.h \
 		${INC_DIR}/computer.h ${INC_DIR}/timer.h \
-		${INC_DIR}/game.h ${LIBFT_DIR}/libft.h
+		${INC_DIR}/game.h ${INC_DIR}/headset.h \
+		${LIBFT_DIR}/libft.h
 
-GTK_CFLAGS := ${shell pkg-config --cflags gtk4}
-GTK_LIBS := ${shell pkg-config --libs gtk4}
+PKG_CFLAGS := ${shell pkg-config --cflags gtk4 libpulse-mainloop-glib}
+PKG_LIBS := ${shell pkg-config --libs gtk4 libpulse-mainloop-glib}
 
 COMPUTER = sources/computer/ram.c \
 	sources/computer/cpu.c \
@@ -54,15 +55,16 @@ TIMER = sources/timer/settings.c \
 
 GAME = sources/game/game_events.c
 
+HEADSET = sources/headset/pulse.c
+
 SOURCES = sources/main.c \
 	sources/utils.c \
 	sources/inits.c \
 	sources/main_build.c
 
 FILES = ${SOURCES} \
-	${COMPUTER} \
-	${TIMER} \
-	${GAME}
+	${COMPUTER} ${TIMER} \
+	${GAME} ${HEADSET}
 
 OBJS = ${FILES:.c=.o}
 
@@ -72,13 +74,13 @@ libft:
 	${MAKE} -C ${LIBFT_DIR}
 
 ${NAME}: ${LIBFT} ${OBJS}
-	${CC} ${CFLAGS} ${OBJS} ${GTK_LIBS} ${LIBFT} -o ${NAME}
+	${CC} ${CFLAGS} ${OBJS} ${PKG_LIBS} ${LIBFT} -o ${NAME}
 
 compile_flags.txt: Makefile
-	printf '%s\n' ${CFLAGS} ${GTK_CFLAGS} ${INCLUDES} > $@
+	printf '%s\n' ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} > $@
 
 %.o: %.c ${HEADERS}
-	${CC} ${CFLAGS} ${GTK_CFLAGS} ${INCLUDES} -c $< -o $@
+	${CC} ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} -c $< -o $@
 
 clean:
 	rm -f ${OBJS}
