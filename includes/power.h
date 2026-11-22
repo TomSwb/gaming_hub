@@ -29,6 +29,9 @@ void		hub_power_show(t_hub *hub);
 void		hub_power_changed(GDBusProxy *proxy, GVariant *changed,
 				GStrv invalidated, gpointer user_data);
 
+// profiles.c
+void		hub_power_profiles(t_hub *hub);
+
 // power_build.c
 GtkWidget	*hub_build_power(t_hub *hub);
 

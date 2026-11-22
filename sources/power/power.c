@@ -36,6 +36,7 @@ void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 		return ;
 	}
 	hub->power.proxy = proxy;
+	hub_power_profiles(hub);
 	hub_power_show(hub);
 	g_signal_connect(hub->power.proxy, "g-properties-changed",
 		G_CALLBACK(hub_power_changed), hub);

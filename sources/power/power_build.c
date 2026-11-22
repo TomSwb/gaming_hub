@@ -17,7 +17,7 @@ GtkWidget	*hub_build_power(t_hub *hub)
 	GtkWidget	*box;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-	hub->power.profile = gtk_label_new("...");
+	hub->power.profile = gtk_label_new("Power profile: ...");
 	gtk_box_append(GTK_BOX(box), hub->power.profile);
 	return (box);
 }

@@ -43,5 +43,6 @@
 # define HUB_PPD_PATH "/org/freedesktop/UPower/PowerProfiles"
 # define HUB_PPD_IFACE "org.freedesktop.UPower.PowerProfiles"
 # define HUB_PPD_ACTIVE "ActiveProfile"
+# define HUB_PPD_PROFILES "Profiles"
 
 #endif
