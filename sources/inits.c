@@ -38,6 +38,8 @@ void	hub_computer_init(t_hub *hub)
 	hub->computer.gpu_max = 0;
 	hub->computer.bat_dir = NULL;
 	hub->computer.mains_dir = NULL;
+	hub->computer.was_plugged = TRUE;
+	hub->computer.low_warned = FALSE;
 }
 
 void	hub_setting_init(t_hub *hub)

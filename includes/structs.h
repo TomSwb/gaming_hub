@@ -48,6 +48,8 @@ typedef struct s_computer
 	guint64		gpu_max;
 	gchar		*bat_dir;
 	gchar		*mains_dir;
+	gboolean	was_plugged;
+	gboolean	low_warned;
 }	t_computer;
 
 typedef struct s_settings

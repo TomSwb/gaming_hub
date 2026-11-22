@@ -96,13 +96,13 @@ void	hub_power_set_done(GObject *source, GAsyncResult *res,
 			gpointer user_data)
 {
 	t_hub		*hub;
-	GVariant	*profiles;
+	GVariant	*reply;
 	GError		*error;
 
 	hub = user_data;
 	error = NULL;
-	profiles = g_dbus_proxy_call_finish(G_DBUS_PROXY(source), res, &error);
-	if (!profiles)
+	reply = g_dbus_proxy_call_finish(G_DBUS_PROXY(source), res, &error);
+	if (!reply)
 	{
 		g_dbus_error_strip_remote_error(error);
 		g_printerr("power: %s\n", error->message);
@@ -110,5 +110,5 @@ void	hub_power_set_done(GObject *source, GAsyncResult *res,
 		hub_power_show(hub);
 	}
 	else
-		g_variant_unref(profiles);
+		g_variant_unref(reply);
 }

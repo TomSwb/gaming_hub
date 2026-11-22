@@ -68,3 +68,18 @@ gchar	*hub_battery_set_charging(t_hub *hub)
 		charging = g_strdup("plugged in");
 	return (charging);
 }
+
+void	hub_battery_unplug(t_hub *hub)
+{
+	guint64		plugged;
+	gboolean	plugged_ok;
+	gboolean	plugged_now;
+
+	plugged_ok = hub_read_number(hub->computer.mains_dir, "online", &plugged);
+	if (!plugged_ok)
+		return ;
+	plugged_now = plugged != 0;
+	if (!plugged_now && hub->computer.was_plugged && hub_timer_running(hub))
+		hub_alert(hub, "unplugged", "Charger unplugged", "Running on battery");
+	hub->computer.was_plugged = plugged_now;
+}
