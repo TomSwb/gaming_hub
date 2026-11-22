@@ -65,7 +65,6 @@ HEADSET = sources/headset/pulse.c \
 POWER = sources/power/power.c \
 	sources/power/power_build.c
 
-
 SOURCES = sources/main.c \
 	sources/utils.c \
 	sources/inits.c sources/inits_2.c \

@@ -17,6 +17,8 @@ void	hub_power_connect(t_hub *hub)
 	g_dbus_proxy_new_for_bus(G_BUS_TYPE_SYSTEM, G_DBUS_PROXY_FLAGS_NONE, NULL,
 			HUB_PPD_NAME, HUB_PPD_PATH, HUB_PPD_IFACE, NULL,
 			hub_power_ready, hub);
+	g_signal_connect(hub->power.proxy, "g-properties-changed",
+			G_CALLBACK(hub_power_changed), hub);
 }
 
 void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data)
@@ -42,12 +44,31 @@ void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 void	hub_power_show(t_hub *hub)
 {
 	GVariant	*profile;
+	gchar		*text;
 
+	text = NULL;
 	profile = g_dbus_proxy_get_cached_property(hub->power.proxy, HUB_PPD_ACTIVE);
 	if (profile && g_variant_is_of_type(profile, G_VARIANT_TYPE_STRING))
-		g_print("power: profile %s\n", g_variant_get_string(profile, NULL));
+	{
+		text = g_strdup_printf("Power profile: %s",
+				g_variant_get_string(profile, NULL));
+		gtk_label_set_text(GTK_LABEL(hub->power.profile), text);
+	}
 	else
-		g_printerr("power: profile ...\n");
+		gtk_label_set_text(GTK_LABEL(hub->power.profile), "Power profile: ...");
+	g_free(text);
 	if (profile)
 		g_variant_unref(profile);
+}
+
+void	hub_power_changed(GDBusProxy *proxy, GVariant *changed,
+			GStrv invalidated, gpointer user_data)
+{
+	t_hub	*hub;
+
+	(void)proxy;
+	(void)changed;
+	(void)invalidated;
+	hub = user_data;
+	hub_power_show(hub);
 }
