@@ -99,6 +99,7 @@ typedef struct s_headset
 	GtkWidget			*mic;
 	GtkWidget			*sld_mic;
 	GtkWidget			*mute_mic;
+	GtkWidget			*headset_data;
 	pa_glib_mainloop	*adapter;
 	pa_context			*context;
 	uint32_t			sink_index;
@@ -107,6 +108,8 @@ typedef struct s_headset
 	pa_cvolume			src_vol;
 	gint64				moved_vol;
 	gint64				moved_mic;
+	GDBusObjectManager	*obj_man;
+	gchar				*obj_add;
 }	t_headset;
 
 typedef struct s_power

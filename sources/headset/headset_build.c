@@ -61,9 +61,11 @@ void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 	GtkWidget	*vol_box;
 	GtkWidget	*mic_box;
 
+
 	setting_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
 	vol_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
 	mic_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	hub->headset.headset_data = gtk_label_new("-");
 	gtk_box_append(GTK_BOX(vol_box), hub->headset.volume);
 	gtk_box_append(GTK_BOX(vol_box), hub->headset.sld_vol);
 	gtk_box_append(GTK_BOX(vol_box), hub->headset.mute_vol);
@@ -73,6 +75,7 @@ void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 	gtk_box_append(GTK_BOX(setting_box), vol_box);
 	gtk_box_append(GTK_BOX(setting_box), mic_box);
 	gtk_box_append(GTK_BOX(box), label);
+	gtk_box_append(GTK_BOX(box), hub->headset.headset_data);
 	gtk_box_append(GTK_BOX(box), setting_box);
 	gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
 }
