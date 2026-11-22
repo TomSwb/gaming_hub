@@ -37,7 +37,7 @@ void	hub_pulse_event(pa_context *c, pa_subscription_event_type_t t,
 			pa_operation_unref(op);
 	}
 	else if (facility == PA_SUBSCRIPTION_EVENT_CARD)
-		hub_outputs_refresh(user_data);;
+		hub_outputs_refresh(user_data);
 }
 
 void	hub_sink_event(t_hub *hub, pa_context *c,
