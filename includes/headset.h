@@ -85,6 +85,9 @@ const gchar	*hub_sink_short_name(const pa_sink_info *i);
 void		hub_outputs_add(t_hub *hub, const pa_sink_info *i);
 void		hub_outputs_select(t_hub *hub);
 
+// outputs_click.c
+void		hub_outputs_toggled(GtkToggleButton *self, gpointer user_data);
+
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);
 void		hub_build_sliders(t_hub *hub);

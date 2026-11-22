@@ -68,6 +68,7 @@ void	hub_outputs_add(t_hub *hub, const pa_sink_info *i)
 		gtk_toggle_button_set_group(GTK_TOGGLE_BUTTON(button),
 			GTK_TOGGLE_BUTTON(leader));
 	gtk_box_append(GTK_BOX(hub->headset.dev_row), button);
+	g_signal_connect(button, "toggled", G_CALLBACK(hub_outputs_toggled), hub);
 }
 
 void	hub_outputs_select(t_hub *hub)
@@ -79,12 +80,12 @@ void	hub_outputs_select(t_hub *hub)
 	while (child != NULL)
 	{
 		name = g_object_get_data(G_OBJECT(child), HUB_PA_KEY);
-		// g_signal_handlers_block_by_func(child,
-		// 	G_CALLBACK(hub_power_toggled), hub);
+		g_signal_handlers_block_by_func(child,
+			G_CALLBACK(hub_outputs_toggled), hub);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(child),
 			g_strcmp0(name, hub->headset.def_sink_name) == 0);
-		// g_signal_handlers_unblock_by_func(child,
-		// 	G_CALLBACK(hub_power_toggled), hub);
+		g_signal_handlers_unblock_by_func(child,
+			G_CALLBACK(hub_outputs_toggled), hub);
 		child = gtk_widget_get_next_sibling(child);
 	}
 }
