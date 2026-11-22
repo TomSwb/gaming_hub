@@ -113,6 +113,9 @@ typedef struct s_headset
 	gchar				*bt_add;
 	gchar				*def_sink_name;
 	gchar				*def_src_name;
+	gchar				*want_add;
+	gchar				*head_mic;
+	gchar				*lapt_mic;
 }	t_headset;
 
 typedef struct s_power

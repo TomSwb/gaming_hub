@@ -63,6 +63,8 @@ void	hub_outputs_add(t_hub *hub, const pa_sink_info *i)
 	button = gtk_toggle_button_new_with_label(hub_sink_short_name(i));
 	g_object_set_data_full(G_OBJECT(button), HUB_PA_KEY,
 		g_strdup(i->name), g_free);
+	g_object_set_data_full(G_OBJECT(button), HUB_PA_ADDR,
+		g_strdup(pa_proplist_gets(i->proplist, HUB_PA_BT_ADDRESS)), g_free);
 	leader = gtk_widget_get_first_child(hub->headset.dev_row);
 	if (leader)
 		gtk_toggle_button_set_group(GTK_TOGGLE_BUTTON(button),

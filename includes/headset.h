@@ -87,11 +87,16 @@ void		hub_outputs_select(t_hub *hub);
 
 // outputs_click.c
 void		hub_outputs_toggled(GtkToggleButton *self, gpointer user_data);
+void		hub_mic_scan(pa_context *c, const pa_source_info *i, int eol,
+				void *user_data);
+void		hub_mic_keep(gchar **slot, const char *name);
+void		hub_mic_apply(t_hub *hub);
 
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);
 void		hub_build_sliders(t_hub *hub);
 void		hub_build_mute(t_hub *hub);
 void		hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label);
+GtkWidget	*hub_append_setting_box(t_hub *hub);
 
 #endif

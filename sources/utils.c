@@ -36,11 +36,7 @@ void	hub_setting_hub(t_hub *hub)
 
 void	hub_free_hub(t_hub *hub)
 {
-	g_free(hub->computer.temp_dir);
-	g_free(hub->computer.fan_dir);
-	g_free(hub->computer.gpu_dir);
-	g_free(hub->computer.bat_dir);
-	g_free(hub->computer.mains_dir);
+	hub_gfree_hub(hub);
 	if (hub->timer.sound != NULL)
 		g_object_unref(hub->timer.sound);
 	if (hub->headset.context != NULL)
@@ -54,7 +50,19 @@ void	hub_free_hub(t_hub *hub)
 		g_object_unref(hub->power.proxy);
 	if (hub->headset.obj_man)
 		g_object_unref(hub->headset.obj_man);
+}
+
+void	hub_gfree_hub(t_hub *hub)
+{
+	g_free(hub->computer.temp_dir);
+	g_free(hub->computer.fan_dir);
+	g_free(hub->computer.gpu_dir);
+	g_free(hub->computer.bat_dir);
+	g_free(hub->computer.mains_dir);
 	g_free(hub->headset.bt_add);
 	g_free(hub->headset.def_sink_name);
 	g_free(hub->headset.def_src_name);
+	g_free(hub->headset.want_add);
+	g_free(hub->headset.head_mic);
+	g_free(hub->headset.lapt_mic);
 }

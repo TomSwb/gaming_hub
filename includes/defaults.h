@@ -45,6 +45,7 @@
 # define HUB_PA_BT_ADDRESS "api.bluez5.address"
 # define HUB_PA_SHORT_NAME "device.profile.description"
 # define HUB_PA_KEY "sink"
+# define HUB_PA_ADDR "address"
 
 # define HUB_PPD_NAME "org.freedesktop.UPower.PowerProfiles"
 # define HUB_PPD_PATH "/org/freedesktop/UPower/PowerProfiles"
