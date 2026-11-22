@@ -17,8 +17,6 @@ void	hub_power_connect(t_hub *hub)
 	g_dbus_proxy_new_for_bus(G_BUS_TYPE_SYSTEM, G_DBUS_PROXY_FLAGS_NONE, NULL,
 			HUB_PPD_NAME, HUB_PPD_PATH, HUB_PPD_IFACE, NULL,
 			hub_power_ready, hub);
-	g_signal_connect(hub->power.proxy, "g-properties-changed",
-			G_CALLBACK(hub_power_changed), hub);
 }
 
 void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data)
@@ -39,6 +37,8 @@ void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 	}
 	hub->power.proxy = proxy;
 	hub_power_show(hub);
+	g_signal_connect(hub->power.proxy, "g-properties-changed",
+			G_CALLBACK(hub_power_changed), hub);
 }
 
 void	hub_power_show(t_hub *hub)
