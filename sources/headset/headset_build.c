@@ -65,7 +65,7 @@ void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 	setting_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
 	vol_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
 	mic_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	hub->headset.headset_data = gtk_label_new("-");
+	hub->headset.headset_data = gtk_label_new("...");
 	gtk_box_append(GTK_BOX(vol_box), hub->headset.volume);
 	gtk_box_append(GTK_BOX(vol_box), hub->headset.sld_vol);
 	gtk_box_append(GTK_BOX(vol_box), hub->headset.mute_vol);

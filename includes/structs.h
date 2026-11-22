@@ -109,7 +109,7 @@ typedef struct s_headset
 	gint64				moved_vol;
 	gint64				moved_mic;
 	GDBusObjectManager	*obj_man;
-	gchar				*obj_add;
+	gchar				*bt_add;
 }	t_headset;
 
 typedef struct s_power

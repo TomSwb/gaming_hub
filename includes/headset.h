@@ -56,6 +56,8 @@ void		hub_source_mute_toggled(GtkToggleButton *self, gpointer user_data);
 int			hub_volume_percent(const pa_cvolume *volume);
 
 // bluez.c
+void		hub_bluez_connect(t_hub *hub);
+void		hub_bluez_ready(GObject *source, GAsyncResult *res, gpointer user_data);
 
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);

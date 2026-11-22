@@ -54,5 +54,5 @@ void	hub_free_hub(t_hub *hub)
 		g_object_unref(hub->power.proxy);
 	if (hub->headset.obj_man)
 		g_object_unref(hub->headset.obj_man);
-	g_free(hub->headset.obj_add);
+	g_free(hub->headset.bt_add);
 }

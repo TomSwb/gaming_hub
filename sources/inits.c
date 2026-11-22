@@ -99,5 +99,5 @@ void	hub_headset_init(t_hub *hub)
 	hub->headset.moved_vol = 0;
 	hub->headset.moved_mic = 0;
 	hub->headset.obj_man = NULL;
-	hub->headset.obj_add = NULL;
+	hub->headset.bt_add = NULL;
 }

@@ -60,6 +60,7 @@ HEADSET = sources/headset/pulse.c \
 	sources/headset/sink.c \
 	sources/headset/source.c \
 	sources/headset/volume.c \
+	sources/headset/bluez.c \
 	sources/headset/headset_build.c
 
 POWER = sources/power/power.c \
