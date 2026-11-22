@@ -62,6 +62,7 @@ HEADSET = sources/headset/pulse.c \
 	sources/headset/volume.c \
 	sources/headset/bluez.c \
 	sources/headset/bluez_show.c \
+	sources/headset/bluez_events.c \
 	sources/headset/headset_build.c
 
 POWER = sources/power/power.c \
@@ -82,24 +83,27 @@ OBJS = ${FILES:.c=.o}
 all: libft compile_flags.txt ${NAME}
 
 libft:
-	${MAKE} -C ${LIBFT_DIR}
+	@${MAKE} -C ${LIBFT_DIR} --no-print-directory
 
 ${NAME}: ${LIBFT} ${OBJS}
-	${CC} ${CFLAGS} ${OBJS} ${PKG_LIBS} ${LIBFT} -o ${NAME}
+	@echo "LD ${NAME}"
+	@${CC} ${CFLAGS} ${OBJS} ${PKG_LIBS} ${LIBFT} -o ${NAME}
 
 compile_flags.txt: Makefile
-	printf '%s\n' ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} > $@
+	@printf '%s\n' ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} > $@
 
 %.o: %.c ${HEADERS}
-	${CC} ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} -c $< -o $@
+	@echo "CC $<"
+	@${CC} ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} -c $< -o $@
 
 clean:
-	rm -f ${OBJS}
-	${MAKE} -C ${LIBFT_DIR} clean
+	@rm -f ${OBJS}
+	@${MAKE} -C ${LIBFT_DIR} clean --no-print-directory
 
 fclean: clean
-	rm -f ${NAME} compile_flags.txt
-	${MAKE} -C ${LIBFT_DIR} fclean
+	@echo "F-Cleaned"
+	@rm -f ${NAME} compile_flags.txt
+	@${MAKE} -C ${LIBFT_DIR} fclean --no-print-directory
 
 re: fclean all
 

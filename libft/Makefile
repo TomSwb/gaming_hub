@@ -60,7 +60,7 @@ PART3 = ./part3/ft_lstadd_back.c \
 
 GNL = ./get_next_line/get_next_line.c \
 		./get_next_line/get_next_line_utils.c
-		
+
 FT_PRINTF = ./ft_printf/ft_printf.c \
 		./ft_printf/ft_printf_managers.c \
 		./ft_printf/ft_printf_parsing.c \
@@ -70,7 +70,7 @@ FT_PRINTF = ./ft_printf/ft_printf.c \
 		./ft_printf/ft_printf_len_utils.c
 
 SOURCES = ${PART1} ${PART2} ${PART3} ${GNL} ${FT_PRINTF}
-		
+
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra
@@ -82,18 +82,18 @@ AR = ar -rcs
 RM = rm -f
 
 %.o: %.c libft.h get_next_line/get_next_line.h ft_printf/ft_printf.h
-	${CC} ${CFLAGS} -c $< -o $@
+	@${CC} ${CFLAGS} -c $< -o $@
 
 all: ${NAME}
 
 ${NAME}: ${OBJECTS}
-		${AR} ${NAME} ${OBJECTS}
+	@${AR} ${NAME} ${OBJECTS}
 
-clean: 
-		${RM} ${OBJECTS}
+clean:
+	@${RM} ${OBJECTS}
 
 fclean: clean
-		${RM} ${NAME}
+	@${RM} ${NAME}
 
 re: fclean all
 
