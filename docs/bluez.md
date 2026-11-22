@@ -2,6 +2,8 @@
 
 Under the "Headset" title, one line says what I'm listening on: a Bluetooth headset's name and battery (`Xbox Wireless Headset · 50 %`), or the output's short name (`Speaker`, `HDMI / DisplayPort 1 Output`). Any headset, not only the Xbox. Back to the [README](../README.md).
 
+> **Later the same evening** the line changed: what I'm listening on became a row of buttons, and the line now only shows the battery (`Battery: 50 %`) beside the "Sound" title, hidden when the output isn't Bluetooth. The headset's name is no longer read from BlueZ (`hub_bluez_with_battery` merged into `hub_bluez_text`) and the output's short name is no longer stored (`hub_set_output` became `hub_set_bt_address`). See [`sound.md`](sound.md). This page describes steps 5a–5b as they were built.
+
 ## The rule (decided 22 Nov)
 
 The line follows **PipeWire's default output**, the one I'm hearing:
@@ -38,4 +40,4 @@ No choosing, nothing to kick out: switch the output in GNOME and the line follow
 - **Live:** `PA_SUBSCRIPTION_MASK_SERVER` added to the subscription; a `SERVER` event asks for the server info again. Switching the output in GNOME, or a headset turning off (PipeWire falls back to another output), updates the line.
 - **The label** (`hub_bluez_show`): the Bluetooth text if the default output is a connected BlueZ device, else the output's name, else `...`. Before BlueZ answers, a Bluetooth output still shows its name from PipeWire. libpulse and BlueZ start in parallel; either order ends on the right text.
 - **Tested** with the hub running: Xbox → `Xbox Wireless Headset · N %`, speakers → `Speaker`, JBL → `JBL Live 770NC · N %`, Xbox off → the fallback output. HDMI: to test with the projector.
-- **Still to do:** the volume and mic sliders follow the default output and the default input (they still look for `HUB_HEADSET_NAME`), then choosing the output from the hub.
+- **Next** (done the same evening, [`sound.md`](sound.md)): the sliders follow the default output and input, and the output is chosen from the hub.

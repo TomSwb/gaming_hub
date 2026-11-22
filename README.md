@@ -8,7 +8,7 @@ A small GTK4 window for my laptop screen while I game on the TV or projector. It
 
 It is also a learning project: event-driven programming in C with GTK4, GLib/GObject, D-Bus and libpulse, all new to me.
 
-> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Milestone 4 (auto-start and install) done on 20 Nov: `make install` puts the hub in the app menu, and through GameMode it opens when a game starts, shows a "Between Games" page when one closes (the session's countdown keeps running) and carries on when the next one starts. Milestone 5 (headset) done on 22 Nov: the Xbox Wireless Headset's volume and mic, each with a slider and a Mute button, kept in sync with GNOME's menu and the volume keys, and following the headset when it's turned off and on. Milestone 6 in progress (22 Nov): the power profile is shown and switched with three buttons (in sync with GNOME), alerts when the charger comes out or the battery reaches 25 % during a session, and a line under "Headset" that says what I'm listening on, with a Bluetooth headset's battery (any headset, following the default output). Next: the volume and mic follow the default output and input, then choosing the output from the hub (and the styling step when the palette arrives).
+> 🚧 **Work in progress.** Milestone 0 (research) and milestone 1 (the first window) done on 8 Nov 2026, milestone 2 (live stats) on 10 Nov: the window shows **RAM**, **CPU %**, **CPU temperature and fan**, **GPU frequency** and **battery / charger**, updated every second, at no measurable fps cost. Milestone 3 (the timer and healthy-gaming features) done on 19 Nov: session plan, countdown, Pause and End session, break screen, 20-20-20 eye cue, notifications and a bell, all values from a settings file and the plan page. Milestone 4 (auto-start and install) done on 20 Nov: `make install` puts the hub in the app menu, and through GameMode it opens when a game starts, shows a "Between Games" page when one closes (the session's countdown keeps running) and carries on when the next one starts. Milestone 5 (headset) done on 22 Nov: the Xbox Wireless Headset's volume and mic, each with a slider and a Mute button, kept in sync with GNOME's menu and the volume keys, and following the headset when it's turned off and on. Milestone 6 (power and sound) done on 22 Nov: the power profile is shown and switched with three buttons (in sync with GNOME), alerts when the charger comes out or the battery reaches 25 % during a session, and a **Sound** section that follows what I'm listening on (headset, speakers or projector): a button per output to switch it, the mic moving with it, the volume and mic sliders on the current devices, and a Bluetooth headset's battery beside the title. Next: milestone 7, the game library (and the styling step when the palette arrives).
 
 **Milestone 2 (10 Nov):** the first working prototype, every stat live and refreshed once a second.
 
@@ -20,6 +20,10 @@ It is also a learning project: event-driven programming in C with GTK4, GLib/GOb
 | --- | --- | --- | --- |
 | <img src="assets/historic/timer_done/planning_page.png" alt="Plan page: Pop-ups and Sound checkboxes, session length, break interval and wind-down fields, an alarm icon and Start" width="200"> | <img src="assets/historic/timer_done/timer_running.png" alt="Session page: countdown 1:59:59, controller icon, Pause and End Session" width="200"> | <img src="assets/historic/timer_done/eye_cue.png" alt="Session page with the eye cue: Look at something 6m away for 20 seconds" width="200"> | <img src="assets/historic/timer_done/break_page.png" alt="Break page: Stand, Roll neck and shoulder, Drink water icons and a Done button" width="200"> |
 
+**Milestones 5–6 (22 Nov):** the Sound section (output buttons, volume and mic of the current devices) and the power profile buttons.
+
+<img src="assets/historic/headset_power_done/image.png" alt="Gaming Hub plan page: the Sound title, Speaker and Xbox Wireless Headset buttons, volume and mic sliders with Mute, the power profile buttons and the stats" width="300">
+
 #### Brief overview:
 
 The window is snapped to one half of the laptop screen (Super+Left/Right), next to the YouTube Music app on the other half.
@@ -27,7 +31,7 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Panel | Shows / does | Data source |
 | --- | --- | --- |
 | Stats | CPU % and frequency, GPU frequency and busy %, temperatures, RAM, battery and charger | `/proc`, `/sys/class/drm`, `/sys/class/hwmon`, `/sys/class/power_supply` |
-| Headset | Volume and mute of the output and the mic (milestone 5); what I'm listening on, with a Bluetooth headset's name and battery (milestone 6) | PipeWire through libpulse; battery from BlueZ over D-Bus |
+| Sound | Volume and mute of the output and the mic (milestone 5); a button per output to switch what I'm listening on, the mic following it, a Bluetooth headset's battery (milestone 6) | PipeWire through libpulse; battery from BlueZ over D-Bus |
 | Timer | Session plan, breaks, wind-down warning, 20-20-20 eye cue, pause button | GLib timers, GtkMediaFile, GNotification |
 | Power | Power Saver / Balanced / Performance buttons; alerts when unplugged or at 25 % during a session | power-profiles D-Bus API (tuned-ppd); charger and battery from `/sys` |
 | Session log | Silent: game, date and play time of library games, for the library's play history (milestone 7) | Own code, `~/.local/share/gaming_hub/` |
@@ -140,7 +144,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 3. Timer and healthy-gaming features, settings file (10–19 Nov)
 - [x] 4. Auto-start with GameMode, single instance, `--start` / `--end`, between games; `make install` (app menu entry) and a guide to hook it to Steam, Heroic, Lutris and emulators (20 Nov)
 - [x] 5. Headset volume and mic with libpulse: sliders and Mute for both, in sync with GNOME, follows the headset off / on (21–22 Nov)
-- [ ] 6. Power profile over D-Bus, battery alerts, the headset line with BlueZ's battery (in progress, 22 Nov: done except the sliders following the default output, and choosing the output)
+- [x] 6. Power profile over D-Bus, battery alerts, the Sound section (output buttons, sliders on the default devices, headset battery from BlueZ) (22 Nov)
 - [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub
 - [ ] 8. Temperature graph with Cairo
 - [ ] 9. FPS from MangoHud (stretch)
@@ -160,6 +164,7 @@ Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, 
 | [`docs/headset.md`](docs/headset.md) | Milestone 5: how PipeWire shows the headset, libpulse in the main loop, finding the headset, sliders and Mute, events, no echo |
 | [`docs/power.md`](docs/power.md) | Milestone 6, steps 1–4: tuned-ppd and UPower by hand, the `GDBusProxy`, profile buttons and `Properties.Set`, battery alerts |
 | [`docs/bluez.md`](docs/bluez.md) | Milestone 6, step 5: the headset line, BlueZ's object manager, the default output's Bluetooth address from libpulse |
+| [`docs/sound.md`](docs/sound.md) | Milestone 6, steps 6–7: sliders on the default output and input, output buttons, the mic following, rebuilding when devices come and go |
 
 ## Resources
 
