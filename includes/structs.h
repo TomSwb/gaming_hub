@@ -111,7 +111,6 @@ typedef struct s_headset
 	gint64				moved_mic;
 	GDBusObjectManager	*obj_man;
 	gchar				*bt_add;
-	gchar				*outp_name;
 	gchar				*def_sink_name;
 	gchar				*def_src_name;
 }	t_headset;

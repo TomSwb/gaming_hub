@@ -57,7 +57,7 @@ void		hub_pulse_default(pa_context *c, const pa_server_info *i,
 				void *user_data);
 void		hub_default_sink(pa_context *c, const pa_sink_info *i, int eol,
 				void *user_data);
-void		hub_set_output(t_hub *hub, const char *address, const char *name);
+void		hub_set_bt_address(t_hub *hub, const char *address);
 void		hub_ask_default_sink(t_hub *hub, const char *sink);
 void		hub_ask_default_source(t_hub *hub, const char *source);
 
@@ -83,6 +83,7 @@ void		hub_outputs_list(pa_context *c, const pa_sink_info *i, int eol,
 				void *user_data);
 const gchar	*hub_sink_short_name(const pa_sink_info *i);
 void		hub_outputs_add(t_hub *hub, const pa_sink_info *i);
+void		hub_outputs_select(t_hub *hub);
 
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);

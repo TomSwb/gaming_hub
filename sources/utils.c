@@ -55,7 +55,6 @@ void	hub_free_hub(t_hub *hub)
 	if (hub->headset.obj_man)
 		g_object_unref(hub->headset.obj_man);
 	g_free(hub->headset.bt_add);
-	g_free(hub->headset.outp_name);
 	g_free(hub->headset.def_sink_name);
 	g_free(hub->headset.def_src_name);
 }

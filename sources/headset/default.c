@@ -28,7 +28,7 @@ void	hub_pulse_default(pa_context *c, const pa_server_info *i,
 		hub_ask_default_source(user_data, i->default_source_name);
 	}
 	if (!i || !i->default_sink_name)
-		hub_set_output(user_data, NULL, NULL);
+		hub_set_bt_address(user_data, NULL);
 	else
 	{
 		op = pa_context_get_sink_info_by_name(c, i->default_sink_name,
@@ -42,22 +42,18 @@ void	hub_default_sink(pa_context *c, const pa_sink_info *i, int eol,
 			void *user_data)
 {
 	const gchar	*address;
-	const gchar	*name;
 
 	(void)c;
 	if (eol > 0 || !i)
 		return ;
 	address = pa_proplist_gets(i->proplist, HUB_PA_BT_ADDRESS);
-	name = hub_sink_short_name(i);
-	hub_set_output(user_data, address, name);
+	hub_set_bt_address(user_data, address);
 }
 
-void	hub_set_output(t_hub *hub, const char *address, const char *name)
+void	hub_set_bt_address(t_hub *hub, const char *address)
 {
 	g_free(hub->headset.bt_add);
-	g_free(hub->headset.outp_name);
 	hub->headset.bt_add = g_strdup(address);
-	hub->headset.outp_name = g_strdup(name);
 	hub_bluez_show(hub);
 }
 
@@ -67,6 +63,7 @@ void	hub_ask_default_sink(t_hub *hub, const char *sink)
 
 	g_free(hub->headset.def_sink_name);
 	hub->headset.def_sink_name = g_strdup(sink);
+	hub_outputs_select(hub);
 	if (hub->headset.def_sink_name)
 	{
 		op = pa_context_get_sink_info_by_name(hub->headset.context,

@@ -84,4 +84,5 @@ void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 	gtk_box_append(GTK_BOX(box), setting_box);
 	gtk_widget_set_halign(label_box, GTK_ALIGN_CENTER);
 	gtk_widget_set_halign(hub->headset.dev_row, GTK_ALIGN_CENTER);
+	gtk_widget_set_visible(hub->headset.dev_row, FALSE);
 }

@@ -101,7 +101,6 @@ void	hub_headset_init(t_hub *hub)
 	hub->headset.moved_mic = 0;
 	hub->headset.obj_man = NULL;
 	hub->headset.bt_add = NULL;
-	hub->headset.outp_name = NULL;
 	hub->headset.def_sink_name = NULL;
 	hub->headset.def_src_name = NULL;
 }
