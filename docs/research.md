@@ -58,11 +58,13 @@ Seen with `gdbus monitor --system --dest org.bluez --object-path <path>` while t
 1. **Off:** `Device1.Disconnected` signal, then `PropertiesChanged` on `org.bluez.Device1` with `Connected: false`.
 2. **On:** `PropertiesChanged` with `Connected: true`, then **a moment later, separately**, `PropertiesChanged` on `org.bluez.Battery1` with `Percentage`.
 
+*Correction (22 Nov, milestone 6, watching all of BlueZ with `gdbus monitor --system --dest org.bluez`):* the **first** percentage after switching on arrives inside **`InterfacesAdded`** on `/` (`{'org.bluez.Battery1': {'Percentage': <byte 0x32>}}`), not as a `PropertiesChanged`; switching off removes `Battery1` with `InterfacesRemoved`. Later drops come as `PropertiesChanged` on `Battery1`. The hub's object manager handles all three (see [`bluez.md`](bluez.md)).
+
 `PropertiesChanged` carries 3 things: the interface name (`s`), the changed values (`a{sv}`), the invalidated property names (`as`).
 
 ### Design rules for the code
 
-- **Don't hard-code `hci0` or the address.** Find the device by name ("Xbox Wireless Headset") among BlueZ's objects (the ObjectManager at `/`, method `GetManagedObjects`), like finding a hwmon sensor by name, not by number.
+- **Don't hard-code `hci0` or the address.** Find the device by name ("Xbox Wireless Headset") among BlueZ's objects (the ObjectManager at `/`, method `GetManagedObjects`), like finding a hwmon sensor by name, not by number. *(22 Nov: done by address instead, the address of PipeWire's default output, so any headset works; see [`bluez.md`](bluez.md).)*
 - **Battery only while connected.** When the headset is off, show "off", not an old number.
 - **The battery arrives after the connection.** Show "—" until the first `Percentage` arrives.
 - **`Battery1` comes and goes.** BlueZ announces it with `InterfacesAdded` / `InterfacesRemoved` on the root object `/`, not on the device path. Listen there too.
