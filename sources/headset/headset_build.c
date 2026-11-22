@@ -18,7 +18,7 @@ GtkWidget	*hub_build_headset(t_hub *hub)
 	GtkWidget	*label;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	label = gtk_label_new("Headset");
+	label = gtk_label_new("Sound");
 	hub->headset.volume = gtk_label_new("Volume: off");
 	hub->headset.mic = gtk_label_new("Mic: off");
 	hub_build_sliders(hub);

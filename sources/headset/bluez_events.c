@@ -12,7 +12,6 @@
 
 #include "gaming_hub.h"
 
-
 void	hub_bluez_iface(GDBusObjectManager *manager, GDBusObject *object,
 			GDBusInterface *interface, gpointer user_data)
 {

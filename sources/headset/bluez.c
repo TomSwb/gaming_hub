@@ -41,7 +41,8 @@ void	hub_bluez_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 	g_signal_connect(hub->headset.obj_man,
 		"interface-removed", G_CALLBACK(hub_bluez_iface), hub);
 	g_signal_connect(hub->headset.obj_man,
-		"interface-proxy-properties-changed", G_CALLBACK(hub_bluez_props), hub);
+		"interface-proxy-properties-changed",
+		G_CALLBACK(hub_bluez_props), hub);
 	hub->headset.bt_add = g_strdup("54:4C:8A:E1:83:E0");
 	hub_bluez_show(hub);
 }
