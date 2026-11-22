@@ -73,6 +73,7 @@ gboolean	hub_tick(gpointer user_data)
 	hub_update_gpu(hub);
 	hub_update_battery(hub);
 	hub_battery_unplug(hub);
+	hub_battery_low(hub);
 	hub_update_timer(hub);
 	return (G_SOURCE_CONTINUE);
 }

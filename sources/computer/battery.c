@@ -83,3 +83,25 @@ void	hub_battery_unplug(t_hub *hub)
 		hub_alert(hub, "unplugged", "Charger unplugged", "Running on battery");
 	hub->computer.was_plugged = plugged_now;
 }
+
+void	hub_battery_low(t_hub *hub)
+{
+	guint64	value;
+	gchar	*text;
+
+	if (!hub_read_number(hub->computer.bat_dir, "capacity", &value))
+		return ;
+	if (hub->computer.was_plugged)
+	{
+		hub->computer.low_warned = FALSE;
+		return ;
+	}
+	if (!hub->computer.low_warned && value <= HUB_BAT_LOW
+		&& hub_timer_running(hub))
+	{
+		text = g_strdup_printf("Battery at %" G_GUINT64_FORMAT " %%", value);
+		hub_alert(hub, "battery_low", "Battery low", text);
+		g_free(text);
+		hub->computer.low_warned = TRUE;
+	}
+}
