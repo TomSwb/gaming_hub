@@ -39,4 +39,8 @@
 
 # define HUB_HEADSET_NAME "Xbox Wireless Headset"
 
+# define HUB_PPD_NAME "org.freedesktop.UPower.PowerProfiles"
+# define HUB_PPD_PATH "/org/freedesktop/UPower/PowerProfiles"
+# define HUB_PPD_IFACE "org.freedesktop.UPower.PowerProfiles"
+
 #endif

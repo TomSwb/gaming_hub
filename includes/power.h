@@ -22,6 +22,7 @@
 // sources/power/
 
 // power.c
-
+void	hub_power_connect(t_hub *hub);
+void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data);
 
 #endif

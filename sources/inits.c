@@ -18,6 +18,7 @@ void	hub_struct_init(t_hub *hub)
 	hub_setting_init(hub);
 	hub_timer_init(hub);
 	hub_headset_init(hub);
+	hub_power_init(hub);
 	hub->stack = NULL;
 	hub->app = NULL;
 }

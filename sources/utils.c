@@ -50,4 +50,6 @@ void	hub_free_hub(t_hub *hub)
 	}
 	if (hub->headset.adapter != NULL)
 		pa_glib_mainloop_free(hub->headset.adapter);
+	if (hub->power.proxy != NULL)
+		g_object_unref(hub->power.proxy);
 }
