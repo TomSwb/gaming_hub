@@ -50,7 +50,7 @@ What each file does. Back to the [README](../README.md).
 * `Makefile`: builds the hub and libft, with GTK4's and libpulse's flags from `pkg-config`; also writes `compile_flags.txt` for the editor; `make install` / `make uninstall` (program in `~/.local/bin`, `.desktop` file in `~/.local/share/applications`)
 * `assets/historic/`: screenshots of the hub at each stage (`first_working_prototype.png`, milestone 2; `timer_done/`, milestone 3: plan, playing, eye cue, break)
 * `docs/research.md`: what I tested by hand before coding (headset battery over D-Bus, MangoHud logging) and the rules the code must follow
-* `docs/files.md`, `docs/basics.md`, `docs/live-stats.md`, `docs/timer.md`, `docs/auto-start.md`, `docs/headset.md`, `docs/power.md`, `docs/bluez.md`, `docs/sound.md`: this file and how each part of the hub works, moved out of the README on 19 Nov 2026
+* `docs/files.md`, `docs/basics.md`, `docs/live-stats.md`, `docs/timer.md`, `docs/auto-start.md`, `docs/headset.md`, `docs/power.md`, `docs/bluez.md`, `docs/sound.md`, `docs/library.md`: this file and how each part of the hub works, moved out of the README on 19 Nov 2026
 
 ## Also included
 
