@@ -22,6 +22,7 @@
 # include "timer.h"
 # include "game.h"
 # include "headset.h"
+# include "power.h"
 
 // === Functions === //
 
@@ -43,6 +44,9 @@ void		hub_computer_init(t_hub *hub);
 void		hub_setting_init(t_hub *hub);
 void		hub_timer_init(t_hub *hub);
 void		hub_headset_init(t_hub *hub);
+
+// inits_2.c
+void		hub_power_init(t_hub *hub);
 
 // main_build.c
 GtkWidget	*hub_build_box(t_hub *hub);

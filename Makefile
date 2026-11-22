@@ -32,7 +32,7 @@ HEADERS = ${INC_DIR}/gaming_hub.h \
 		${INC_DIR}/structs.h ${INC_DIR}/defaults.h \
 		${INC_DIR}/computer.h ${INC_DIR}/timer.h \
 		${INC_DIR}/game.h ${INC_DIR}/headset.h \
-		${LIBFT_DIR}/libft.h
+		${INC_DIR}/power.h ${LIBFT_DIR}/libft.h
 
 PKG_CFLAGS := ${shell pkg-config --cflags gtk4 libpulse-mainloop-glib}
 PKG_LIBS := ${shell pkg-config --libs gtk4 libpulse-mainloop-glib}
@@ -62,14 +62,16 @@ HEADSET = sources/headset/pulse.c \
 	sources/headset/volume.c \
 	sources/headset/headset_build.c
 
+POWER = sources/power/power.c
+
 SOURCES = sources/main.c \
 	sources/utils.c \
-	sources/inits.c \
+	sources/inits.c sources/inits_2.c \
 	sources/main_build.c
 
 FILES = ${SOURCES} \
 	${COMPUTER} ${TIMER} \
-	${GAME} ${HEADSET}
+	${GAME} ${HEADSET} ${POWER}
 
 OBJS = ${FILES:.c=.o}
 

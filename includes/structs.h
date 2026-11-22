@@ -107,12 +107,19 @@ typedef struct s_headset
 	gint64				moved_mic;
 }	t_headset;
 
+typedef struct s_power
+{
+	GtkWidget	*profile;
+	GDBusProxy	*proxy;
+}	t_power;
+
 typedef struct s_hub
 {
 	t_computer		computer;
 	t_settings		setting;
 	t_timer			timer;
 	t_headset		headset;
+	t_power			power;
 	GtkWidget		*stack;
 	GApplication	*app;
 }	t_hub;
