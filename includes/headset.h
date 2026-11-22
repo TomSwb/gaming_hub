@@ -58,6 +58,8 @@ void		hub_pulse_default(pa_context *c, const pa_server_info *i,
 void		hub_default_sink(pa_context *c, const pa_sink_info *i, int eol,
 				void *user_data);
 void		hub_set_output(t_hub *hub, const char *address, const char *name);
+void		hub_ask_default_sink(t_hub *hub, const char *sink);
+void		hub_ask_default_source(t_hub *hub, const char *source);
 
 // volume.c
 int			hub_volume_percent(const pa_cvolume *volume);

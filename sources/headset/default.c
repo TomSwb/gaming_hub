@@ -17,10 +17,18 @@ void	hub_pulse_default(pa_context *c, const pa_server_info *i,
 {
 	pa_operation	*op;
 
-	if (!i || !i->default_sink_name)
+	if (!i)
 	{
-		hub_set_output(user_data, NULL, NULL);
+		hub_ask_default_sink(user_data, NULL);
+		hub_ask_default_source(user_data, NULL);
 	}
+	else
+	{
+		hub_ask_default_sink(user_data, i->default_sink_name);
+		hub_ask_default_source(user_data, i->default_source_name);
+	}
+	if (!i || !i->default_sink_name)
+		hub_set_output(user_data, NULL, NULL);
 	else
 	{
 		op = pa_context_get_sink_info_by_name(c, i->default_sink_name,
@@ -53,4 +61,44 @@ void	hub_set_output(t_hub *hub, const char *address, const char *name)
 	hub->headset.bt_add = g_strdup(address);
 	hub->headset.outp_name = g_strdup(name);
 	hub_bluez_show(hub);
+}
+
+void	hub_ask_default_sink(t_hub *hub, const char *sink)
+{
+	pa_operation	*op;
+
+	g_free(hub->headset.def_sink_name);
+	hub->headset.def_sink_name = g_strdup(sink);
+	if (hub->headset.def_sink_name)
+	{
+		op = pa_context_get_sink_info_by_name(hub->headset.context,
+			hub->headset.def_sink_name, hub_sink_list, hub);
+		if (op)
+			pa_operation_unref(op);
+	}
+	else
+	{
+		hub->headset.sink_index = PA_INVALID_INDEX;
+		hub_show_sink(hub, NULL);
+	}
+}
+
+void	hub_ask_default_source(t_hub *hub, const char *source)
+{
+	pa_operation	*op;
+
+	g_free(hub->headset.def_src_name);
+	hub->headset.def_src_name = g_strdup(source);
+	if (hub->headset.def_src_name)
+	{
+		op = pa_context_get_source_info_by_name(hub->headset.context,
+			hub->headset.def_src_name, hub_source_list, hub);
+		if (op)
+			pa_operation_unref(op);
+	}
+	else
+	{
+		hub->headset.src_index = PA_INVALID_INDEX;
+		hub_show_source(hub, NULL);
+	}
 }

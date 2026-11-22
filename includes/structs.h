@@ -111,6 +111,8 @@ typedef struct s_headset
 	GDBusObjectManager	*obj_man;
 	gchar				*bt_add;
 	gchar				*outp_name;
+	gchar				*def_sink_name;
+	gchar				*def_src_name;
 }	t_headset;
 
 typedef struct s_power

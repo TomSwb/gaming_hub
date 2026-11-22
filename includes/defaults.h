@@ -39,7 +39,6 @@
 # define HUB_DEF_POPUPS TRUE
 # define HUB_DEF_SOUND TRUE
 
-# define HUB_HEADSET_NAME "Xbox Wireless Headset"
 # define HUB_BLUEZ_NAME "org.bluez"
 # define HUB_BLUEZ_DEVICE "org.bluez.Device1"
 # define HUB_BLUEZ_BATTERY "org.bluez.Battery1"
