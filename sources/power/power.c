@@ -22,19 +22,32 @@ void	hub_power_connect(t_hub *hub)
 void	hub_power_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	t_hub		*hub;
-	GDBusProxy	*result;
+	GDBusProxy	*proxy;
 	GError		*error;
 
 	(void)source;
 	hub = user_data;
 	error = NULL;
-	result = g_dbus_proxy_new_for_bus_finish(res, &error);
-	if (!result)
+	proxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+	if (!proxy)
 	{
-		g_printerr("power: error: %s\n", error->message);
+		g_printerr("power: %s\n", error->message);
 		g_error_free(error);
 		return ;
 	}
-	hub->power.proxy = result;
-	g_print("power: ready\n");
+	hub->power.proxy = proxy;
+	hub_power_show(hub);
+}
+
+void	hub_power_show(t_hub *hub)
+{
+	GVariant	*profile;
+
+	profile = g_dbus_proxy_get_cached_property(hub->power.proxy, HUB_PPD_ACTIVE);
+	if (profile && g_variant_is_of_type(profile, G_VARIANT_TYPE_STRING))
+		g_print("power: profile %s\n", g_variant_get_string(profile, NULL));
+	else
+		g_printerr("power: profile ...\n");
+	if (profile)
+		g_variant_unref(profile);
 }
