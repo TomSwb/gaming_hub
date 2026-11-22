@@ -45,5 +45,6 @@
 # define HUB_PPD_ACTIVE "ActiveProfile"
 # define HUB_PPD_PROFILES "Profiles"
 # define HUB_PPD_KEY "profile"
+# define HUB_PPD_METH_NAME "org.freedesktop.DBus.Properties.Set"
 
 #endif

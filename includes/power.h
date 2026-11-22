@@ -32,6 +32,10 @@ void		hub_power_changed(GDBusProxy *proxy, GVariant *changed,
 // profiles.c
 void		hub_power_profiles(t_hub *hub);
 void		hub_power_add_button(t_hub *hub, const gchar *name);
+void		hub_power_select(t_hub *hub, const gchar *active);
+void		hub_power_toggled(GtkToggleButton *self, gpointer user_data);
+void		hub_power_set_done(GObject *source, GAsyncResult *res,
+				gpointer user_data);
 
 // power_build.c
 GtkWidget	*hub_build_power(t_hub *hub);

@@ -55,9 +55,13 @@ void	hub_power_show(t_hub *hub)
 		text = g_strdup_printf("Power profile: %s",
 				g_variant_get_string(profile, NULL));
 		gtk_label_set_text(GTK_LABEL(hub->power.profile), text);
+		hub_power_select(hub, g_variant_get_string(profile, NULL));
 	}
 	else
+	{
 		gtk_label_set_text(GTK_LABEL(hub->power.profile), "Power profile: ...");
+		hub_power_select(hub, NULL);
+	}
 	g_free(text);
 	if (profile)
 		g_variant_unref(profile);
