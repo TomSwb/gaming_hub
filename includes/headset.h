@@ -52,6 +52,13 @@ void		hub_source_set_buttons(t_hub *hub, gint per_mic,
 void		hub_source_slider_moved(GtkRange *self, gpointer user_data);
 void		hub_source_mute_toggled(GtkToggleButton *self, gpointer user_data);
 
+// default.c
+void		hub_pulse_default(pa_context *c, const pa_server_info *i,
+				void *user_data);
+void		hub_default_sink(pa_context *c, const pa_sink_info *i, int eol,
+				void *user_data);
+void		hub_set_output(t_hub *hub, const char *address, const char *name);
+
 // volume.c
 int			hub_volume_percent(const pa_cvolume *volume);
 

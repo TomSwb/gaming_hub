@@ -52,10 +52,14 @@ void	hub_pulse_ready(pa_context *c, void *user_data)
 			hub_source_list, user_data);
 	if (op)
 		pa_operation_unref(op);
+	op = pa_context_get_server_info(c,
+			hub_pulse_default, user_data);
+	if (op)
+		pa_operation_unref(op);
 	pa_context_set_subscribe_callback(c, hub_pulse_event, user_data);
 	op = pa_context_subscribe(c,
-			PA_SUBSCRIPTION_MASK_SINK | PA_SUBSCRIPTION_MASK_SOURCE,
-			NULL, NULL);
+			PA_SUBSCRIPTION_MASK_SINK | PA_SUBSCRIPTION_MASK_SOURCE
+			| PA_SUBSCRIPTION_MASK_SERVER, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
 }

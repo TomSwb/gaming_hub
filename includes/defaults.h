@@ -43,6 +43,8 @@
 # define HUB_BLUEZ_NAME "org.bluez"
 # define HUB_BLUEZ_DEVICE "org.bluez.Device1"
 # define HUB_BLUEZ_BATTERY "org.bluez.Battery1"
+# define HUB_PA_BT_ADDRESS "api.bluez5.address"
+# define HUB_PA_SHORT_NAME "device.profile.description"
 
 # define HUB_PPD_NAME "org.freedesktop.UPower.PowerProfiles"
 # define HUB_PPD_PATH "/org/freedesktop/UPower/PowerProfiles"

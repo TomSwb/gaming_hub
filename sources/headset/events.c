@@ -17,6 +17,7 @@ void	hub_pulse_event(pa_context *c, pa_subscription_event_type_t t,
 {
 	pa_subscription_event_type_t	facility;
 	pa_subscription_event_type_t	type;
+	pa_operation					*op;
 
 	facility = t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK;
 	type = t & PA_SUBSCRIPTION_EVENT_TYPE_MASK;
@@ -24,6 +25,12 @@ void	hub_pulse_event(pa_context *c, pa_subscription_event_type_t t,
 		hub_sink_event(user_data, c, type, idx);
 	else if (facility == PA_SUBSCRIPTION_EVENT_SOURCE)
 		hub_source_event(user_data, c, type, idx);
+	else if (facility == PA_SUBSCRIPTION_EVENT_SERVER)
+	{
+		op = pa_context_get_server_info(c, hub_pulse_default, user_data);
+		if (op)
+			pa_operation_unref(op);
+	}
 }
 
 void	hub_sink_event(t_hub *hub, pa_context *c,

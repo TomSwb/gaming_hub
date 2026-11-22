@@ -40,6 +40,9 @@ void	hub_bluez_show(t_hub *hub)
 	}
 	if (text)
 		gtk_label_set_text(GTK_LABEL(hub->headset.headset_data), text);
+	else if (hub->headset.outp_name)
+		gtk_label_set_text(GTK_LABEL(hub->headset.headset_data),
+			hub->headset.outp_name);
 	else
 		gtk_label_set_text(GTK_LABEL(hub->headset.headset_data), "...");
 	g_free(text);
