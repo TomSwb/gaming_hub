@@ -24,7 +24,6 @@ void	hub_bluez_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 	t_hub				*hub;
 	GDBusObjectManager	*manager;
 	GError				*error;
-	GDBusObject			*device;
 
 	(void)source;
 	hub = user_data;
@@ -38,14 +37,7 @@ void	hub_bluez_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 	}
 	hub->headset.obj_man = manager;
 	hub->headset.bt_add = g_strdup("54:4C:8A:E1:83:E0");
-	device = hub_bluez_find(hub);
-	if (device)
-	{
-		g_print("%s\n", g_dbus_object_get_object_path(device));
-		g_object_unref(device);
-	}
-	else
-		g_print("bluez; no found");
+	hub_bluez_show(hub);
 }
 
 gboolean	hub_bluez_has_address(GDBusObject *object, const gchar *address)
@@ -69,19 +61,21 @@ gboolean	hub_bluez_has_address(GDBusObject *object, const gchar *address)
 GDBusObject	*hub_bluez_find(t_hub *hub)
 {
 	GList		*node;
+	GList		*head;
 	GDBusObject	*found;
 
 	if (!hub->headset.obj_man || !hub->headset.bt_add)
 		return (NULL);
 	found = NULL;
 	node = g_dbus_object_manager_get_objects(hub->headset.obj_man);
+	head = node;
 	while (node && !found)
 	{
 		if (hub_bluez_has_address(G_DBUS_OBJECT(node->data),
 			hub->headset.bt_add))
-				found = g_object_ref(node->data);
+			found = g_object_ref(node->data);
 		node = node->next;
 	}
-	g_list_free_full(node, g_object_unref);
+	g_list_free_full(head, g_object_unref);
 	return (found);
 }

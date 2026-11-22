@@ -62,6 +62,13 @@ void		hub_bluez_ready(GObject *source, GAsyncResult *res,
 gboolean	hub_bluez_has_address(GDBusObject *object, const gchar *address);
 GDBusObject	*hub_bluez_find(t_hub *hub);
 
+// bluez_show.c
+GVariant	*hub_bluez_prop(GDBusObject *object, const gchar *iface,
+				const gchar *prop);
+void		hub_bluez_show(t_hub *hub);
+gchar		*hub_bluez_text(GDBusObject *device);
+gchar		*hub_bluez_with_battery(GDBusObject *device, const gchar *name);
+
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);
 void		hub_build_sliders(t_hub *hub);
