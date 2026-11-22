@@ -64,7 +64,7 @@ gchar	*hub_bluez_text(GDBusObject *device)
 	value = hub_bluez_prop(device, HUB_BLUEZ_DEVICE, "Name");
 	if (value && g_variant_is_of_type(value, G_VARIANT_TYPE_STRING))
 		text = hub_bluez_with_battery(device,
-			g_variant_get_string(value, NULL));
+				g_variant_get_string(value, NULL));
 	else
 		text = NULL;
 	if (value != NULL)

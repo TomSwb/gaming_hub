@@ -36,13 +36,13 @@ void	hub_bluez_ready(GObject *source, GAsyncResult *res, gpointer user_data)
 		return ;
 	}
 	hub->headset.obj_man = manager;
-	g_signal_connect(hub->headset.obj_man,
-		"interface-added", G_CALLBACK(hub_bluez_iface), hub);
-	g_signal_connect(hub->headset.obj_man,
-		"interface-removed", G_CALLBACK(hub_bluez_iface), hub);
-	g_signal_connect(hub->headset.obj_man,
+	g_signal_connect_swapped(hub->headset.obj_man,
+		"interface-added", G_CALLBACK(hub_bluez_show), hub);
+	g_signal_connect_swapped(hub->headset.obj_man,
+		"interface-removed", G_CALLBACK(hub_bluez_show), hub);
+	g_signal_connect_swapped(hub->headset.obj_man,
 		"interface-proxy-properties-changed",
-		G_CALLBACK(hub_bluez_props), hub);
+		G_CALLBACK(hub_bluez_show), hub);
 	hub_bluez_show(hub);
 }
 
@@ -78,7 +78,7 @@ GDBusObject	*hub_bluez_find(t_hub *hub)
 	while (node && !found)
 	{
 		if (hub_bluez_has_address(G_DBUS_OBJECT(node->data),
-			hub->headset.bt_add))
+				hub->headset.bt_add))
 			found = g_object_ref(node->data);
 		node = node->next;
 	}

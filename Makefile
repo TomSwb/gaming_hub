@@ -63,7 +63,6 @@ HEADSET = sources/headset/pulse.c \
 	sources/headset/volume.c \
 	sources/headset/bluez.c \
 	sources/headset/bluez_show.c \
-	sources/headset/bluez_events.c \
 	sources/headset/headset_build.c
 
 POWER = sources/power/power.c \

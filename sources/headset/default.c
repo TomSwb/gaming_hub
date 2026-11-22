@@ -24,7 +24,7 @@ void	hub_pulse_default(pa_context *c, const pa_server_info *i,
 	else
 	{
 		op = pa_context_get_sink_info_by_name(c, i->default_sink_name,
-			hub_default_sink, user_data);
+				hub_default_sink, user_data);
 		if (op)
 			pa_operation_unref(op);
 	}
@@ -33,8 +33,8 @@ void	hub_pulse_default(pa_context *c, const pa_server_info *i,
 void	hub_default_sink(pa_context *c, const pa_sink_info *i, int eol,
 			void *user_data)
 {
-	const gchar *address;
-	const gchar *name;
+	const gchar	*address;
+	const gchar	*name;
 
 	(void)c;
 	if (eol > 0 || !i)
