@@ -75,7 +75,7 @@ void	hub_outputs_select(t_hub *hub)
 	GtkWidget	*child;
 	const gchar	*name;
 
-	child = gtk_widget_get_first_child(hub->power.pow_but_row);
+	child = gtk_widget_get_first_child(hub->headset.dev_row);
 	while (child != NULL)
 	{
 		name = g_object_get_data(G_OBJECT(child), HUB_PA_KEY);
