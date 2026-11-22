@@ -69,6 +69,13 @@ void		hub_bluez_show(t_hub *hub);
 gchar		*hub_bluez_text(GDBusObject *device);
 gchar		*hub_bluez_with_battery(GDBusObject *device, const gchar *name);
 
+// bluez_events.c
+void		hub_bluez_iface(GDBusObjectManager *manager, GDBusObject *object,
+				GDBusInterface *interface, gpointer user_data);
+void		hub_bluez_props(GDBusObjectManagerClient *manager,
+				GDBusObjectProxy *object_proxy, GDBusProxy *interface_proxy,
+				GVariant *changed, GStrv invalidated, gpointer user_data);
+
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);
 void		hub_build_sliders(t_hub *hub);
