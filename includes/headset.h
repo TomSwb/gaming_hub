@@ -76,7 +76,13 @@ GVariant	*hub_bluez_prop(GDBusObject *object, const gchar *iface,
 				const gchar *prop);
 void		hub_bluez_show(t_hub *hub);
 gchar		*hub_bluez_text(GDBusObject *device);
-gchar		*hub_bluez_with_battery(GDBusObject *device, const gchar *name);
+
+// outputs.c
+void		hub_outputs_refresh(t_hub *hub);
+void		hub_outputs_list(pa_context *c, const pa_sink_info *i, int eol,
+				void *user_data);
+const gchar	*hub_sink_short_name(const pa_sink_info *i);
+void		hub_outputs_add(t_hub *hub, const pa_sink_info *i);
 
 // headset_build.c
 GtkWidget	*hub_build_headset(t_hub *hub);

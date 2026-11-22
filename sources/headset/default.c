@@ -48,9 +48,7 @@ void	hub_default_sink(pa_context *c, const pa_sink_info *i, int eol,
 	if (eol > 0 || !i)
 		return ;
 	address = pa_proplist_gets(i->proplist, HUB_PA_BT_ADDRESS);
-	name = pa_proplist_gets(i->proplist, HUB_PA_SHORT_NAME);
-	if (!name)
-		name = i->description;
+	name = hub_sink_short_name(i);
 	hub_set_output(user_data, address, name);
 }
 
@@ -72,7 +70,7 @@ void	hub_ask_default_sink(t_hub *hub, const char *sink)
 	if (hub->headset.def_sink_name)
 	{
 		op = pa_context_get_sink_info_by_name(hub->headset.context,
-			hub->headset.def_sink_name, hub_sink_list, hub);
+				hub->headset.def_sink_name, hub_sink_list, hub);
 		if (op)
 			pa_operation_unref(op);
 	}
@@ -92,7 +90,7 @@ void	hub_ask_default_source(t_hub *hub, const char *source)
 	if (hub->headset.def_src_name)
 	{
 		op = pa_context_get_source_info_by_name(hub->headset.context,
-			hub->headset.def_src_name, hub_source_list, hub);
+				hub->headset.def_src_name, hub_source_list, hub);
 		if (op)
 			pa_operation_unref(op);
 	}

@@ -39,12 +39,12 @@ void	hub_bluez_show(t_hub *hub)
 		g_object_unref(device);
 	}
 	if (text)
+	{
 		gtk_label_set_text(GTK_LABEL(hub->headset.headset_data), text);
-	else if (hub->headset.outp_name)
-		gtk_label_set_text(GTK_LABEL(hub->headset.headset_data),
-			hub->headset.outp_name);
+		gtk_widget_set_visible(hub->headset.headset_data, TRUE);
+	}
 	else
-		gtk_label_set_text(GTK_LABEL(hub->headset.headset_data), "...");
+		gtk_widget_set_visible(hub->headset.headset_data, FALSE);
 	g_free(text);
 }
 
@@ -61,27 +61,11 @@ gchar	*hub_bluez_text(GDBusObject *device)
 		g_variant_unref(value);
 	if (!connected)
 		return (NULL);
-	value = hub_bluez_prop(device, HUB_BLUEZ_DEVICE, "Name");
-	if (value && g_variant_is_of_type(value, G_VARIANT_TYPE_STRING))
-		text = hub_bluez_with_battery(device,
-				g_variant_get_string(value, NULL));
-	else
-		text = NULL;
-	if (value != NULL)
-		g_variant_unref(value);
-	return (text);
-}
-
-gchar	*hub_bluez_with_battery(GDBusObject *device, const gchar *name)
-{
-	GVariant	*value;
-	gchar		*text;
-
 	value = hub_bluez_prop(device, HUB_BLUEZ_BATTERY, "Percentage");
 	if (value && g_variant_is_of_type(value, G_VARIANT_TYPE_BYTE))
-		text = g_strdup_printf("%s · %u %%", name, g_variant_get_byte(value));
+		text = g_strdup_printf("Battery: %u %%", g_variant_get_byte(value));
 	else
-		text = g_strdup_printf("%s · ...", name);
+		text = g_strdup("Battery: ...");
 	if (value != NULL)
 		g_variant_unref(value);
 	return (text);

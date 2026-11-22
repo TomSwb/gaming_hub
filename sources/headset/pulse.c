@@ -62,4 +62,5 @@ void	hub_pulse_ready(pa_context *c, void *user_data)
 			| PA_SUBSCRIPTION_MASK_SERVER, NULL, NULL);
 	if (op)
 		pa_operation_unref(op);
+	hub_outputs_refresh(user_data);
 }

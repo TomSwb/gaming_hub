@@ -100,6 +100,7 @@ typedef struct s_headset
 	GtkWidget			*sld_mic;
 	GtkWidget			*mute_mic;
 	GtkWidget			*headset_data;
+	GtkWidget			*dev_row;
 	pa_glib_mainloop	*adapter;
 	pa_context			*context;
 	uint32_t			sink_index;

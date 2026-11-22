@@ -61,6 +61,7 @@ HEADSET = sources/headset/pulse.c \
 	sources/headset/source.c \
 	sources/headset/default.c \
 	sources/headset/volume.c \
+	sources/headset/outputs.c \
 	sources/headset/bluez.c \
 	sources/headset/bluez_show.c \
 	sources/headset/headset_build.c

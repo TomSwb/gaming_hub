@@ -18,7 +18,7 @@ GtkWidget	*hub_build_headset(t_hub *hub)
 	GtkWidget	*label;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-	label = gtk_label_new("Sound");
+	label = gtk_label_new("Sound:");
 	hub->headset.volume = gtk_label_new("Volume: off");
 	hub->headset.mic = gtk_label_new("Mic: off");
 	hub_build_sliders(hub);
@@ -60,7 +60,11 @@ void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 	GtkWidget	*setting_box;
 	GtkWidget	*vol_box;
 	GtkWidget	*mic_box;
+	GtkWidget	*label_box;
 
+	label_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
+	hub->headset.dev_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_widget_add_css_class(hub->headset.dev_row, "linked");
 	setting_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
 	vol_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
 	mic_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
@@ -73,8 +77,11 @@ void	hub_headset_build_box(t_hub *hub, GtkWidget *box, GtkWidget *label)
 	gtk_box_append(GTK_BOX(mic_box), hub->headset.mute_mic);
 	gtk_box_append(GTK_BOX(setting_box), vol_box);
 	gtk_box_append(GTK_BOX(setting_box), mic_box);
-	gtk_box_append(GTK_BOX(box), label);
-	gtk_box_append(GTK_BOX(box), hub->headset.headset_data);
+	gtk_box_append(GTK_BOX(label_box), label);
+	gtk_box_append(GTK_BOX(label_box), hub->headset.headset_data);
+	gtk_box_append(GTK_BOX(box), label_box);
+	gtk_box_append(GTK_BOX(box), hub->headset.dev_row);
 	gtk_box_append(GTK_BOX(box), setting_box);
-	gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_halign(label_box, GTK_ALIGN_CENTER);
+	gtk_widget_set_halign(hub->headset.dev_row, GTK_ALIGN_CENTER);
 }
