@@ -15,5 +15,6 @@
 void	hub_power_init(t_hub *hub)
 {
 	hub->power.profile = NULL;
+	hub->power.pow_but_row = NULL;
 	hub->power.proxy = NULL;
 }

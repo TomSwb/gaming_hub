@@ -44,5 +44,6 @@
 # define HUB_PPD_IFACE "org.freedesktop.UPower.PowerProfiles"
 # define HUB_PPD_ACTIVE "ActiveProfile"
 # define HUB_PPD_PROFILES "Profiles"
+# define HUB_PPD_KEY "profile"
 
 #endif

@@ -34,9 +34,24 @@ void	hub_power_profiles(t_hub *hub)
 	while (dict != NULL)
 	{
 		if (g_variant_lookup(dict, "Profile", "&s", &name))
-			g_print("power: has %s\n", name);
+			hub_power_add_button(hub, name);
 		g_variant_unref(dict);
 		dict = g_variant_iter_next_value(&iter);
 	}
 	g_variant_unref(profiles);
+}
+
+void	hub_power_add_button(t_hub *hub, const gchar *name)
+{
+	GtkWidget	*button;
+	GtkWidget	*leader;
+
+	button = gtk_toggle_button_new_with_label(name);
+	g_object_set_data_full(G_OBJECT(button), "HUB_PPD_KEY",
+		g_strdup(name), g_free);
+	leader = gtk_widget_get_first_child(hub->power.pow_but_row);
+	if (leader)
+		gtk_toggle_button_set_group(GTK_TOGGLE_BUTTON(button),
+			GTK_TOGGLE_BUTTON(leader));
+	gtk_box_append(GTK_BOX(hub->power.pow_but_row), button);
 }

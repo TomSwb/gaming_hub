@@ -110,6 +110,7 @@ typedef struct s_headset
 typedef struct s_power
 {
 	GtkWidget	*profile;
+	GtkWidget	*pow_but_row;
 	GDBusProxy	*proxy;
 }	t_power;
 

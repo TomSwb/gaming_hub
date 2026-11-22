@@ -31,6 +31,7 @@ void		hub_power_changed(GDBusProxy *proxy, GVariant *changed,
 
 // profiles.c
 void		hub_power_profiles(t_hub *hub);
+void		hub_power_add_button(t_hub *hub, const gchar *name);
 
 // power_build.c
 GtkWidget	*hub_build_power(t_hub *hub);

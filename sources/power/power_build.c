@@ -18,6 +18,10 @@ GtkWidget	*hub_build_power(t_hub *hub)
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	hub->power.profile = gtk_label_new("Power profile: ...");
+	hub->power.pow_but_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
+	gtk_widget_add_css_class(hub->power.pow_but_row, "linked");
 	gtk_box_append(GTK_BOX(box), hub->power.profile);
+	gtk_box_append(GTK_BOX(box), hub->power.pow_but_row);
+	gtk_widget_set_halign(hub->power.pow_but_row, GTK_ALIGN_CENTER);
 	return (box);
 }
