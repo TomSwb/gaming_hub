@@ -22,7 +22,12 @@ void	hub_pulse_event(pa_context *c, pa_subscription_event_type_t t,
 	facility = t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK;
 	type = t & PA_SUBSCRIPTION_EVENT_TYPE_MASK;
 	if (facility == PA_SUBSCRIPTION_EVENT_SINK)
+	{
 		hub_sink_event(user_data, c, type, idx);
+		if (type == PA_SUBSCRIPTION_EVENT_NEW
+			|| type == PA_SUBSCRIPTION_EVENT_REMOVE)
+			hub_outputs_refresh(user_data);
+	}
 	else if (facility == PA_SUBSCRIPTION_EVENT_SOURCE)
 		hub_source_event(user_data, c, type, idx);
 	else if (facility == PA_SUBSCRIPTION_EVENT_SERVER)
@@ -31,6 +36,8 @@ void	hub_pulse_event(pa_context *c, pa_subscription_event_type_t t,
 		if (op)
 			pa_operation_unref(op);
 	}
+	else if (facility == PA_SUBSCRIPTION_EVENT_CARD)
+		hub_outputs_refresh(user_data);;
 }
 
 void	hub_sink_event(t_hub *hub, pa_context *c,
