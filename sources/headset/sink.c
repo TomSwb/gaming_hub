@@ -23,7 +23,7 @@ void	hub_sink_list(pa_context *c, const pa_sink_info *i, int eol,
 		g_printerr("pulse: Error sink line\n");
 	else if (eol == 0)
 	{
-		if (g_strcmp0(i->description, hub->headset.def_sink_name) == 0)
+		if (g_strcmp0(i->name, hub->headset.def_sink_name) == 0)
 		{
 			hub->headset.sink_index = i->index;
 			hub_show_sink(hub, i);

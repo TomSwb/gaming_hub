@@ -23,7 +23,7 @@ void	hub_source_list(pa_context *c, const pa_source_info *i, int eol,
 		g_printerr("pulse: Error source line\n");
 	else if (eol == 0)
 	{
-		if (g_strcmp0(i->description, hub->headset.def_src_name) == 0)
+		if (g_strcmp0(i->name, hub->headset.def_src_name) == 0)
 		{
 			hub->headset.src_index = i->index;
 			hub_show_source(hub, i);
