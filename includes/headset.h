@@ -89,7 +89,6 @@ void		hub_outputs_select(t_hub *hub);
 void		hub_outputs_toggled(GtkToggleButton *self, gpointer user_data);
 void		hub_mic_scan(pa_context *c, const pa_source_info *i, int eol,
 				void *user_data);
-void		hub_mic_keep(gchar **slot, const char *name);
 void		hub_mic_apply(t_hub *hub);
 
 // headset_build.c

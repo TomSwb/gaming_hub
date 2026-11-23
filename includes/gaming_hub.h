@@ -41,6 +41,7 @@ int			hub_command_line(GApplication *self,
 void		hub_setting_hub(t_hub *hub);
 void		hub_free_hub(t_hub *hub);
 void		hub_gfree_hub(t_hub *hub);
+void		hub_keep(gchar **slot, const char *name);
 
 // inits.c
 void		hub_struct_init(t_hub *hub);

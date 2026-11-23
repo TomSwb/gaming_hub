@@ -58,15 +58,9 @@ void	hub_mic_scan(pa_context *c, const pa_source_info *i, int eol,
 		return ;
 	address = pa_proplist_gets(i->proplist, HUB_PA_BT_ADDRESS);
 	if (hub->headset.want_add && g_strcmp0(hub->headset.want_add, address) == 0)
-		hub_mic_keep(&hub->headset.head_mic, i->name);
+		hub_keep(&hub->headset.head_mic, i->name);
 	else if (!address && !hub->headset.lapt_mic)
-		hub_mic_keep(&hub->headset.lapt_mic, i->name);
-}
-
-void	hub_mic_keep(gchar **slot, const char *name)
-{
-	g_free(*slot);
-	*slot = g_strdup(name);
+		hub_keep(&hub->headset.lapt_mic, i->name);
 }
 
 void	hub_mic_apply(t_hub *hub)
@@ -85,6 +79,6 @@ void	hub_mic_apply(t_hub *hub)
 		if (op)
 			pa_operation_unref(op);
 	}
-	hub_mic_keep(&hub->headset.head_mic, NULL);
-	hub_mic_keep(&hub->headset.lapt_mic, NULL);
+	hub_keep(&hub->headset.head_mic, NULL);
+	hub_keep(&hub->headset.lapt_mic, NULL);
 }

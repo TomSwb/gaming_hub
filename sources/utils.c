@@ -66,3 +66,9 @@ void	hub_gfree_hub(t_hub *hub)
 	g_free(hub->headset.head_mic);
 	g_free(hub->headset.lapt_mic);
 }
+
+void	hub_keep(gchar **slot, const char *name)
+{
+	g_free(*slot);
+	*slot = g_strdup(name);
+}

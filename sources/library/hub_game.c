@@ -30,8 +30,14 @@ GType	hub_game_get_type(void)
 
 void	hub_game_class_init(gpointer klass, gpointer data)
 {
+	GObjectClass	*object_class;
+
 	(void)data;
-	G_OBJECT_CLASS(klass)->finalize = hub_game_finalize;
+	object_class = G_OBJECT_CLASS(klass);
+	object_class->finalize = hub_game_finalize;
+	object_class->set_property = hub_game_set_property;
+	object_class->get_property = hub_game_get_property;
+	hub_game_install_props(object_class);
 }
 
 void	hub_game_init(GTypeInstance *instance, gpointer klass)
