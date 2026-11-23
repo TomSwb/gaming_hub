@@ -62,4 +62,11 @@
 # define HUB_GAME_ID "id"
 # define HUB_GAME_PATH "path"
 
+# define HUB_STEAM_PATH "path"
+# define HUB_STEAM_ROOT "libraryfolders"
+# define HUB_STEAM_FOLDERS ".local/share/Steam/steamapps/libraryfolders.vdf"
+# define HUB_STEAM_APPS "steamapps"
+# define HUB_STEAM_PREFIX "appmanifest_"
+# define HUB_STEAM_SUFFIX ".acf"
+
 #endif

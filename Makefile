@@ -77,7 +77,10 @@ LIBRARY = sources/library/hub_game.c \
 	sources/library/library_store.c \
 	sources/library/library_rows.c \
 	sources/library/library_build.c \
-	sources/library/keyvalues.c
+	sources/library/keyvalues.c \
+	sources/library/keyvalues_2.c \
+	sources/library/steam.c \
+	sources/library/steam_app.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

@@ -56,4 +56,20 @@ void		hub_kv_skip_space(t_kv_cursor *cursor);
 t_kv_token	hub_kv_read_string(t_kv_cursor *cursor, gchar **text);
 gboolean	hub_kv_skip_block(t_kv_cursor *cursor);
 
+// keyvalues_2.c
+gchar		*hub_kv_load(const gchar *path, t_kv_cursor *cursor);
+t_kv_token	hub_kv_pair(t_kv_cursor *cursor, gchar **name,
+				gchar **value);
+void		hub_kv_take(gchar **slot, gchar **value);
+
+// steam.c
+void		hub_steam_scan(GListStore *store);
+gboolean	hub_steam_folders(GListStore *store, t_kv_cursor *cursor);
+void		hub_steam_library(GListStore *store, const gchar *lib);
+gchar		*hub_steam_lib_path(t_kv_cursor *cursor);
+
+// steam_app.c
+void		hub_steam_app(GListStore *store, const gchar *folder,
+				const gchar *name);
+
 #endif

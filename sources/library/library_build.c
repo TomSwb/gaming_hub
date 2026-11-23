@@ -23,6 +23,7 @@ GtkWidget	*hub_build_library(t_hub *hub)
 	store = g_list_store_new(hub_game_get_type());
 	hub->library.games = store;
 	hub_library_fake(store);
+	hub_steam_scan(store);
 	selection = gtk_single_selection_new(G_LIST_MODEL(store));
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory, "setup", G_CALLBACK(hub_row_setup), NULL);
