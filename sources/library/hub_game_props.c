@@ -71,3 +71,9 @@ void	hub_game_get_property(GObject *object, guint prop_id,
 	else
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 }
+
+t_hub_game	*hub_game_cast(gpointer object)
+{
+	return (G_TYPE_CHECK_INSTANCE_CAST(object,
+			hub_game_get_type(), t_hub_game));
+}

@@ -61,14 +61,6 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	hub_bluez_connect(hub);
 	hub_tick(hub);
 	gtk_window_present(window);
-	hub_test();
-}
-
-void	hub_test(void)
-{
-	g_print("%s %lu %lu\n", g_type_name(hub_game_get_type()),
-		hub_game_get_type(), hub_game_get_type());
-	g_object_unref(g_object_new(hub_game_get_type(), NULL));
 }
 
 gboolean	hub_tick(gpointer user_data)
@@ -100,4 +92,25 @@ int	hub_command_line(GApplication *self,
 	if (g_variant_dict_contains(option, "start"))
 		hub_game_started(user_data);
 	return (0);
+}
+
+void	hub_test(void)
+{
+	t_game_info	info;
+	t_hub_game	*game;
+	gchar		*name;
+	t_hub_game	*checked;
+
+	info.name = "Portal";
+	info.source = GAME_STEAM;
+	info.platform = "Steam";
+	info.id = "400";
+	info.path = "/mnt/Steam2TB/SteamLibrary/steamapps/common/Portal";
+	game = hub_game_new(&info);
+	g_object_get(game, HUB_GAME_NAME, &name, NULL);
+	checked = hub_game_cast((gpointer)game);
+	g_print("name: %s\nsource: %d\nplatform: %s\nid: %s\npath: %s\n",
+		name, game->source, checked->platform, checked->id, checked->path);
+	g_free(name);
+	g_object_unref(game);
 }

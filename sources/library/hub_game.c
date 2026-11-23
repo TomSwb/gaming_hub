@@ -58,7 +58,6 @@ void	hub_game_finalize(GObject *object)
 	t_hub_game		*game;
 	GObjectClass	*parent;
 
-	g_print("finalize\n");
 	game = (t_hub_game *)object;
 	g_free(game->name);
 	g_free(game->platform);
@@ -66,4 +65,15 @@ void	hub_game_finalize(GObject *object)
 	g_free(game->path);
 	parent = g_type_class_peek_parent(G_OBJECT_GET_CLASS(object));
 	parent->finalize(object);
+}
+
+t_hub_game	*hub_game_new(const t_game_info *info)
+{
+	return (g_object_new(hub_game_get_type(),
+			HUB_GAME_NAME, info->name,
+			HUB_GAME_SOURCE, info->source,
+			HUB_GAME_PLATFORM, info->platform,
+			HUB_GAME_ID, info->id,
+			HUB_GAME_PATH, info->path,
+			NULL));
 }

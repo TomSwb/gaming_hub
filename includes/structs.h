@@ -153,6 +153,15 @@ typedef struct s_hub_game
 	gchar			*path;
 }	t_hub_game;
 
+typedef struct s_game_info
+{
+	t_game_source	source;
+	const gchar		*name;
+	const gchar		*platform;
+	const gchar		*id;
+	const gchar		*path;
+}	t_game_info;
+
 typedef struct s_hub_game_class
 {
 	GObjectClass	parent_class;
