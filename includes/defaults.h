@@ -55,4 +55,11 @@
 # define HUB_PPD_KEY "profile"
 # define HUB_PPD_METH_NAME "org.freedesktop.DBus.Properties.Set"
 
+# define HUB_GAME_TYPE_NAME "HubGame"
+# define HUB_GAME_NAME "name"
+# define HUB_GAME_SOURCE "source"
+# define HUB_GAME_PLATFORM "platform"
+# define HUB_GAME_ID "id"
+# define HUB_GAME_PATH "path"
+
 #endif

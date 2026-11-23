@@ -23,6 +23,7 @@
 # include "game.h"
 # include "headset.h"
 # include "power.h"
+# include "library.h"
 
 // === Functions === //
 

@@ -31,6 +31,24 @@ typedef enum e_timer_state
 	TIMER_TRANSIT
 }	t_timer_state;
 
+typedef enum e_game_source
+{
+	GAME_STEAM,
+	GAME_EMULATORS,
+	GAME_MANUAL
+}	t_game_source;
+
+typedef enum e_game_prop
+{
+	GAME_PROP_NONE,
+	GAME_PROP_NAME,
+	GAME_PROP_SOURCE,
+	GAME_PROP_PLATFORM,
+	GAME_PROP_ID,
+	GAME_PROP_PATH,
+	GAME_PROP_COUNT
+}	t_game_prop;
+
 // === Struct === //
 
 typedef struct s_computer
@@ -124,6 +142,21 @@ typedef struct s_power
 	GtkWidget	*pow_but_row;
 	GDBusProxy	*proxy;
 }	t_power;
+
+typedef struct s_hub_game
+{
+	GObject			parent;
+	gchar			*name;
+	t_game_source	*source;
+	gchar			*platform;
+	gchar			*id;
+	gchar			*path;
+}	t_hub_game;
+
+typedef struct s_hub_game_class
+{
+	GObjectClass	parent_class;
+}	t_hub_game_class;
 
 typedef struct s_hub
 {
