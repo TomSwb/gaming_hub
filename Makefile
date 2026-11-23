@@ -74,7 +74,9 @@ POWER = sources/power/power.c \
 
 LIBRARY = sources/library/hub_game.c \
 	sources/library/hub_game_props.c \
-	sources/library/library_store.c
+	sources/library/library_store.c \
+	sources/library/library_rows.c \
+	sources/library/library_build.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

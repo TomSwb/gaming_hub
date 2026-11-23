@@ -41,9 +41,12 @@ void		hub_library_add(GListStore *store, const t_game_info *info);
 void		hub_library_fake(GListStore *store);
 
 // library_rows.c
-void	hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
-			gpointer user_data);
-void	hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
-			gpointer user_data);
+void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
+				gpointer user_data);
+void		hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
+				gpointer user_data);
+
+// library_build.c
+GtkWidget	*hub_build_library(t_hub *hub);
 
 #endif

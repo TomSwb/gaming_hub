@@ -20,6 +20,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	stack = gtk_stack_new();
 	hub->stack = stack;
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_library(hub), "library");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");
@@ -29,6 +30,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	gtk_box_append(GTK_BOX(box), hub_build_power(hub));
 	gtk_box_append(GTK_BOX(box), hub_build_stats(hub));
 	hub_show_timer_page(hub);
+	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "library");
 	return (box);
 }
 
