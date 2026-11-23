@@ -40,4 +40,10 @@ t_hub_game	*hub_game_cast(gpointer object);
 void		hub_library_add(GListStore *store, const t_game_info *info);
 void		hub_library_fake(GListStore *store);
 
+// library_rows.c
+void	hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
+			gpointer user_data);
+void	hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
+			gpointer user_data);
+
 #endif
