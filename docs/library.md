@@ -12,7 +12,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 4–5 | KeyValues parser, Steam source | 4–6 h |
 | 6 | Emulator source: platforms file, ROM folders by extension | 3–4 h |
 | 7 | Names from file names, disc header check | 1–2 h |
-| 8 | Launch and the session loop (`steam://`, emulators watched as a process) | 4–6 h |
+| 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h |
 | 9 | The hub's library file | 2–3 h |
 | 10 | Three states, live drives | 2–3 h |
 | 11 | Silent session log + play history | 3–5 h |
