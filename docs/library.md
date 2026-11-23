@@ -157,3 +157,24 @@ Bugs on the way: the `setup` row never handed to the list item (empty row and a 
 
 Code `gaming_hub` `e117fa0` … `96731cd`.
 
+## Step 4: the KeyValues parser (23 Nov, ~1.3 h)
+
+A reader for Valve's KeyValues text (`libraryfolders.vdf`, `appmanifest_*.acf`), written by hand like a 42 parser: one buffer, one walking pointer. GLib only for the boring parts (`g_ascii_isspace`, `g_strndup`; step 5 reads the file with `g_file_get_contents`, the libft equivalents would be `ft_substr` and a `read` loop). Allocated with `g_`, freed with `g_free`.
+
+**Decided 23 Nov (option B): walk the text, take what's needed.** No tree: a cursor walks the buffer, and the two file shapes of step 5 get their own small loops on top of "enter a block by its key" and "skip a block". The only owned things are the file buffer and the strings kept. Rejected: a tree of nodes queried afterwards (A: general, but a node struct, a recursive build and a recursive free, 8–10 functions, power not needed: Heroic will be JSON), a callback parser (C: function pointers, a state struct, "where am I" tracked by depth numbers).
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `t_kv_token` | `KV_STRING`, `KV_OPEN` (`{`), `KV_CLOSE` (`}`), `KV_END` (the `'\0'`), `KV_ERROR` (stray character, unclosed string). A string is a key or a value: only its place tells | `structs.h` |
+| `t_kv_cursor` | `pos` (the walking pointer, `const`: reads only, borrows the buffer) and `line` (counted at every `'\n'`, for error messages). A struct so new state doesn't change every prototype | `structs.h` |
+| `hub_kv_skip_space` | steps over whitespace (`g_ascii_isspace`), counting lines; `'\0'` stops it by itself | `keyvalues.c` |
+| `hub_kv_read_string` | on a `"` (else `KV_ERROR`): walks to the closing `"` or `'\0'`; a `\` steps over the next character so `\"` doesn't end the string; **escapes kept as they are** (decided: never in my Linux files, unescaping would mean a char-by-char copy); unclosed → `KV_ERROR`, nothing copied; else `*text = g_strndup(start, pos - start)`, owned by the caller. Spaces inside quotes are text: the trailing space of `"Sonic Adventure™ 2 "` is trimmed in step 5, for the name only | `keyvalues.c` |
+| `hub_kv_next` | the tokenizer: `*text = NULL` first (so the caller can always `g_free` it), skip space, then `'\0'` → end (no move), `{` / `}` (one step), `"` → `read_string`, else error (no move, so `line` points at the bad character) | `keyvalues.c` |
+| `hub_kv_skip_block` | called just after a `KV_OPEN`: depth from 1, +1 / −1 per brace, every string freed at the bottom of the loop, `FALSE` on end or error before the matching `}` | `keyvalues.c` |
+| `hub_kv_enter` | reads key-value pairs at one level until the key asked for has a block: `TRUE` with the cursor just inside its `{`. Other blocks skipped whole, plain pairs passed, compare **before** freeing. `FALSE` at the level's `}`, the end, or a broken file | `keyvalues.c` |
+
+**Test** (`hub_test`, not called): a made-up manifest (an `appid`, a two-level `InstalledDepots` block, a name with a trailing space) as four joined string literals. `enter("AppState")` → 1, line 2; then a key not there → 0 at line 12 (the level's `}`: walked one level, skipped the nested block whole); with the name's closing `"` removed → 0 at line 13 (unclosed string ran to the end: an error, told apart by the line); `enter("InstalledDepots")` → 1, line 5 (just inside its `{`). Lesson: **C doesn't fix the order in which a function's arguments are evaluated**: `g_print(…, hub_kv_enter(&cursor, …), cursor.line)` printed the line from *before* the call; store the result first. Removing only the `"` of a `\"` in C source leaves a `\` that escapes the next `n`.
+
+Bugs on the way: `||` instead of `&&` (walked past the end of the buffer), `*cursor->pos + 1` (the character's value + 1, not the next character), the line counter moved instead of the cursor, a bare `{ }` block, `g_free(text)` on the address of the caller's variable, every string treated as an error in `skip_block`, then a double free, `name` compared with its own value, `hub_kv_skip_block` called in the conditions instead of testing the token, `hub_test` never called, two hubs left paused with Ctrl+Z (`fg` then Ctrl+C).
+
+Code `gaming_hub` `b5934af`.
