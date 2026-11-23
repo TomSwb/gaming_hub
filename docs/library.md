@@ -216,3 +216,8 @@ Bugs on the way: `GError` not set to `NULL`, `g_free(name)` / `name = NULL` on t
 
 Code `gaming_hub` `8648ebc`, `ddb6d3a`.
 
+## Step 6: the emulator source (started 23 Nov)
+
+The platforms file is read with GKeyFile, one section per console (`folder`, `extensions`, `command`, `icon`). Each folder is walked with `GDir`, files are kept by extension (case ignored), and each file becomes one `GAME_EMULATOR` game in the same store as Steam: platform = section name, path = full path, name = the file name until step 7. `command` waits for step 8.
+
+**Decided 23 Nov (option A):** the file is `~/.config/gaming_hub/platforms.ini`, next to `settings.ini`. A missing file means no emulator games and no message (same rule as the settings file); a broken file prints an error line. The repo gets a commented `platforms.example.ini`. Rejected: a default file written by the hub (B: my emulators would be named in the code), sections inside `settings.ini` (C: timer values and consoles mixed).
