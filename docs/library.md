@@ -178,3 +178,41 @@ A reader for Valve's KeyValues text (`libraryfolders.vdf`, `appmanifest_*.acf`),
 Bugs on the way: `||` instead of `&&` (walked past the end of the buffer), `*cursor->pos + 1` (the character's value + 1, not the next character), the line counter moved instead of the cursor, a bare `{ }` block, `g_free(text)` on the address of the caller's variable, every string treated as an error in `skip_block`, then a double free, `name` compared with its own value, `hub_kv_skip_block` called in the conditions instead of testing the token, `hub_test` never called, two hubs left paused with Ctrl+Z (`fg` then Ctrl+C).
 
 Code `gaming_hub` `b5934af`.
+
+## Step 5: the Steam source (23 Nov, ~2.1 h)
+
+The hub reads my real Steam library: `libraryfolders.vdf` → each library's `steamapps/` → every `appmanifest_*.acf` → the tools skipped → the game in the store. **Result on my laptop: 3 libraries, 47 manifests (6 on the SSD, 41 on Steam2TB, 0 in `/var/tmp`), 6 tools skipped, 41 games, no error line.** The made-up games (`hub_library_fake`) are deleted. Names keep their UTF-8 (`Mass Effect™ Legendary Edition`) and lose trailing spaces; the order is the order the folders were walked (sorting: step 13).
+
+**The chain** (each level frees what it made before returning):
+
+```
+hub_steam_scan(store)                     ~/.local/share/Steam/steamapps/libraryfolders.vdf
+└─ hub_kv_enter "libraryfolders"
+   └─ hub_steam_folders                   each numbered block (plain pairs passed over)
+      ├─ hub_steam_lib_path               that block's "path" (its "apps" block skipped)
+      └─ hub_steam_library(store, path)   GDir on <path>/steamapps (missing folder: skipped quietly)
+         └─ hub_steam_app(store, folder, file name)   each appmanifest_*.acf
+            ├─ hub_kv_enter "AppState" + hub_steam_app_read → t_steam_app
+            ├─ hub_steam_app_skip         missing id / name / installdir, LastOwner "0", or id in the skip list
+            ├─ hub_steam_app_add          trimmed name, <folder>/common/<installdir>, t_game_info → hub_library_add
+            └─ hub_steam_app_free
+```
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `hub_kv_load` | `g_file_get_contents` (the whole file, `'\0'`-ended) and the cursor pointed at it; the **caller owns the buffer** and frees it after the cursor is done. `GError *error = NULL` first (GLib's rule); on failure the message is printed and `NULL` returned | `keyvalues_2.c` |
+| `hub_kv_pair` | one key and its value: `KV_STRING` (both owned), `KV_OPEN` (key owned, value `NULL`), `KV_CLOSE` / `KV_ERROR` (nothing to free: an orphaned key is freed and cleared, `*name = NULL`) | `keyvalues_2.c` |
+| `hub_kv_take` | **moves** a string instead of copying it: frees the slot's old string, the slot takes the pointer, the source becomes `NULL` (so the usual free at the bottom of a loop frees nothing) | `keyvalues_2.c` |
+| The level loop | read a pair before the loop; each turn: use it, free `name` / `value`, then **either** skip the block (`KV_ERROR` if that fails) **or** read the next pair; ends on `KV_CLOSE` (clean) or `KV_ERROR`. Used by `hub_steam_lib_path`, `hub_steam_folders`, `hub_steam_app_read` | `steam.c`, `steam_app.c` |
+| `hub_steam_scan` | `g_build_filename(g_get_home_dir(), …, NULL)` (owned; the home dir borrowed), load, enter, folders; a broken file prints `file: line N: not a valid Steam library list`; the cursor lives on the stack, lent with `&` | `steam.c` |
+| `hub_steam_library` | `g_dir_open` (`NULL` = missing library, not an error), `g_dir_read_name` read before the loop and at the bottom (names borrowed from the `GDir`), `g_str_has_prefix` / `_suffix` on the **name** | `steam.c` |
+| `t_steam_app` | `id`, `name`, `dir`, `owner`: **owned** strings (the opposite of `t_game_info`, which lends), cleared with `ft_bzero`, filled by `hub_steam_app_keep` (one `hub_kv_take` per wanted key), freed by `hub_steam_app_free` | `structs.h`, `steam_app.c`, `steam.c` |
+| Skip list | `HUB_STEAM_SKIP "228980;4099820"`: `g_strsplit` → a strv, `g_strv_contains` (needs the cast `(const gchar *const *)`: C won't add that `const` by itself), `g_strfreev` frees the array and its strings. Cheap checks first, the list freed before returning | `steam_app.c`, `defaults.h` |
+| `hub_steam_app_add` | `g_strstrip` trims **in place** (the name is my own writable copy), the install path built and freed, the info lends, the game copies | `steam_app.c` |
+
+Defines for every outside name (`defaults.h`, `HUB_STEAM_*`): one place for Valve's spellings, the skip list and the paths (the libraryfolders path is the one v2 changes for Flatpak Steam).
+
+Bugs on the way: `GError` not set to `NULL`, `g_free(name)` / `name = NULL` on the address instead of the string, a failed skip overwritten by the next read, a comma operator in a `return`, `KV_STRING` tested instead of `KV_OPEN`, `while (dir)` (never ends) with the read result thrown away, prefix / suffix tested on the folder instead of the entry, a built path leaked into `g_print`, 27 lines (the per-manifest work moved into `hub_steam_app`), a field assigned then freed (dangling) and not cleared in the caller (double free), `g_free` on the caller's variable's address, the `"path"` test left over in the manifest loop, the skip returns flipped, `hub_kv_skip_block` used for `hub_steam_app_skip` and the read never called.
+
+Code `gaming_hub` `8648ebc`, `ddb6d3a`.
+
