@@ -19,7 +19,7 @@
 # include <pulse/pulseaudio.h>
 # include <pulse/glib-mainloop.h>
 
-// === Enum === //
+// === Enums === //
 
 typedef enum e_timer_state
 {
@@ -49,7 +49,16 @@ typedef enum e_game_prop
 	GAME_PROP_COUNT
 }	t_game_prop;
 
-// === Struct === //
+typedef enum e_kv_token
+{
+	KV_STRING,
+	KV_OPEN,
+	KV_CLOSE,
+	KV_END,
+	KV_ERROR
+}	t_kv_token;
+
+// === Structs === //
 
 typedef struct s_computer
 {
@@ -171,6 +180,12 @@ typedef struct s_library
 {
 	GListStore	*games;
 }	t_library;
+
+typedef struct s_kv_cursor
+{
+	const char	*pos;
+	gint		line;
+}	t_kv_cursor;
 
 typedef struct s_hub
 {

@@ -49,4 +49,11 @@ void		hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 // library_build.c
 GtkWidget	*hub_build_library(t_hub *hub);
 
+// keyvalues.c
+gboolean	hub_kv_enter(t_kv_cursor *cursor, const gchar *key);
+t_kv_token	hub_kv_next(t_kv_cursor *cursor, gchar **text);
+void		hub_kv_skip_space(t_kv_cursor *cursor);
+t_kv_token	hub_kv_read_string(t_kv_cursor *cursor, gchar **text);
+gboolean	hub_kv_skip_block(t_kv_cursor *cursor);
+
 #endif

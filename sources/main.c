@@ -96,21 +96,15 @@ int	hub_command_line(GApplication *self,
 
 void	hub_test(void)
 {
-	t_game_info	info;
-	t_hub_game	*game;
-	gchar		*name;
-	t_hub_game	*checked;
+	t_kv_cursor	cursor;
+	gboolean	result;
 
-	info.name = "Portal";
-	info.source = GAME_STEAM;
-	info.platform = "Steam";
-	info.id = "400";
-	info.path = "/mnt/Steam2TB/SteamLibrary/steamapps/common/Portal";
-	game = hub_game_new(&info);
-	g_object_get(game, HUB_GAME_NAME, &name, NULL);
-	checked = hub_game_cast((gpointer)game);
-	g_print("name: %s\nsource: %d\nplatform: %s\nid: %s\npath: %s\n",
-		name, game->source, checked->platform, checked->id, checked->path);
-	g_free(name);
-	g_object_unref(game);
+	cursor.pos = "\"AppState\"\n{\n\t\"appid\"\t\"400\"\n"
+		"\t\"InstalledDepots\"\n\t{\n\t\t\"401\"\n\t\t{\n"
+		"\t\t\t\"size\"\t\"1\"\n\t\t}\n\t}\n"
+		"\t\"name\"\t\"Portal \"\n}\n";
+	cursor.line = 1;
+	g_print("kv enter: %d\n", hub_kv_enter(&cursor, "AppState"));
+	result = hub_kv_enter(&cursor, "InstalledDepots");
+	g_print("kv enter: %d, lines: %d\n", result, cursor.line);
 }
