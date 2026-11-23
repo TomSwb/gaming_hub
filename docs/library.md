@@ -109,3 +109,27 @@ The header titles are worse than my file names: English on a French disc (and no
 - `pkg-config --modversion`: **gtk4 4.22.5** (section headers need 4.12+; whether GtkGridView has them too: check at step 16), **gdk-pixbuf-2.0 2.44.4**, **gio-unix-2.0 2.88.4**. Nothing to install; json-glib only when Heroic comes.
 - **Dolphin** (`--help`): `-e <file>` loads the file, `-b` runs without its window and needs `-e`. So `-b -e %f`.
 - **PCSX2 2.8.2** (`-help`, one dash; `--help` prints nothing and exits 1): `-batch` exits when the game shuts down, `-fullscreen`, `--` ends the options so a file name with spaces stays one. So `-batch -fullscreen -- %f`. (`-nogui` would also hide the main window.)
+
+## Step 2: the Game GObject (23 Nov, ~2.7 h)
+
+`HubGame` is the shape of one game: the common format between the sources (Steam, ROMs, later Heroic) and GTK's list and grid. It has to be a GObject because GTK's model-based views (`GListStore`, `GtkListView` / `GtkGridView`) only hold GObjects; in return GTK gives scrolling, widget reuse (only visible tiles exist), section headers for the grouping, filters and sorting. Compare: a SQL table's schema (the struct), its rows (one object per game), its column names (the properties).
+
+**Registered by hand (decided 23 Nov, option B).** The usual macros `G_DECLARE_FINAL_TYPE` / `G_DEFINE_TYPE` are calls outside any function, which norminette can't parse (it then checks nothing in the file), and `#define HUB_TYPE_GAME (hub_game_get_type())` fails its `PREPROC_CONSTANT` rule. So the hub writes what the macros would generate, with GLib's public functions. Rejected: the macros in two files kept as a documented norm exception (A), norminette skipped for the library (C).
+
+| Piece | What | Where |
+| --- | --- | --- |
+| Types | `t_game_source` (`GAME_STEAM`, `GAME_EMULATOR`, `GAME_MANUAL`), `t_game_prop` (`GAME_PROP_NONE` = 0, unused, then one id per property, `GAME_PROP_COUNT`), `t_hub_game` (`GObject parent` **by value and first**, then the fields), `t_hub_game_class` (`GObjectClass parent_class`). The norm forbids struct declarations in a `.c` file, so the fields are public: no getters needed | `structs.h` |
+| `hub_game_get_type` | `g_type_register_static_simple(G_TYPE_OBJECT, "HubGame", sizeof class, class_init, sizeof instance, init, 0)` inside `if (g_once_init_enter(&type_id))` … `g_once_init_leave(&type_id, result)`; `type_id` is a `static gsize` (zero by itself; norminette accepts it). The number changes every run, the name doesn't | `hub_game.c` |
+| `class_init`, `init` | Written with the exact signatures GLib calls (`gpointer klass, gpointer data` / `GTypeInstance *instance, gpointer klass`), so they're passed **without casts** and the compiler checks them | `hub_game.c` |
+| `finalize` | Frees the four strings, then **chains up**: `g_type_class_peek_parent(G_OBJECT_GET_CLASS(object))` gives GObject's class, whose `finalize` frees the object itself (no stored parent pointer: the norm forbids globals) | `hub_game.c` |
+| Properties | `name`, `platform`, `id`, `path` (`g_param_spec_string`), `source` (`g_param_spec_int`, `GAME_STEAM`–`GAME_MANUAL`, default `GAME_MANUAL`: an enum property would need the enum registered as a type too), flags `G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS`, installed at once with `g_object_class_install_properties`. A writable property needs `set_property` on the class **before** install (GLib's `CRITICAL` otherwise) | `hub_game_props.c` |
+| `set_property` / `get_property` | `if` / `else if` on `prop_id` (the norm forbids `switch`); strings stored as copies with `hub_keep`, read out with `g_value_set_string` (copies); unknown ids → `G_OBJECT_WARN_INVALID_PROPERTY_ID` | `hub_game_props.c` |
+| `hub_game_cast` | `G_TYPE_CHECK_INSTANCE_CAST(object, hub_game_get_type(), t_hub_game)`: a wrong object gives a `CRITICAL` instead of silent garbage | `hub_game_props.c` |
+| `hub_game_new` | **Decided 23 Nov (option C):** takes a `t_game_info *` (the five values, strings `const` and only lent) because the norm allows 4 parameters; one `g_object_new` with the five property pairs ending with `NULL`, so `set_property` stays the one place that stores values and the variadic call (unchecked by the compiler) exists only here. The caller gets one reference. Rejected: `g_object_new` with pairs in every parser (mistakes only at runtime), 4 parameters + `g_object_set` | `hub_game.c` |
+
+`hub_mic_keep` became `hub_keep` and moved to `utils.c`: it now stores the games' strings too.
+
+**Test** (`hub_test` in `main.c`, kept but not called): Portal from a `t_game_info` → `hub_game_new` → name read back with `g_object_get` (a copy: freed), platform / id / path read through `hub_game_cast`, `g_object_unref` → `finalize` ran once. Bugs on the way: the two sizes swapped (instance size given as an enum's: memory corruption at runtime), `class_init` **calling** `finalize` instead of storing it, casts on a line of their own (result thrown away; one stopped the build: "statement with no effect"), `g_free(&field)` / `&field = …`, the borrowed string from `g_value_get_string` stored without a copy, `prop_id` confused with `game->id`, a source enum stored as a pointer.
+
+Code `gaming_hub` `1722035` … `7550de8`.
+
