@@ -49,7 +49,7 @@ void	hub_game_set_property(GObject *object, guint prop_id,
 	else if (prop_id == GAME_PROP_PATH)
 		hub_keep(&game->path, g_value_get_string(value));
 	else
-	 	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 }
 
 void	hub_game_get_property(GObject *object, guint prop_id,
@@ -69,5 +69,5 @@ void	hub_game_get_property(GObject *object, guint prop_id,
 	else if (prop_id == GAME_PROP_PATH)
 		g_value_set_string(value, game->path);
 	else
-	 	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 }
