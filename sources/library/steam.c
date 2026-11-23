@@ -115,3 +115,11 @@ gchar	*hub_steam_lib_path(t_kv_cursor *cursor)
 	}
 	return (path);
 }
+
+void	hub_steam_app_free(t_steam_app *app)
+{
+	g_free(app->name);
+	g_free(app->id);
+	g_free(app->dir);
+	g_free(app->owner);
+}

@@ -6,7 +6,7 @@
 /*   By: TomSwb <github.com/TomSwb>           +#+   +#+  +#+     +#+   +#+    */
 /*                                            ########   ###     ###  #####   */
 /*   Created: 2026/11/11 08:45:19 by TomSwb                                   */
-/*   Updated: 2026/11/11 08:45:19 by TomSwb                   bitminded.ch    */
+/*   Updated: 2026/11/23 22:01:33 by TomSwb                   bitminded.ch    */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,15 @@
 # define HUB_STEAM_APPS "steamapps"
 # define HUB_STEAM_PREFIX "appmanifest_"
 # define HUB_STEAM_SUFFIX ".acf"
+# define HUB_STEAM_ID "appid"
+# define HUB_STEAM_NAME "name"
+# define HUB_STEAM_DIR "installdir"
+# define HUB_STEAM_OWNER "LastOwner"
+# define HUB_STEAM_SKIP "228980;4099820"
+# define HUB_STEAM_NO_OWNER "0"
+# define HUB_STEAM_SEP ";"
+# define HUB_STEAM_COMMON "common"
+# define HUB_STEAM_PLATFORM "Steam"
+# define HUB_STEAM_STATE "AppState"
 
 #endif

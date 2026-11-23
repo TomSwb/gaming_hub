@@ -38,7 +38,6 @@ t_hub_game	*hub_game_cast(gpointer object);
 
 // library_store.c
 void		hub_library_add(GListStore *store, const t_game_info *info);
-void		hub_library_fake(GListStore *store);
 
 // library_rows.c
 void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
@@ -67,9 +66,16 @@ void		hub_steam_scan(GListStore *store);
 gboolean	hub_steam_folders(GListStore *store, t_kv_cursor *cursor);
 void		hub_steam_library(GListStore *store, const gchar *lib);
 gchar		*hub_steam_lib_path(t_kv_cursor *cursor);
+void		hub_steam_app_free(t_steam_app *app);
 
 // steam_app.c
 void		hub_steam_app(GListStore *store, const gchar *folder,
 				const gchar *name);
+void		hub_steam_app_keep(t_steam_app *app, const gchar *key,
+				gchar **value);
+gboolean	hub_steam_app_read(t_kv_cursor *cursor, t_steam_app *app);
+gboolean	hub_steam_app_skip(const t_steam_app *app);
+void		hub_steam_app_add(GListStore *store, t_steam_app *app,
+				const gchar *folder);
 
 #endif

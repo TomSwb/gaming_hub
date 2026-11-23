@@ -187,6 +187,14 @@ typedef struct s_kv_cursor
 	gint		line;
 }	t_kv_cursor;
 
+typedef struct s_steam_app
+{
+	gchar	*id;
+	gchar	*name;
+	gchar	*dir;
+	gchar	*owner;
+}	t_steam_app;
+
 typedef struct s_hub
 {
 	t_computer		computer;
