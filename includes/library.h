@@ -36,4 +36,8 @@ void		hub_game_get_property(GObject *object, guint prop_id,
 				GValue *value, GParamSpec *pspec);
 t_hub_game	*hub_game_cast(gpointer object);
 
+// library_store.c
+void		hub_library_add(GListStore *store, const t_game_info *info);
+void		hub_library_fake(GListStore *store);
+
 #endif

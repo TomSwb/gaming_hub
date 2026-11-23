@@ -52,6 +52,7 @@ void		hub_headset_init(t_hub *hub);
 
 // inits_2.c
 void		hub_power_init(t_hub *hub);
+void		hub_library_init(t_hub *hub);
 
 // main_build.c
 GtkWidget	*hub_build_box(t_hub *hub);

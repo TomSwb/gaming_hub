@@ -18,3 +18,8 @@ void	hub_power_init(t_hub *hub)
 	hub->power.pow_but_row = NULL;
 	hub->power.proxy = NULL;
 }
+
+void	hub_library_init(t_hub *hub)
+{
+	hub->library.games = NULL;
+}

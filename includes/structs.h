@@ -167,6 +167,11 @@ typedef struct s_hub_game_class
 	GObjectClass	parent_class;
 }	t_hub_game_class;
 
+typedef struct s_library
+{
+	GListStore	*games;
+}	t_library;
+
 typedef struct s_hub
 {
 	t_computer		computer;
@@ -174,6 +179,7 @@ typedef struct s_hub
 	t_timer			timer;
 	t_headset		headset;
 	t_power			power;
+	t_library		library;
 	GtkWidget		*stack;
 	GApplication	*app;
 }	t_hub;
