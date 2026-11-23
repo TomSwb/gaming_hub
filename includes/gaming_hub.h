@@ -29,6 +29,8 @@
 
 // sources/
 
+void		hub_test(void);
+
 // main.c
 void		hub_activate(GtkApplication *self, gpointer user_data);
 gboolean	hub_tick(gpointer user_data);

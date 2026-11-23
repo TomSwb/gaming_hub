@@ -25,5 +25,6 @@
 GType	hub_game_get_type(void);
 void	hub_game_class_init(gpointer klass, gpointer data);
 void	hub_game_init(GTypeInstance *instance, gpointer klass);
+void	hub_game_finalize(GObject *object);
 
 #endif

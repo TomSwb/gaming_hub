@@ -61,7 +61,14 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	hub_bluez_connect(hub);
 	hub_tick(hub);
 	gtk_window_present(window);
-	g_print("%s %lu %lu\n", g_type_name(hub_game_get_type()), hub_game_get_type(), hub_game_get_type());
+	hub_test();
+}
+
+void	hub_test(void)
+{
+	g_print("%s %lu %lu\n", g_type_name(hub_game_get_type()),
+		hub_game_get_type(), hub_game_get_type());
+	g_object_unref(g_object_new(hub_game_get_type(), NULL));
 }
 
 gboolean	hub_tick(gpointer user_data)

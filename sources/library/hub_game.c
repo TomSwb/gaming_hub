@@ -30,12 +30,34 @@ GType	hub_game_get_type(void)
 
 void	hub_game_class_init(gpointer klass, gpointer data)
 {
-	(void)klass;
 	(void)data;
+	G_OBJECT_CLASS(klass)->finalize = hub_game_finalize;
 }
 
 void	hub_game_init(GTypeInstance *instance, gpointer klass)
 {
-	(void)instance;
+	t_hub_game	*game;
+
 	(void)klass;
+	game = (t_hub_game *)instance;
+	game->name = NULL;
+	game->platform = NULL;
+	game->id = NULL;
+	game->path = NULL;
+	game->source = GAME_MANUAL;
+}
+
+void	hub_game_finalize(GObject *object)
+{
+	t_hub_game		*game;
+	GObjectClass	*parent;
+
+	g_print("finalize\n");
+	game = (t_hub_game *)object;
+	g_free(game->name);
+	g_free(game->platform);
+	g_free(game->id);
+	g_free(game->path);
+	parent = g_type_class_peek_parent(G_OBJECT_GET_CLASS(object));
+	parent->finalize(object);
 }

@@ -146,8 +146,8 @@ typedef struct s_power
 typedef struct s_hub_game
 {
 	GObject			parent;
-	gchar			*name;
 	t_game_source	source;
+	gchar			*name;
 	gchar			*platform;
 	gchar			*id;
 	gchar			*path;
