@@ -133,3 +133,27 @@ The header titles are worse than my file names: English on a French disc (and no
 
 Code `gaming_hub` `1722035` … `7550de8`.
 
+## Step 3: the library page and the list view (23 Nov, ~1.1 h)
+
+The library page is the first page of the stack: a scrolling list with one row per game (name on the left, platform on the right), filled with three made-up games until the Steam source arrives.
+
+**The chain.** A GTK list is two inputs joined in a view: the **data** side (`GListStore` of `HubGame`s → `GtkSingleSelection`, which only adds "which row is picked") and the **drawing** side (`GtkSignalListItemFactory`, the row recipe). `GtkListView` asks the selection how many games there are, works out which rows fit on screen, and asks the factory to build and fill only those; a `GtkScrolledWindow` around it shows one part and tells the view which part is visible. Compare: the store is a table, the selection the highlighted row, the factory the template for one row of a web page, the view the page that renders only what fits, the scrolled window the browser window. The grid (step 12) will be a second view on the same selection with another factory.
+
+**The factory's life cycle.** `setup` builds an empty row once per row widget (only enough to fill the screen); `bind` fills a row with one game, again each time scrolling reuses that row for another game. `unbind` / `teardown` undo what `bind` / `setup` did; not needed here (labels are just overwritten). The order of the two `g_signal_connect` calls doesn't matter: GTK fires the signals, always `setup` before `bind`.
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `t_library` | `GListStore *games`, **borrowed** (the selection owns the store), so `hub_free_hub` doesn't unref it; set to `NULL` by `hub_library_init`. Will grow (running game, volume monitor, inner stack for list / grid, filters) | `structs.h`, `inits_2.c` |
+| `hub_library_add` | `hub_game_new` (1 ref, mine) → `g_list_store_append` (transfer none: the store adds its own, 2) → `g_object_unref` (1, the store's). Used later by every source | `library_store.c` |
+| `hub_library_fake` | Portal / Steam, Super Mario Galaxy / Wii, Jak X / PS2 from one reused `t_game_info` (it only lends; `set_property` copies). Deleted at step 5 | `library_store.c` |
+| `hub_row_setup` | The empty row: `hub_labelled(NULL, gtk_label_new(NULL))` (expanding name label + platform label), handed to the row with `gtk_list_item_set_child` (which takes the floating reference) | `library_rows.c` |
+| `hub_row_bind` | `gtk_list_item_get_item` → `hub_game_cast`, `gtk_list_item_get_child`, first / last child of the row → `gtk_label_set_text` with name / platform. Everything borrowed, nothing freed; `gtk_label_set_text` refuses `NULL` (remember for manual entries, step 15) | `library_rows.c` |
+| `hub_build_library` | `g_list_store_new(hub_game_get_type())` → fake games → `gtk_single_selection_new` (**transfer full**: takes the store) → factory + both signals → `gtk_list_view_new` (**transfer full**: takes the selection and the factory) → scrolled window (`vexpand`). No unref anywhere: each object belongs to the next, the stack takes the page. 5 locals, the norm's maximum | `library_build.c` |
+| Stack | `"library"` added first in `hub_build_box`; **decided (B):** shown at startup until step 8 wires "pick a game → plan" (the plan page is unreachable meanwhile; I'm not playing until the library is done). To get the plan back early, delete that line: the norm forbids comments inside a function | `main_build.c` |
+
+`GtkSingleSelection` autoselects the first row (Portal is highlighted at start): kept, for "Enter starts the highlighted game" later. Arrow keys and clicks move the highlight. Screenshot: `assets/historic/library_done/first_test_rows.png`.
+
+Bugs on the way: the `setup` row never handed to the list item (empty row and a leaked floating widget) inside an extra box, a variable named `label` holding a box, a space before `)` and a split right after `(`, the `bind` signal not connected, `library_rows.c` missing from the Makefile (the clean build hadn't compiled it), header prototypes misaligned.
+
+Code `gaming_hub` `e117fa0` … `96731cd`.
+
