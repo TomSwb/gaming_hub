@@ -21,7 +21,7 @@
 
 // sources/library/
 
-// hub_games.c
+// hub_game.c
 GType	hub_game_get_type(void);
 
 #endif

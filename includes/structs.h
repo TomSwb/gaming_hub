@@ -34,7 +34,7 @@ typedef enum e_timer_state
 typedef enum e_game_source
 {
 	GAME_STEAM,
-	GAME_EMULATORS,
+	GAME_EMULATOR,
 	GAME_MANUAL
 }	t_game_source;
 
@@ -147,7 +147,7 @@ typedef struct s_hub_game
 {
 	GObject			parent;
 	gchar			*name;
-	t_game_source	*source;
+	t_game_source	source;
 	gchar			*platform;
 	gchar			*id;
 	gchar			*path;

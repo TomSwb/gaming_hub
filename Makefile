@@ -72,7 +72,7 @@ POWER = sources/power/power.c \
 	sources/power/profiles.c \
 	sources/power/power_build.c
 
-LIBRARY = sources/library/hub_games.c
+LIBRARY = sources/library/hub_game.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \
@@ -80,8 +80,8 @@ SOURCES = sources/main.c \
 	sources/main_build.c
 
 FILES = ${SOURCES} \
-	${COMPUTER} ${TIMER} \
-	${GAME} ${HEADSET} ${POWER}
+	${COMPUTER} ${TIMER} ${GAME} \
+	${HEADSET} ${POWER} ${LIBRARY}
 
 OBJS = ${FILES:.c=.o}
 
