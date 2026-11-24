@@ -50,6 +50,7 @@ void	hub_free_hub(t_hub *hub)
 		g_object_unref(hub->power.proxy);
 	if (hub->headset.obj_man)
 		g_object_unref(hub->headset.obj_man);
+	g_clear_object(&hub->library.picked);
 }
 
 void	hub_gfree_hub(t_hub *hub)

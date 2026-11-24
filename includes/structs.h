@@ -179,6 +179,7 @@ typedef struct s_hub_game_class
 typedef struct s_library
 {
 	GListStore	*games;
+	t_hub_game	*picked;
 }	t_library;
 
 typedef struct s_kv_cursor
