@@ -12,7 +12,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 4–5 | KeyValues parser, Steam source | 4–6 h |
 | 6 | Emulator source: platforms file, ROM folders by extension | 3–4 h |
 | 7 | Names from file names, disc header check | 1–2 h (done 24 Nov, ~1.2 h) |
-| 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h |
+| 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h (in progress: pieces 1–4 of 9 done 24 Nov, ~2.4 h) |
 | 9 | The hub's library file | 2–3 h |
 | 10 | Three states, live drives | 2–3 h |
 | 11 | Silent session log + play history | 3–5 h |
@@ -284,3 +284,86 @@ hub_platform_add(store, group, folder, name)
 Bugs on the way: locals named `open` / `close` (they hide the POSIX functions piece 4 needed: renamed `bracket`, `paren_end`), `false` for `FALSE`, `open` undeclared (`<fcntl.h>`), the magic words compared at offset 0 and with the logic inverted (`!ft_memcmp` = a match), then against the empty `id` buffer, `close(-1)` when `open` failed, the title printed as the disc's ID and no `\n`, the check written but not called (a silent run proved nothing until it was wired).
 
 Code `gaming_hub` `936239b`, `7679a46`.
+
+## Step 8: launch and the session loop (24 Nov, in progress, ~2.4 h so far)
+
+From the library to a running game and back. Split into 9 pieces; **pieces 1–4 done 24 Nov** (look by hand, decisions, pick a game, launch a Steam game), 5–9 next.
+
+| # | Piece | State |
+| --- | --- | --- |
+| 1 | Look by hand: PrimeHack's flags, an emulator and a `steam://` link from the terminal | done (~0.3 h) |
+| 2 | Decisions: where the command comes from, what a pick does, how the hub's own launches fit `--start` / `--end` | done (~0.1 h) |
+| 3 | Pick a game: `activate`, the picked game, plan page with Back and "Game:", pages that follow the state, sections hidden on the library | done (~1.25 h) |
+| 4 | Launch a Steam game from Start, "Starting … / Playing …" on the session page | done (~0.5 h) |
+| 5 | Launch an emulator game: `command` on the game (`t_platform`), argv with `%f` as one element, `gamemoderun` in front, `GSubprocess` | next |
+| 6 | Watch the process: `g_subprocess_wait_async`, exit code, then `hub_game_closed` | |
+| 7 | Between games = the library with the timer and End session on top; a pick launches at once | |
+| 8 | Rescan when the library page is shown + a Refresh button | |
+| 9 | Tests (Steam, Dolphin, PCSX2, PrimeHack, switching games, End session), norm, ownership | |
+
+### Piece 1: by hand
+
+| Launch | Returns | The hub learns the game closed from |
+| --- | --- | --- |
+| `steam://rungameid/<id>` (`gio open`, the same lookup as `g_app_info_launch_default_for_uri`) | **at once**, before the game (or even Steam) has started | GameMode's `end=` hook (`--end`) only |
+| `gamemoderun flatpak run io.github.shiiion.primehack -b -e <file>` | when the game's window closes: `0`; at once with `1` when the file doesn't exist | the process ending (and `--end` from GameMode too) |
+
+- **PrimeHack** (`--help`, a Dolphin fork, prints `Usage: dolphin-emu`): `-e <file>` and `-b, --batch` ("Requires --exec or --nand-title"), so `-b -e %f` is right, like Dolphin.
+- GameMode's `start=` hook fires for these launches too (the hub opened), so the hub will get `--start` / `--end` for its **own** launches.
+- `gamemoderun flatpak run …` prints GameMode `ERROR` lines about the portal (`bwrapinfo.json: empty file` when registering, `/proc/pid/…: No such file` when unregistering), also with a real game; GameMode still switched on (the hook ran). Looks like the preloaded library registering again from processes further down the Flatpak chain. Harmless, noted.
+- Steam games: inside Steam's container the GameMode library isn't found for Portal (32-bit: `libgamemodeauto.so.0 … cannot be preloaded`, `dlopen failed - libgamemode.so`); GameMode's tweaks probably don't apply to 32-bit games (32-bit GameMode package?). Not the hub's problem; the hooks still fired.
+- File names with spaces and brackets: in fish a list item (`set game …/*.iso; … $game[1]`) stays **one argument**, exactly what the hub's argv does with `%f`. Tab completion stops at the part all three Metroid files share.
+- Starting a game while Steam isn't running starts Steam first (slow; Portal crashed once that way); the link still returns at once.
+
+### Piece 2: decisions (24 Nov)
+
+- **(2a) Option A: the command goes on the game.** `hub_platform_read` reads `command=` with `folder=`; every game gets a sixth property, `command`; a section's values travel together in a `t_platform` struct (passed by pointer, keeps `platforms.c` under 4 parameters). Launching needs only the game; manual entries (step 15) use the same field; a missing `command=` is found at scan time; `platform` stays free to become a display name later; `icon=` will travel the same way. Rejected: (B) read `platforms.ini` again at launch by the section name (ties launching to the name forever, no per-game command, icons impossible in `bind`), (C) a section → command `GHashTable` in `t_library` (same ties, more ownership).
+- **(2b) Option A: double-click or Enter** (GTK's default `activate`; single click only highlights). Rejected: single-click activate (hover highlights rows, a stray click starts a game).
+
+  | State | A pick… |
+  | --- | --- |
+  | No session (planning, ended) | keeps the game, shows the **plan page** with "Game: Portal" and **Back to library**; **Start** launches the game and starts the countdown together |
+  | Between games | launches **at once** (the session is already planned; piece 7) |
+  | Playing, paused, break | can't happen: the library isn't shown |
+
+  Hub opened by GameMode (`--start`, a game started elsewhere) → plan page with no game; from the app menu → library.
+- **(2c)** (1A) the state becomes **playing when the hub launches**; the `--start` that follows only updates the label. Rejected: (1B) wait for `--start` (a game without GameMode would never start the session). (2) Emulators: the process watch **and** `--end` both call `hub_game_closed`, which acts only once; the watch stays (works without GameMode, gives the exit code). (3) A launch that fails (an error from GLib) changes **nothing**, one error line; an emulator ending with a non-zero code counts as a close (between games) plus one error line.
+- **The library page shows only the library** (decided 24 Nov): the Sound / power / stats sections show on every other page (plan, session, break, between games).
+- Layout gap between the timer and the Sound section (the stack takes the leftover height because the library's scrolled window expands): left for the **styling step** (idea: plan centred under the Back row with `vexpand` + `valign` on the plan widget).
+
+### Piece 3: pick a game
+
+```
+GtkListView "activate" (double-click / Enter)
+└─ hub_library_activate            game at position → hub->library.picked, "Game: …", plan page
+plan page = hub_build_plan_page    [Back to library]  Game: Portal   (GtkCenterBox)
+│                                  └─ hub_build_plan (unchanged)
+└─ Back → hub_library_back         picked dropped, library page
+stack "notify::visible-child-name"
+└─ hub_page_changed                hub->sections hidden on "library", shown elsewhere
+```
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `t_library.picked` | `t_hub_game *`, **owns one reference**: the game the plan page will start, then the game being played (kept after the session for step 11's log); `NULL` = none. Dropped with `g_clear_object` (unref + `NULL` in one call, safe on `NULL`) at every new pick, Back, `--start` without a session, and exit. A plain pointer would dangle after the rescan (piece 8) empties the store | `structs.h`, `inits_2.c`, `utils.c` |
+| `hub_library_activate` | the signal's fixed signature (`GtkListView *`, `guint position`, `gpointer`); `g_list_model_get_item` on the view's model (`gtk_list_view_get_model`: transfer none, nested) is **transfer full**, so the reference is **moved** into `picked` (no ref, no unref); `Game: %s` with `g_strdup_printf` (owned, freed after `gtk_label_set_text`, which copies) | `library_pick.c` |
+| `hub_build_plan_page` | vertical box: a `GtkCenterBox` row (start = Back, center = the "Game:" label, exactly centred whatever the button's width), then `hub_build_plan(hub)`; `t_library.next` borrows the label. Replaces `hub_build_plan` as the stack's `"plan"` page | `library_pick.c`, `main_build.c` |
+| `hub_library_back` | `(void)self`, drop `picked`, show `"library"` (`set_visible_child_name`: `add_named` happens once, at build) | `library_pick.c` |
+| Pages | `hub_show_timer_page`: planning / ended → **`"library"`** (was `"plan"`); the forced `"library"` line in `hub_build_box` (the step-3 stop-gap) removed. `hub_game_started`: `--start` while planning or ended → `"plan"`, `picked` dropped and the label emptied (the hub doesn't know that game) | `show.c`, `main_build.c`, `game_events.c` |
+| `hub->sections` | a vertical box holding Sound, power and stats, borrowed by `t_hub` like `stack` | `structs.h`, `inits.c`, `main_build.c` |
+| `hub_page_changed` | `GObject::notify` handler on the stack's `visible-child-name` property: one line, `gtk_widget_set_visible(hub->sections, g_strcmp0(name, "library") != 0)` (`g_strcmp0` accepts the `NULL` name). Catches every page switch, wherever it comes from. **Order matters:** `hub->sections` is created and the handler connected **before** the first `add_named`, the only moment the library *becomes* visible (the later `hub_show_timer_page` sets the same page: no change, no notify) | `main_build.c` |
+
+### Piece 4: launch a Steam game
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `hub_launch_steam` | `HUB_STEAM_RUN` `"steam://rungameid/%s"` + the id (owned, freed) → `g_app_info_launch_default_for_uri(uri, NULL, &error)`; `GError` from `NULL`, read and freed only on failure, one line on stderr | `launch.c` |
+| `hub_launch` | the dispatcher, `TRUE` = go ahead: no picked game (`--start` case) → `TRUE`; Steam → its result; other games → `<name>: can't launch this game yet` and `FALSE` (until piece 5); on success `hub_show_playing(hub, HUB_STARTING)`. The `NULL` test comes first in the Steam test (`picked && picked->source == …`: `&&` stops before reading `source`) | `launch.c` |
+| `hub_start_clicked` | `if (!hub_launch(hub)) return ;` first, so a failed launch changes nothing | `buttons.c` |
+| `t_library.playing`, `hub_show_playing` | a label at the top of the session page (borrowed); the helper fills it with a format define and the picked game's name (`HUB_STARTING` `"Starting %s ..."`, `HUB_PLAYING` `"Playing %s"`), or empties it with no game. `Starting …` after the launch; `--start` while playing, paused or in a break (the game is really up) → `Playing …`. Steam can take a minute (Steam starting, Proton, shaders), so the label shows it's on its way | `timer_build.c`, `game_events.c`, `defaults.h` |
+
+**Tests:** pick (double-click and Enter) → plan page; Back → library; start → library only, the sections on every other page; Portal → Start → `Starting Portal ...` → `Playing Portal` → quit → between games; a dump → Start → the error line, still on the plan page; `./gaming_hub --start` (hub closed) → plan page, empty label → Start → countdown only, no crash; norminette clean.
+
+Bugs on the way: the handler connected without `G_CALLBACK` (incompatible pointer type), the plan page built but never added to the stack (`Child name 'plan' not found`), then the library's `add_named` deleted instead of the forced line, `add_named` used for Back (a second library and a full rescan), `(void)self` missing, the notify handler switching the **page** back to the library instead of hiding the sections (then still inside an `if`, so it never hid), the "no game" case without `return` (a `NULL` dereference), a define named `HUB_PLAYINGloading` (pushed code didn't build), the early return that skipped emptying the label, then `NULL->source` when it was removed, a test call that launched every pick (dumps included) through Steam, `next` / `sections` not set in the inits.
+
+Code `gaming_hub` `5140213` … `cde637d`.
