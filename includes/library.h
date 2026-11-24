@@ -100,4 +100,8 @@ gboolean	hub_name_parse(const gchar *file, t_dump_name *dump);
 gboolean	hub_disc_id(const gchar *path, gchar *id);
 void		hub_disc_check(const gchar *path, t_dump_name *dump);
 
+// library_pick.c
+void		hub_library_activate(GtkListView *self, guint position,
+				gpointer user_data);
+
 #endif
