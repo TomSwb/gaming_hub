@@ -180,6 +180,7 @@ typedef struct s_library
 {
 	GListStore	*games;
 	t_hub_game	*picked;
+	GtkWidget	*next;
 }	t_library;
 
 typedef struct s_kv_cursor

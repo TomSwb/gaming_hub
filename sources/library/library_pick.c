@@ -17,12 +17,43 @@ void	hub_library_activate(GtkListView *self, guint position,
 {
 	t_hub		*hub;
 	t_hub_game	*game;
+	gchar		*text;
 
 	hub = user_data;
 	game = hub_game_cast(g_list_model_get_item(G_LIST_MODEL(
 					gtk_list_view_get_model(self)), position));
 	g_clear_object(&hub->library.picked);
 	hub->library.picked = game;
-	g_print("picked: %s\n", hub->library.picked->name);
+	text = g_strdup_printf("Game: %s", hub->library.picked->name);
+	gtk_label_set_text(GTK_LABEL(hub->library.next), text);
 	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");
+	g_free(text);
+}
+
+GtkWidget	*hub_build_plan_page(t_hub *hub)
+{
+	GtkWidget	*page;
+	GtkWidget	*row;
+	GtkWidget	*back;
+
+	page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+	row = gtk_center_box_new();
+	back = gtk_button_new_with_label("Back to library");
+	g_signal_connect(back, "clicked", G_CALLBACK(hub_library_back), hub);
+	hub->library.next = gtk_label_new(NULL);
+	gtk_center_box_set_start_widget(GTK_CENTER_BOX(row), back);
+	gtk_center_box_set_center_widget(GTK_CENTER_BOX(row), hub->library.next);
+	gtk_box_append(GTK_BOX(page), row);
+	gtk_box_append(GTK_BOX(page), hub_build_plan(hub));
+	return (page);
+}
+
+void	hub_library_back(GtkButton *self, gpointer user_data)
+{
+	t_hub	*hub;
+
+	(void)self;
+	hub = user_data;
+	g_clear_object(&hub->library.picked);
+	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "library");
 }

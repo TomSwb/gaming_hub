@@ -103,5 +103,7 @@ void		hub_disc_check(const gchar *path, t_dump_name *dump);
 // library_pick.c
 void		hub_library_activate(GtkListView *self, guint position,
 				gpointer user_data);
+GtkWidget	*hub_build_plan_page(t_hub *hub);
+void		hub_library_back(GtkButton *self, gpointer user_data);
 
 #endif
