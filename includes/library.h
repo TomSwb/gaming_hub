@@ -85,5 +85,10 @@ void		hub_platform_read(GListStore *store, GKeyFile *key_file,
 gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions);
 void		hub_platform_folder(GListStore *store, const gchar *group,
 				const gchar *folder, gchar **extensions);
+void		hub_platform_add(GListStore *store, const gchar *group,
+				const gchar *folder, const gchar *name);
+
+// paths.c
+void		hub_path_expand(gchar **path);
 
 #endif

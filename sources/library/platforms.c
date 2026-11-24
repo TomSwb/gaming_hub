@@ -50,7 +50,10 @@ void	hub_platform_read(GListStore *store, GKeyFile *key_file,
 		g_printerr("%s: [%s] needs %s= and %s=\n", HUB_PLATFORMS_FILE,
 			group, HUB_PLAT_FOLDER, HUB_PLAT_EXTS);
 	else
+	{
+		hub_path_expand(&folder);
 		hub_platform_folder(store, group, folder, extensions);
+	}
 	g_free(folder);
 	g_strfreev(extensions);
 }
@@ -80,7 +83,6 @@ void	hub_platform_folder(GListStore *store, const gchar *group,
 	GDir		*dir;
 	const gchar	*name;
 
-	(void)store;
 	dir = g_dir_open(folder, 0, NULL);
 	if (!dir)
 		return ;
@@ -88,8 +90,24 @@ void	hub_platform_folder(GListStore *store, const gchar *group,
 	while (name)
 	{
 		if (hub_platform_ext_ok(name, extensions))
-			g_print("group: %s, name: %s\n", group, name);
+			hub_platform_add(store, group, folder, name);
 		name = g_dir_read_name(dir);
 	}
 	g_dir_close(dir);
+}
+
+void	hub_platform_add(GListStore *store, const gchar *group,
+			const gchar *folder, const gchar *name)
+{
+	t_game_info	info;
+	gchar		*path;
+
+	path = g_build_filename(folder, name, NULL);
+	info.source = GAME_EMULATOR;
+	info.platform = group;
+	info.name = name;
+	info.id = NULL;
+	info.path = path;
+	hub_library_add(store, &info);
+	g_free(path);
 }
