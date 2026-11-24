@@ -20,7 +20,6 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	stack = gtk_stack_new();
 	hub->stack = stack;
-	gtk_stack_add_named(GTK_STACK(stack), hub_build_library(hub), "library");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan_page(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");

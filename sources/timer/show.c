@@ -36,7 +36,7 @@ void	hub_show_timer_page(t_hub *hub)
 	playing = hub->timer.state == TIMER_PLAYING
 		|| hub->timer.state == TIMER_PAUSED;
 	if (planning)
-		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");
+		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "library");
 	else if (playing)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
 	else if (hub->timer.state == TIMER_BREAK)
