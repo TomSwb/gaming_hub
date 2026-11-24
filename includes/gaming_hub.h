@@ -44,7 +44,6 @@ void		hub_gfree_hub(t_hub *hub);
 void		hub_keep(gchar **slot, const char *name);
 void		hub_window_destroyed(GtkWidget *self, gpointer user_data);
 
-
 // inits.c
 void		hub_struct_init(t_hub *hub);
 void		hub_computer_init(t_hub *hub);

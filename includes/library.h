@@ -80,5 +80,7 @@ void		hub_steam_app_add(GListStore *store, t_steam_app *app,
 
 // platforms.c
 void		hub_platforms_scan(GListStore *store);
+void		hub_platform_read(GListStore *store, GKeyFile *key_file,
+				const gchar *group);
 
 #endif

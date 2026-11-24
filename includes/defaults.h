@@ -81,5 +81,7 @@
 
 # define HUB_CONFIG_DIR "gaming_hub"
 # define HUB_PLATFORMS_FILE "platforms.ini"
+# define HUB_PLAT_FOLDER "folder"
+# define HUB_PLAT_EXTS "extensions"
 
 #endif
