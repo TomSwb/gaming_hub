@@ -19,7 +19,6 @@ void	hub_platforms_scan(GListStore *store)
 	gchar		**groups;
 	gsize		i;
 
-	(void)store;
 	i = 0;
 	path = g_build_filename(g_get_user_config_dir(),
 			HUB_CONFIG_DIR, HUB_PLATFORMS_FILE, NULL);
@@ -43,26 +42,54 @@ void	hub_platform_read(GListStore *store, GKeyFile *key_file,
 {
 	gchar	*folder;
 	gchar	**extensions;
-	guint	i;
-	guint	j;
 
-	(void)store;
-	j = 0;
 	folder = g_key_file_get_string(key_file, group, HUB_PLAT_FOLDER, NULL);
 	extensions = g_key_file_get_string_list(key_file, group,
 			HUB_PLAT_EXTS, NULL, NULL);
 	if (!folder || !extensions)
-		g_printerr("%s: [%s] needs %s= and %s=\n", HUB_PLATFORMS_FILE, group, HUB_PLAT_FOLDER, HUB_PLAT_EXTS);
+		g_printerr("%s: [%s] needs %s= and %s=\n", HUB_PLATFORMS_FILE,
+			group, HUB_PLAT_FOLDER, HUB_PLAT_EXTS);
 	else
-	{
-		i = g_strv_length(extensions);
-		g_print("group: %s, file: %s, #extensions: %u\n", group, folder, i);
-		while (j < i)
-		{
-			g_print("extensions: %s\n", extensions[j]);
-			j++;
-		}
-	}
+		hub_platform_folder(store, group, folder, extensions);
 	g_free(folder);
 	g_strfreev(extensions);
+}
+
+gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions)
+{
+	const gchar	*dot;
+	gsize		i;
+
+	dot = ft_strrchr(name, '.');
+	if (!dot || dot == name)
+		return (FALSE);
+	dot++;
+	i = 0;
+	while (extensions[i])
+	{
+		if (g_ascii_strcasecmp(dot, extensions[i]) == 0)
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
+
+void	hub_platform_folder(GListStore *store, const gchar *group,
+			const gchar *folder, gchar **extensions)
+{
+	GDir		*dir;
+	const gchar	*name;
+
+	(void)store;
+	dir = g_dir_open(folder, 0, NULL);
+	if (!dir)
+		return ;
+	name = g_dir_read_name(dir);
+	while (name)
+	{
+		if (hub_platform_ext_ok(name, extensions))
+			g_print("group: %s, name: %s\n", group, name);
+		name = g_dir_read_name(dir);
+	}
+	g_dir_close(dir);
 }

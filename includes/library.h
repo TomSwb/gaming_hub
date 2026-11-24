@@ -82,5 +82,8 @@ void		hub_steam_app_add(GListStore *store, t_steam_app *app,
 void		hub_platforms_scan(GListStore *store);
 void		hub_platform_read(GListStore *store, GKeyFile *key_file,
 				const gchar *group);
+gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions);
+void		hub_platform_folder(GListStore *store, const gchar *group,
+				const gchar *folder, gchar **extensions);
 
 #endif
