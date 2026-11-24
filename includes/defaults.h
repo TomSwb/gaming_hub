@@ -78,6 +78,7 @@
 # define HUB_STEAM_COMMON "common"
 # define HUB_STEAM_PLATFORM "Steam"
 # define HUB_STEAM_STATE "AppState"
+# define HUB_STEAM_RUN "steam://rungameid/%s"
 
 # define HUB_CONFIG_DIR "gaming_hub"
 # define HUB_PLATFORMS_FILE "platforms.ini"
