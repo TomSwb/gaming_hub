@@ -96,6 +96,6 @@
 # define HUB_MAGIC_LEN 4
 
 # define HUB_STARTING "Starting %s ..."
-# define HUB_PLAYINGloading "Playing %s"
+# define HUB_PLAYING "Playing %s"
 
 #endif
