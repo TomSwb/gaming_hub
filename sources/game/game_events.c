@@ -45,4 +45,22 @@ void	hub_game_started(t_hub *hub)
 		g_clear_object(&hub->library.picked);
 		gtk_label_set_text(GTK_LABEL(hub->library.next), "");
 	}
+	else if (hub->timer.state == TIMER_PLAYING
+		|| hub->timer.state == TIMER_PAUSED
+		|| hub->timer.state == TIMER_BREAK)
+		hub_show_playing(hub, HUB_PLAYING);
+}
+
+void	hub_show_playing(t_hub *hub, const gchar *format)
+{
+	gchar	*text;
+
+	if (!hub->library.picked)
+	{
+		gtk_label_set_text(GTK_LABEL(hub->library.playing), "");
+		return ;
+	}
+	text = g_strdup_printf(format, hub->library.picked->name);
+	gtk_label_set_text(GTK_LABEL(hub->library.playing), text);
+	g_free(text);
 }

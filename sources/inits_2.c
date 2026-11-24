@@ -24,4 +24,5 @@ void	hub_library_init(t_hub *hub)
 	hub->library.games = NULL;
 	hub->library.picked = NULL;
 	hub->library.next = NULL;
+	hub->library.playing = NULL;
 }

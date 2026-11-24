@@ -68,10 +68,12 @@ GtkWidget	*hub_build_session(t_hub *hub)
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
+	hub->library.playing = gtk_label_new(NULL);
 	gtk_box_append(GTK_BOX(box2), hub->timer.pause);
 	gtk_box_append(GTK_BOX(box2), hub->timer.stop);
 	gtk_widget_set_halign(box2, GTK_ALIGN_CENTER);
 	gtk_widget_set_valign(box2, GTK_ALIGN_CENTER);
+	gtk_box_append(GTK_BOX(box), hub->library.playing);
 	gtk_box_append(GTK_BOX(box), hub->timer.countdown);
 	gtk_box_append(GTK_BOX(box), hub->timer.eye);
 	gtk_box_append(GTK_BOX(box),

@@ -95,4 +95,7 @@
 # define HUB_GC_MAGIC "\xC2\x33\x9F\x3D"
 # define HUB_MAGIC_LEN 4
 
+# define HUB_STARTING "Starting %s ..."
+# define HUB_PLAYINGloading "Playing %s"
+
 #endif
