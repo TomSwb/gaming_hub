@@ -78,7 +78,7 @@ gboolean	hub_steam_app_skip(const t_steam_app *app);
 void		hub_steam_app_add(GListStore *store, t_steam_app *app,
 				const gchar *folder);
 
-// sources/library/platforms.c
-void	hub_platforms_scan(GListStore *store);
+// platforms.c
+void		hub_platforms_scan(GListStore *store);
 
 #endif

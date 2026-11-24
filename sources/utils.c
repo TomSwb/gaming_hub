@@ -72,3 +72,16 @@ void	hub_keep(gchar **slot, const char *name)
 	g_free(*slot);
 	*slot = g_strdup(name);
 }
+
+void	hub_window_destroyed(GtkWidget *self, gpointer user_data)
+{
+	t_hub	*hub;
+
+	(void)self;
+	hub = user_data;
+	if (hub->tick_id != 0)
+	{
+		g_source_remove(hub->tick_id);
+		hub->tick_id = 0;
+	}
+}

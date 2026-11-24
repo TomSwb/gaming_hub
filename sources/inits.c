@@ -22,6 +22,7 @@ void	hub_struct_init(t_hub *hub)
 	hub_library_init(hub);
 	hub->stack = NULL;
 	hub->app = NULL;
+	hub->tick_id = 0;
 }
 
 void	hub_computer_init(t_hub *hub)

@@ -205,6 +205,7 @@ typedef struct s_hub
 	t_library		library;
 	GtkWidget		*stack;
 	GApplication	*app;
+	guint			tick_id;
 }	t_hub;
 
 #endif

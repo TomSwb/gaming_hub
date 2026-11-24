@@ -49,13 +49,14 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 		return ;
 	}
 	window = GTK_WINDOW(gtk_application_window_new(self));
+	g_signal_connect(window, "destroy", G_CALLBACK(hub_window_destroyed), hub);
 	hub->app = G_APPLICATION(self);
 	gtk_window_set_title(window, "Gaming Hub");
 	gtk_window_set_default_size(window, 480, 720);
 	hub_setting_hub(hub);
 	box = hub_build_box(hub);
 	gtk_window_set_child(window, box);
-	g_timeout_add(1000, hub_tick, hub);
+	hub->tick_id = g_timeout_add(1000, hub_tick, hub);
 	hub_pulse_connect(hub);
 	hub_power_connect(hub);
 	hub_bluez_connect(hub);
