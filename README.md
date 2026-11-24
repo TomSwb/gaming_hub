@@ -147,7 +147,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 4. Auto-start with GameMode, single instance, `--start` / `--end`, between games; `make install` (app menu entry) and a guide to hook it to Steam, Heroic, Lutris and emulators (20 Nov)
 - [x] 5. Headset volume and mic with libpulse: sliders and Mute for both, in sync with GNOME, follows the headset off / on (21–22 Nov)
 - [x] 6. Power profile over D-Bus, battery alerts, the Sound section (output buttons, sliders on the default devices, headset battery from BlueZ) (22 Nov)
-- [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub
+- [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub (in progress: Steam and emulator games listed, 24 Nov)
 - [ ] 8. Temperature graph with Cairo
 - [ ] 9. FPS from MangoHud (stretch)
 

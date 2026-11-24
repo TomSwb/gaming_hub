@@ -216,8 +216,40 @@ Bugs on the way: `GError` not set to `NULL`, `g_free(name)` / `name = NULL` on t
 
 Code `gaming_hub` `8648ebc`, `ddb6d3a`.
 
-## Step 6: the emulator source (started 23 Nov)
+## Step 6: the emulator source (23–24 Nov, ~1.2 h)
 
-The platforms file is read with GKeyFile, one section per console (`folder`, `extensions`, `command`, `icon`). Each folder is walked with `GDir`, files are kept by extension (case ignored), and each file becomes one `GAME_EMULATOR` game in the same store as Steam: platform = section name, path = full path, name = the file name until step 7. `command` waits for step 8.
+The hub reads my emulator games from a **platforms file** next to Steam: one section per platform, every file in its folder with one of its extensions becomes a game. **Result: 66 rows** (41 Steam + 25 dumps: 4 GameCube, 6 Wii, 12 PS2, and the 3 Metroid Prime discs in their own PrimeHack folder), no terminal output. Names are still whole file names (`Sonic Heroes (Europe) [SLES-51950].iso`) until step 7; `command` and `icon` are read at step 8.
 
-**Decided 23 Nov (option A):** the file is `~/.config/gaming_hub/platforms.ini`, next to `settings.ini`. A missing file means no emulator games and no message (same rule as the settings file); a broken file prints an error line. The repo gets a commented `platforms.example.ini`. Rejected: a default file written by the hub (B: my emulators would be named in the code), sections inside `settings.ini` (C: timer values and consoles mixed).
+**Decided 23 Nov (option A):** the file is `~/.config/gaming_hub/platforms.ini`, next to `settings.ini`. Missing = no emulator games and no message (same rule as the settings file, through the same `hub_key_file_error`); a section without `folder=` or `extensions=` gives one line and is skipped. The repo has a commented [`platforms.example.ini`](../platforms.example.ini) (README: "Emulator games"). Rejected: a default file written by the hub (B: my emulators would be named in the code), sections inside `settings.ini` (C: timer values and consoles mixed).
+
+**Found 24 Nov:** the three Metroids aren't in `roms/` but in `~/Emulation/ports/primehack` (one folder, GameCube and Wii mixed), so they get a **`[PrimeHack]` section** with PrimeHack's command; for now their platform shows as "PrimeHack" (the section name); step 7's header check could give GameCube / Wii instead. **Jak 1–3 (OpenGOAL) stay out:** OpenGOAL extracted the ISOs once and runs its own build, there is no file to hand an emulator; they become manual entries (step 15).
+
+**Decided 24 Nov (option A): a leading `~/` in `folder=` is expanded by the hub** (GKeyFile reads text only; `~` is a shell feature), so the example works for anyone. Rejected: full paths only (B: a copied `~` path would silently show nothing).
+
+```
+hub_build_library
+├─ hub_steam_scan(store)
+└─ hub_platforms_scan(store)              ~/.config/gaming_hub/platforms.ini (missing: quiet)
+   └─ hub_platform_read(store, key_file, group)     each section
+      ├─ hub_path_expand(&folder)         ~/… → /home/<me>/…
+      └─ hub_platform_folder(store, group, folder, extensions)   GDir (missing folder: quiet)
+         ├─ hub_platform_ext_ok(name, extensions)
+         └─ hub_platform_add(store, group, folder, name)          → hub_library_add
+```
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `hub_platforms_scan` | builds the path (`g_get_user_config_dir`, `HUB_CONFIG_DIR`, `HUB_PLATFORMS_FILE`), loads with `hub_key_file_error` (reused from the timer: `TRUE` = loaded), `g_key_file_get_groups` (**all** section names at once in an owned strv; the second argument is an optional count output, not an index) → one `hub_platform_read` each → `g_strfreev`; key file and path freed on every path | `platforms.c` |
+| `hub_platform_read` | `g_key_file_get_string` (folder, owned) and `g_key_file_get_string_list` (extensions split on `;`, owned strv), both `NULL` when missing (error argument `NULL`: the reason isn't needed); one error line naming the section, else expand + walk; both freed at the bottom (`g_free(NULL)` / `g_strfreev(NULL)` are safe) | `platforms.c` |
+| `hub_platform_ext_ok` | the extension = after the **last** dot (`ft_strrchr`: `New Super Mario Bros. Wii … .iso`); no dot or a leading dot only (`.hidden`) → `FALSE`; `g_ascii_strcasecmp(…) == 0` against each extension (case ignored; `g_strv_contains` is case-sensitive). Nothing allocated: `dot` points into `name` | `platforms.c` |
+| `hub_platform_folder` | `g_dir_open` (`NULL` = missing folder or unplugged drive: skipped, step 10 shows it), names borrowed from the `GDir` (valid until the next read: the game copies them first), not recursive | `platforms.c` |
+| `hub_platform_add` | `t_game_info`: `GAME_EMULATOR`, name = file name, platform = section, id = `NULL`, path = `g_build_filename(folder, name)` (owned, freed after `hub_library_add`) | `platforms.c` (full at 5) |
+| `hub_path_expand` | replaces an owned string **in place** (the `hub_keep` / `hub_kv_take` shape, the caller passes `&folder`): if it starts with `HUB_HOME_PREFIX` (`"~/"`), builds `home + rest` first, then frees the old one; `NULL` slot or string → no change. Reused at step 15 | `paths.c` |
+
+**Tests:** the four section names printed; each section's folder and extensions; `folder=` renamed to `foldr=` in `[Wii]` → `platforms.ini: [Wii] needs folder= and extensions=` and the other three still read; the 25 file names; 66 rows in the window; the PS2 folder written as `~/Emulation/roms/ps2` → still 66; norminette clean.
+
+**Fixed on the way (an old bug, milestone 2):** five `invalid unclassed pointer in cast to 'GtkLabel'` `CRITICAL`s, sometimes, when closing the window: the tick wrote to the five freed stat labels. Now the timer's id is kept and the window's `destroy` signal removes it (`docs/live-stats.md`, "Stopping the tick"). Found with `G_DEBUG=fatal-criticals` and by counting: five failures = the five labels `hub_tick` writes.
+
+Bugs on the way: `g_build_filename` without its `NULL` end, `i` thought to be an argument of `get_groups`, `self` and `store` unused (`-Wunused-parameter` + `-Werror`), the window created twice (a second, lost window) instead of the `destroy` connection, a 110-column `g_printerr`, a `folder` named `file`, `g_ascii_strcasecmp` tested without `== 0` (every other extension "matched"), the `NULL` check on the slot (`path`) instead of the string (`*path`), two empty lines in a header.
+
+Code `gaming_hub` `b40cada`, `b5d0e79` (tick fix), `e88dd14`, `fea2d65`, `7ee68d4`.
