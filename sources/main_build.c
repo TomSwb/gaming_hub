@@ -18,18 +18,22 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	GtkWidget	*stack;
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
+	hub->sections = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	stack = gtk_stack_new();
 	hub->stack = stack;
+	g_signal_connect(stack, "notify::visible-child-name",
+		G_CALLBACK(hub_page_changed), hub);
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_library(hub), "library");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan_page(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_transit(hub), "transit");
 	gtk_box_append(GTK_BOX(box), hub->stack);
-	gtk_box_append(GTK_BOX(box), hub_build_headset(hub));
-	gtk_box_append(GTK_BOX(box), hub_build_power(hub));
-	gtk_box_append(GTK_BOX(box), hub_build_stats(hub));
+	gtk_box_append(GTK_BOX(box), hub->sections);
+	gtk_box_append(GTK_BOX(hub->sections), hub_build_headset(hub));
+	gtk_box_append(GTK_BOX(hub->sections), hub_build_power(hub));
+	gtk_box_append(GTK_BOX(hub->sections), hub_build_stats(hub));
 	hub_show_timer_page(hub);
-	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "library");
 	return (box);
 }
 
@@ -65,4 +69,16 @@ GtkWidget	*hub_labelled(const gchar *text, GtkWidget *widget)
 	gtk_widget_set_hexpand(label, TRUE);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	return (box);
+}
+
+void	hub_page_changed(GObject *self, GParamSpec *pspec, gpointer user_data)
+{
+	t_hub		*hub;
+	const gchar	*name;
+
+	(void)pspec;
+	hub = user_data;
+	name = gtk_stack_get_visible_child_name(GTK_STACK(self));
+	if (g_strcmp0(name, "library") != 0)
+		gtk_widget_set_visible(hub->sections, g_strcmp0(name, "library") != 0);
 }

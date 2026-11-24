@@ -213,6 +213,7 @@ typedef struct s_hub
 	t_power			power;
 	t_library		library;
 	GtkWidget		*stack;
+	GtkWidget		*sections;
 	GApplication	*app;
 	guint			tick_id;
 }	t_hub;

@@ -63,5 +63,7 @@ void		hub_library_init(t_hub *hub);
 GtkWidget	*hub_build_box(t_hub *hub);
 GtkWidget	*hub_image_with_label(const gchar *icon, const gchar *text);
 GtkWidget	*hub_labelled(const gchar *text, GtkWidget *widget);
+void		hub_page_changed(GObject *self, GParamSpec *pspec,
+				gpointer user_data);
 
 #endif

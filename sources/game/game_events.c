@@ -39,7 +39,7 @@ void	hub_game_started(t_hub *hub)
 		hub_show_timer_page(hub);
 	}
 	else if (hub->timer.state == TIMER_PLANNING
-			|| hub->timer.state == TIMER_ENDED)
+		|| hub->timer.state == TIMER_ENDED)
 	{
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");
 		g_clear_object(&hub->library.picked);
