@@ -91,4 +91,9 @@ void		hub_platform_add(GListStore *store, const gchar *group,
 // paths.c
 void		hub_path_expand(gchar **path);
 
+// names.c
+void		hub_name_clear(t_dump_name *dump);
+gboolean	hub_name_split(const gchar *file, gsize len, t_dump_name *dump);
+gboolean	hub_name_parse(const gchar *file, t_dump_name *dump);
+
 #endif

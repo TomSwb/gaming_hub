@@ -195,6 +195,13 @@ typedef struct s_steam_app
 	gchar	*owner;
 }	t_steam_app;
 
+typedef struct s_dump_name
+{
+	gchar	*title;
+	gchar	*region;
+	gchar	*id;
+}	t_dump_name;
+
 typedef struct s_hub
 {
 	t_computer		computer;

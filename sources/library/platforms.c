@@ -101,13 +101,16 @@ void	hub_platform_add(GListStore *store, const gchar *group,
 {
 	t_game_info	info;
 	gchar		*path;
+	t_dump_name	dump;
 
+	hub_name_parse(name, &dump);
 	path = g_build_filename(folder, name, NULL);
 	info.source = GAME_EMULATOR;
 	info.platform = group;
-	info.name = name;
-	info.id = NULL;
+	info.name = dump.title;
+	info.id = dump.id;
 	info.path = path;
 	hub_library_add(store, &info);
+	hub_name_clear(&dump);
 	g_free(path);
 }
