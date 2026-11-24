@@ -83,7 +83,8 @@ LIBRARY = sources/library/hub_game.c \
 	sources/library/steam_app.c \
 	sources/library/platforms.c \
 	sources/library/paths.c \
-	sources/library/names.c
+	sources/library/names.c \
+	sources/library/disc.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

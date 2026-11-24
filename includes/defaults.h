@@ -86,4 +86,12 @@
 # define HUB_HOME_PREFIX "~/"
 # define HUB_HOME_PREFIX_L 2
 
+# define HUB_DISC_HEADER 32
+# define HUB_DISC_ID_LEN 6
+# define HUB_WII_OFFSET 24
+# define HUB_WII_MAGIC "\x5D\x1C\x9E\xA3"
+# define HUB_GC_OFFSET 28
+# define HUB_GC_MAGIC "\xC2\x33\x9F\x3D"
+# define HUB_MAGIC_LEN 4
+
 #endif

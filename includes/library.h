@@ -96,4 +96,8 @@ void		hub_name_clear(t_dump_name *dump);
 gboolean	hub_name_split(const gchar *file, gsize len, t_dump_name *dump);
 gboolean	hub_name_parse(const gchar *file, t_dump_name *dump);
 
+// disc.c
+gboolean	hub_disc_id(const gchar *path, gchar *id);
+void		hub_disc_check(const gchar *path, t_dump_name *dump);
+
 #endif
