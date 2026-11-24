@@ -11,7 +11,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 3 | Library page + list view with a few made-up games | 2–3 h |
 | 4–5 | KeyValues parser, Steam source | 4–6 h |
 | 6 | Emulator source: platforms file, ROM folders by extension | 3–4 h |
-| 7 | Names from file names, disc header check | 1–2 h |
+| 7 | Names from file names, disc header check | 1–2 h (done 24 Nov, ~1.2 h) |
 | 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h |
 | 9 | The hub's library file | 2–3 h |
 | 10 | Three states, live drives | 2–3 h |
@@ -253,3 +253,34 @@ hub_build_library
 Bugs on the way: `g_build_filename` without its `NULL` end, `i` thought to be an argument of `get_groups`, `self` and `store` unused (`-Wunused-parameter` + `-Werror`), the window created twice (a second, lost window) instead of the `destroy` connection, a 110-column `g_printerr`, a `folder` named `file`, `g_ascii_strcasecmp` tested without `== 0` (every other extension "matched"), the `NULL` check on the slot (`path`) instead of the string (`*path`), two empty lines in a header.
 
 Code `gaming_hub` `b40cada`, `b5d0e79` (tick fix), `e88dd14`, `fea2d65`, `7ee68d4`.
+
+## Step 7: names from the file names, the disc header check (24 Nov, ~1.2 h)
+
+Every dump now shows a clean title (`Sonic Heroes`, `Jak X`, `Metroid Prime 2 - Echoes`) and carries its ID (`SLES-51950`, `RMGP01`) in the game's `id`. For GameCube / Wii discs the hub reads the first 32 bytes too: the ID from the disc fills in when the file name has none, and a name whose ID differs from its disc gives one warning line. All 13 GameCube / Wii dumps (incl. the Metroids) match.
+
+**Decided 24 Nov:** (1B) the region is parsed but **not stored**: optional in the spec, nothing uses it yet, the GameCube / Wii ID encodes it; (2A) the platform **stays the section name**, also for the PrimeHack folder: step 8 launches a game with its section's `command`, so a header-made "Wii" would start Metroid in Dolphin; and the section name is the user's spelling; (3B) the header is read for **every** file (the magic word decides; PS2 files have none), as fallback **and** check; on a mismatch the **file name's ID is kept** (the name is the one source of truth) and the warning says to fix it.
+
+```
+hub_platform_add(store, group, folder, name)
+├─ hub_name_parse(name, &dump)          t_dump_name: title always, region + id if the pattern fits
+│  └─ hub_name_split(name, len, &dump)  from the end: [ID], then (Region), then the title
+├─ g_build_filename(folder, name)       path
+├─ hub_disc_check(path, &dump)          GameCube / Wii only
+│  └─ hub_disc_id(path, id)             32 bytes, magic word, 6-byte ID into the caller's buffer
+├─ hub_library_add (title, id, section, path)
+└─ hub_name_clear(&dump), g_free(path)
+```
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `t_dump_name` | `title`, `region`, `id`: owned strings, together because one name gives three results; `ft_bzero` first (garbage → `NULL`s, nothing freed), `hub_name_clear` last (frees, back to `NULL`, safe twice) | `structs.h`, `names.c` |
+| `hub_name_split` | searches **backward** only, each search limited to what's before the last find (`g_strrstr_len`): the stem must end in `]` → the last `[` → `") "` right before it → the last `(` before that `)`; slices by pointer subtraction (`g_strndup(start, end - start)`), title trimmed with `g_strstrip`. Returns `FALSE` before any allocation when the pattern doesn't fit | `names.c` |
+| `hub_name_parse` | the entry point: stem length (last dot, same rule as `hub_platform_ext_ok`), `split`, else the whole stem as title. **The title is always set** | `names.c` |
+| `hub_disc_id` | `open` / `read` 32 bytes / `close` at once (`<fcntl.h>` for `open`: libft only brings `<unistd.h>`); `got != 32` covers short, empty and failed reads (`ssize_t`: `-1` fits); Wii word `5D 1C 9E A3` at 24, GameCube `C2 33 9F 3D` at 28, compared with `ft_memcmp` (string functions stop at `0x00`), as `\x` string defines; the ID copied into the **caller's** 7-byte buffer (no allocation) | `disc.c` |
+| `hub_disc_check` | not a disc → nothing; no ID in the name → `g_strdup` the disc's (the buffer dies with the function, `dump` must own); different → one line on stderr | `disc.c` |
+
+**Tests:** the 25 titles clean in the list; two empty test files: `Odd name.iso` → `Odd name`, `No region [TEST-1].iso` → kept whole (no `(Region)`); silent with the check wired (13 GameCube / Wii names match their discs); a 32-byte fake (`head -c 32` of Galaxy 2) named `Fake (Europe) [RMGP01].iso` → `…: the name says [RMGP01], the disc says [SB4P01]`; test files removed; norminette clean.
+
+Bugs on the way: locals named `open` / `close` (they hide the POSIX functions piece 4 needed: renamed `bracket`, `paren_end`), `false` for `FALSE`, `open` undeclared (`<fcntl.h>`), the magic words compared at offset 0 and with the logic inverted (`!ft_memcmp` = a match), then against the empty `id` buffer, `close(-1)` when `open` failed, the title printed as the disc's ID and no `\n`, the check written but not called (a silent run proved nothing until it was wired).
+
+Code `gaming_hub` `936239b`, `7679a46`.
