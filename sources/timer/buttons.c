@@ -20,6 +20,8 @@ void	hub_start_clicked(GtkButton *self, gpointer user_data)
 	hub = user_data;
 	if (hub->timer.state == TIMER_PLANNING || hub->timer.state == TIMER_ENDED)
 	{
+		if (!hub_launch(hub))
+			return ;
 		hub_read_plan(hub);
 		hub->timer.state = TIMER_PLAYING;
 		hub_show_timer_page(hub);

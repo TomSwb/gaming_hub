@@ -27,5 +27,6 @@ void		hub_game_started(t_hub *hub);
 
 // launch.c
 gboolean	hub_launch_steam(const t_hub_game *game);
+gboolean	hub_launch(t_hub *hub);
 
 #endif

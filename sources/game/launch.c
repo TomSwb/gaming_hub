@@ -29,3 +29,13 @@ gboolean	hub_launch_steam(const t_hub_game *game)
 	g_free(uri);
 	return (launch);
 }
+
+gboolean	hub_launch(t_hub *hub)
+{
+	if (!hub->library.picked)
+		return (TRUE);
+	if (hub->library.picked->source == GAME_STEAM)
+		return (hub_launch_steam(hub->library.picked));
+	g_printerr("%s: can-t launch this game yet\n", hub->library.picked->name);
+	return (FALSE);
+}
