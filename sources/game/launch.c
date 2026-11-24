@@ -35,11 +35,11 @@ gboolean	hub_launch(t_hub *hub)
 	gboolean	launch;
 
 	launch = TRUE;
-	if (hub->library.picked->source == GAME_STEAM)
+	if (hub->library.picked && hub->library.picked->source == GAME_STEAM)
 		launch = hub_launch_steam(hub->library.picked);
 	else if (hub->library.picked)
 	{
-		g_printerr("%s: can-t launch this game yet\n",
+		g_printerr("%s: can't launch this game yet\n",
 			hub->library.picked->name);
 		launch = FALSE;
 	}
