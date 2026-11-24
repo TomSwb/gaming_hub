@@ -79,6 +79,5 @@ void	hub_page_changed(GObject *self, GParamSpec *pspec, gpointer user_data)
 	(void)pspec;
 	hub = user_data;
 	name = gtk_stack_get_visible_child_name(GTK_STACK(self));
-	if (g_strcmp0(name, "library") != 0)
-		gtk_widget_set_visible(hub->sections, g_strcmp0(name, "library") != 0);
+	gtk_widget_set_visible(hub->sections, g_strcmp0(name, "library") != 0);
 }
