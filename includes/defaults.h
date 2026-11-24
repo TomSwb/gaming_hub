@@ -79,4 +79,7 @@
 # define HUB_STEAM_PLATFORM "Steam"
 # define HUB_STEAM_STATE "AppState"
 
+# define HUB_CONFIG_DIR "gaming_hub"
+# define HUB_PLATFORMS_FILE "platforms.ini"
+
 #endif

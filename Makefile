@@ -80,7 +80,8 @@ LIBRARY = sources/library/hub_game.c \
 	sources/library/keyvalues.c \
 	sources/library/keyvalues_2.c \
 	sources/library/steam.c \
-	sources/library/steam_app.c
+	sources/library/steam_app.c \
+	sources/library/platforms.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \
