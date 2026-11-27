@@ -23,7 +23,8 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	hub->stack = stack;
 	g_signal_connect(stack, "notify::visible-child-name",
 		G_CALLBACK(hub_page_changed), hub);
-	gtk_stack_add_named(GTK_STACK(stack), hub_build_library_page(hub), "library");
+	gtk_stack_add_named(GTK_STACK(stack),
+		hub_build_library_page(hub), "library");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan_page(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");
