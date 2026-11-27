@@ -46,6 +46,7 @@ typedef enum e_game_prop
 	GAME_PROP_PLATFORM,
 	GAME_PROP_ID,
 	GAME_PROP_PATH,
+	GAME_PROP_COMMAND,
 	GAME_PROP_COUNT
 }	t_game_prop;
 
@@ -160,6 +161,7 @@ typedef struct s_hub_game
 	gchar			*platform;
 	gchar			*id;
 	gchar			*path;
+	gchar			*command;
 }	t_hub_game;
 
 typedef struct s_game_info
@@ -169,6 +171,7 @@ typedef struct s_game_info
 	const gchar		*platform;
 	const gchar		*id;
 	const gchar		*path;
+	const gchar		*command;
 }	t_game_info;
 
 typedef struct s_hub_game_class

@@ -27,6 +27,8 @@ void	hub_game_install_props(GObjectClass *object_class)
 			NULL, NULL, flags);
 	props[GAME_PROP_ID] = g_param_spec_string(HUB_GAME_ID, NULL, NULL,
 			NULL, flags);
+	props[GAME_PROP_COMMAND] = g_param_spec_string(HUB_GAME_COMMAND, NULL, NULL,
+			NULL, flags);
 	props[GAME_PROP_PATH] = g_param_spec_string(HUB_GAME_PATH, NULL, NULL,
 			NULL, flags);
 	g_object_class_install_properties(object_class, GAME_PROP_COUNT, props);

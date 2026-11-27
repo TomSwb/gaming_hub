@@ -110,6 +110,7 @@ void	hub_platform_add(GListStore *store, const gchar *group,
 	info.platform = group;
 	info.name = dump.title;
 	info.id = dump.id;
+	info.command = NULL;
 	info.path = path;
 	hub_library_add(store, &info);
 	hub_name_clear(&dump);

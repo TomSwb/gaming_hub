@@ -61,6 +61,7 @@
 # define HUB_GAME_PLATFORM "platform"
 # define HUB_GAME_ID "id"
 # define HUB_GAME_PATH "path"
+# define HUB_GAME_COMMAND "command"
 
 # define HUB_STEAM_PATH "path"
 # define HUB_STEAM_ROOT "libraryfolders"

@@ -100,6 +100,7 @@ void	hub_steam_app_add(GListStore *store, t_steam_app *app,
 	info.platform = HUB_STEAM_PLATFORM;
 	info.name = app->name;
 	info.id = app->id;
+	info.command = NULL;
 	info.path = path;
 	hub_library_add(store, &info);
 	g_free(path);
