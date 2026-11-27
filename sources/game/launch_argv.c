@@ -43,7 +43,7 @@ void	hub_launch_fill(gchar **argv, gchar **words, const gchar *path)
 		if (g_strcmp0(HUB_FILE_MARK, words[i]) == 0)
 			argv[i + 1] = g_strdup(path);
 		else
-		 	argv[i + 1] = g_strdup(words[i]);
+			argv[i + 1] = g_strdup(words[i]);
 		i++;
 	}
 }
