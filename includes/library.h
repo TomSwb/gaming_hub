@@ -38,6 +38,7 @@ t_hub_game	*hub_game_cast(gpointer object);
 
 // library_store.c
 void		hub_library_add(GListStore *store, const t_game_info *info);
+void		hub_library_rescan(t_hub *hub);
 
 // library_rows.c
 void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
@@ -47,6 +48,8 @@ void		hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 
 // library_build.c
 GtkWidget	*hub_build_library(t_hub *hub);
+GtkWidget	*hub_build_library_page(t_hub *hub);
+void		hub_library_refresh(GtkButton *self, gpointer user_data);
 
 // keyvalues.c
 gboolean	hub_kv_enter(t_kv_cursor *cursor, const gchar *key);

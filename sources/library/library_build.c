@@ -22,8 +22,6 @@ GtkWidget	*hub_build_library(t_hub *hub)
 
 	store = g_list_store_new(hub_game_get_type());
 	hub->library.games = store;
-	hub_steam_scan(store);
-	hub_platforms_scan(store);
 	selection = gtk_single_selection_new(G_LIST_MODEL(store));
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory, "setup", G_CALLBACK(hub_row_setup), NULL);
@@ -34,4 +32,24 @@ GtkWidget	*hub_build_library(t_hub *hub)
 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll), view);
 	gtk_widget_set_vexpand(scroll, TRUE);
 	return (scroll);
+}
+
+GtkWidget	*hub_build_library_page(t_hub *hub)
+{
+	GtkWidget	*page;
+	GtkWidget	*refresh;
+
+	page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+	refresh = gtk_button_new_with_label("Refresh");
+	g_signal_connect(refresh, "clicked", G_CALLBACK(hub_library_refresh), hub);
+	gtk_box_append(GTK_BOX(page), refresh);
+	gtk_widget_set_halign(refresh, GTK_ALIGN_END);
+	gtk_box_append(GTK_BOX(page), hub_build_library(hub));
+	return (page);
+}
+
+void	hub_library_refresh(GtkButton *self, gpointer user_data)
+{
+	(void)self;
+	hub_library_rescan(user_data);
 }

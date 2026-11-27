@@ -20,3 +20,10 @@ void	hub_library_add(GListStore *store, const t_game_info *info)
 	g_list_store_append(store, game);
 	g_object_unref(game);
 }
+
+void	hub_library_rescan(t_hub *hub)
+{
+	g_list_store_remove_all(hub->library.games);
+	hub_steam_scan(hub->library.games);
+	hub_platforms_scan(hub->library.games);
+}

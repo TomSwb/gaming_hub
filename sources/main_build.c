@@ -23,7 +23,7 @@ GtkWidget	*hub_build_box(t_hub *hub)
 	hub->stack = stack;
 	g_signal_connect(stack, "notify::visible-child-name",
 		G_CALLBACK(hub_page_changed), hub);
-	gtk_stack_add_named(GTK_STACK(stack), hub_build_library(hub), "library");
+	gtk_stack_add_named(GTK_STACK(stack), hub_build_library_page(hub), "library");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_plan_page(hub), "plan");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_session(hub), "session");
 	gtk_stack_add_named(GTK_STACK(stack), hub_build_break(hub), "break");
@@ -80,4 +80,6 @@ void	hub_page_changed(GObject *self, GParamSpec *pspec, gpointer user_data)
 	hub = user_data;
 	name = gtk_stack_get_visible_child_name(GTK_STACK(self));
 	gtk_widget_set_visible(hub->sections, g_strcmp0(name, "library") != 0);
+	if (g_strcmp0(name, "library") == 0)
+		hub_library_rescan(hub);
 }
