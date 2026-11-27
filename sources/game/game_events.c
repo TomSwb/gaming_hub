@@ -64,3 +64,30 @@ void	hub_show_playing(t_hub *hub, const gchar *format)
 	gtk_label_set_text(GTK_LABEL(hub->library.playing), text);
 	g_free(text);
 }
+
+void	hub_game_exited(GObject *source, GAsyncResult *res,
+			gpointer user_data)
+{
+	t_hub		*hub;
+	GSubprocess	*proc;
+	GError		*error;
+
+	hub = user_data;
+	proc = G_SUBPROCESS(source);
+	error = NULL;
+	if (!g_subprocess_wait_finish(proc, res, &error))
+	{
+		g_printerr("%s\n", error->message);
+		g_error_free(error);
+		return ;
+	}
+	if (g_subprocess_get_if_exited(proc)
+		&& g_subprocess_get_exit_status(proc) != 0)
+		g_printerr("emulator ended with code %d\n",
+			g_subprocess_get_exit_status(proc));
+	if (proc == hub->library.running)
+	{
+		g_clear_object(&hub->library.running);
+		hub_game_closed(hub);
+	}
+}

@@ -24,6 +24,12 @@ void	hub_library_activate(GtkListView *self, guint position,
 					gtk_list_view_get_model(self)), position));
 	g_clear_object(&hub->library.picked);
 	hub->library.picked = game;
+	if (hub->timer.state == TIMER_TRANSIT)
+	{
+		if (hub_launch(hub))
+			hub_game_started(hub);
+		return ;
+	}
 	text = g_strdup_printf("Game: %s", hub->library.picked->name);
 	gtk_label_set_text(GTK_LABEL(hub->library.next), text);
 	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");

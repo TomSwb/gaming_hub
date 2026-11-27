@@ -65,5 +65,6 @@ gboolean	hub_launch_emulator(t_hub *hub)
 	}
 	g_clear_object(&hub->library.running);
 	hub->library.running = proc;
+	g_subprocess_wait_async(proc, NULL, hub_game_exited, hub);
 	return (TRUE);
 }

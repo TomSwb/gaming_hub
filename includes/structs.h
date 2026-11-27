@@ -106,6 +106,7 @@ typedef struct s_timer
 	GtkWidget		*wind_spin;
 	GtkWidget		*popups_check;
 	GtkWidget		*sound_check;
+	GtkWidget		*transit_bar;
 	gint			planned;
 	t_timer_state	state;
 	gint64			started;

@@ -30,19 +30,22 @@ void	hub_show_timer_page(t_hub *hub)
 {
 	gboolean	planning;
 	gboolean	playing;
+	gboolean	transit;
+	gboolean	break_state;
 
 	planning = hub->timer.state == TIMER_PLANNING
 		|| hub->timer.state == TIMER_ENDED;
 	playing = hub->timer.state == TIMER_PLAYING
 		|| hub->timer.state == TIMER_PAUSED;
-	if (planning)
+	transit = hub->timer.state == TIMER_TRANSIT;
+	break_state = hub->timer.state == TIMER_BREAK;
+	if (planning || transit)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "library");
 	else if (playing)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "session");
-	else if (hub->timer.state == TIMER_BREAK)
+	else if (break_state)
 		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "break");
-	else if (hub->timer.state == TIMER_TRANSIT)
-		gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "transit");
+	gtk_widget_set_visible(hub->timer.transit_bar, transit);
 }
 
 void	hub_show_eye(GtkWidget *label, gint seconds)

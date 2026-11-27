@@ -71,6 +71,7 @@ void	hub_timer_init(t_hub *hub)
 	hub->timer.wind_spin = NULL;
 	hub->timer.popups_check = NULL;
 	hub->timer.sound_check = NULL;
+	hub->timer.transit_bar = NULL;
 	hub->timer.planned = 0;
 	hub->timer.state = TIMER_PLANNING;
 	hub->timer.started = 0;

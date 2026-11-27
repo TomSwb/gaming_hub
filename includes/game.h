@@ -25,6 +25,8 @@
 void		hub_game_closed(t_hub *hub);
 void		hub_game_started(t_hub *hub);
 void		hub_show_playing(t_hub *hub, const gchar *format);
+void		hub_game_exited(GObject *source, GAsyncResult *res,
+				gpointer user_data);
 
 // launch.c
 gboolean	hub_launch_steam(const t_hub_game *game);
