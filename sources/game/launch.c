@@ -38,12 +38,32 @@ gboolean	hub_launch(t_hub *hub)
 	if (hub->library.picked && hub->library.picked->source == GAME_STEAM)
 		launch = hub_launch_steam(hub->library.picked);
 	else if (hub->library.picked)
-	{
-		g_printerr("%s: can't launch this game yet\n",
-			hub->library.picked->name);
-		launch = FALSE;
-	}
+		launch = hub_launch_emulator(hub);
 	if (launch)
 		hub_show_playing(hub, HUB_STARTING);
 	return (launch);
+}
+
+gboolean	hub_launch_emulator(t_hub *hub)
+{
+	gchar		**argv;
+	GError		*error;
+	GSubprocess	*proc;
+
+	error = NULL;
+	argv = hub_launch_argv(hub->library.picked);
+	if (!argv)
+		return (FALSE);
+	proc = g_subprocess_newv((const gchar * const *)argv,
+			G_SUBPROCESS_FLAGS_NONE, &error);
+	g_strfreev(argv);
+	if (!proc)
+	{
+		g_printerr("%s: %s\n", hub->library.picked->name, error->message);
+		g_error_free(error);
+		return (FALSE);
+	}
+	g_clear_object(&hub->library.running);
+	hub->library.running = proc;
+	return (TRUE);
 }

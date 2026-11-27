@@ -29,5 +29,10 @@ void		hub_show_playing(t_hub *hub, const gchar *format);
 // launch.c
 gboolean	hub_launch_steam(const t_hub_game *game);
 gboolean	hub_launch(t_hub *hub);
+gboolean	hub_launch_emulator(t_hub *hub);
+
+// launch_argv.c
+gchar		**hub_launch_argv(const t_hub_game *game);
+void		hub_launch_fill(gchar **argv, gchar **words, const gchar *path);
 
 #endif

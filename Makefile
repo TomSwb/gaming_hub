@@ -55,7 +55,8 @@ TIMER = sources/timer/settings.c \
 	sources/timer/timer_utils.c
 
 GAME = sources/game/game_events.c \
-	sources/game/launch.c
+	sources/game/launch.c \
+	sources/game/launch_argv.c
 
 HEADSET = sources/headset/pulse.c \
 	sources/headset/events.c \

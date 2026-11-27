@@ -100,4 +100,7 @@
 # define HUB_STARTING "Starting %s ..."
 # define HUB_PLAYING "Playing %s"
 
+# define HUB_GAMEMODE "gamemoderun"
+# define HUB_FILE_MARK "%f"
+
 #endif

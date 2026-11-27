@@ -43,7 +43,8 @@ void	hub_platform_read(GListStore *store, GKeyFile *key_file,
 	t_platform	plat;
 
 	plat.name = group;
-	plat.folder = g_key_file_get_string(key_file, plat.name, HUB_PLAT_FOLDER, NULL);
+	plat.folder = g_key_file_get_string(key_file, plat.name,
+			HUB_PLAT_FOLDER, NULL);
 	plat.command = g_key_file_get_string(key_file, plat.name,
 			HUB_PLAT_COMMAND, NULL);
 	plat.extensions = g_key_file_get_string_list(key_file, plat.name,

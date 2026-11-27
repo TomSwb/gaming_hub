@@ -193,6 +193,7 @@ typedef struct s_library
 	t_hub_game	*picked;
 	GtkWidget	*next;
 	GtkWidget	*playing;
+	GSubprocess	*running;
 }	t_library;
 
 typedef struct s_kv_cursor
