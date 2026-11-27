@@ -12,7 +12,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 4–5 | KeyValues parser, Steam source | 4–6 h |
 | 6 | Emulator source: platforms file, ROM folders by extension | 3–4 h |
 | 7 | Names from file names, disc header check | 1–2 h (done 24 Nov, ~1.2 h) |
-| 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h (in progress: pieces 1–4 of 9 done 24 Nov, ~2.4 h) |
+| 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h (done 27 Nov, ~5.3 h: 24 Nov ~2.4 h, 27 Nov ~2.9 h) |
 | 9 | The hub's library file | 2–3 h |
 | 10 | Three states, live drives | 2–3 h |
 | 11 | Silent session log + play history | 3–5 h |
@@ -285,9 +285,9 @@ Bugs on the way: locals named `open` / `close` (they hide the POSIX functions pi
 
 Code `gaming_hub` `936239b`, `7679a46`.
 
-## Step 8: launch and the session loop (24 Nov, in progress, ~2.4 h so far)
+## Step 8: launch and the session loop (24 + 27 Nov, ~5.3 h)
 
-From the library to a running game and back. Split into 9 pieces; **pieces 1–4 done 24 Nov** (look by hand, decisions, pick a game, launch a Steam game), 5–9 next.
+From the library to a running game and back. Split into 9 pieces: 1–4 done 24 Nov, 5–9 done 27 Nov. The whole loop now runs: library → pick → plan page → Start → game (Steam or emulator) → game closes → library with the "Between Games" bar → the next game at once → … → End Session.
 
 | # | Piece | State |
 | --- | --- | --- |
@@ -295,11 +295,11 @@ From the library to a running game and back. Split into 9 pieces; **pieces 1–4
 | 2 | Decisions: where the command comes from, what a pick does, how the hub's own launches fit `--start` / `--end` | done (~0.1 h) |
 | 3 | Pick a game: `activate`, the picked game, plan page with Back and "Game:", pages that follow the state, sections hidden on the library | done (~1.25 h) |
 | 4 | Launch a Steam game from Start, "Starting … / Playing …" on the session page | done (~0.5 h) |
-| 5 | Launch an emulator game: `command` on the game (`t_platform`), argv with `%f` as one element, `gamemoderun` in front, `GSubprocess` | next |
-| 6 | Watch the process: `g_subprocess_wait_async`, exit code, then `hub_game_closed` | |
-| 7 | Between games = the library with the timer and End session on top; a pick launches at once | |
-| 8 | Rescan when the library page is shown + a Refresh button | |
-| 9 | Tests (Steam, Dolphin, PCSX2, PrimeHack, switching games, End session), norm, ownership | |
+| 5 | Launch an emulator game: `command` on the game (`t_platform`), argv with `%f` as one element, `gamemoderun` in front, `GSubprocess` | done (~1.3 h) |
+| 6 | Watch the process: `g_subprocess_wait_async`, exit code, then `hub_game_closed` | done (~0.3 h) |
+| 7 | Between games = the library with the timer and End session on top; a pick launches at once | done (~0.8 h, with the GameMode `--start` investigation) |
+| 8 | Rescan when the library page is shown + a Refresh button | done (~0.3 h) |
+| 9 | Tests (Steam, Dolphin, PCSX2, PrimeHack, switching games, End session), norm, ownership | done (~0.2 h) |
 
 ### Piece 1: by hand
 
@@ -367,3 +367,53 @@ stack "notify::visible-child-name"
 Bugs on the way: the handler connected without `G_CALLBACK` (incompatible pointer type), the plan page built but never added to the stack (`Child name 'plan' not found`), then the library's `add_named` deleted instead of the forced line, `add_named` used for Back (a second library and a full rescan), `(void)self` missing, the notify handler switching the **page** back to the library instead of hiding the sections (then still inside an `if`, so it never hid), the "no game" case without `return` (a `NULL` dereference), a define named `HUB_PLAYINGloading` (pushed code didn't build), the early return that skipped emptying the label, then `NULL->source` when it was removed, a test call that launched every pick (dumps included) through Steam, `next` / `sections` not set in the inits.
 
 Code `gaming_hub` `5140213` … `cde637d`.
+
+### Piece 5: launch an emulator game (27 Nov)
+
+**Decided (5.2, A):** a section without `command=` is skipped with one line, like `folder=` / `extensions=` (`platforms.ini: [Wii] needs folder=, extensions= and command=`). Rejected (B): list its games and fail only at Start.
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `command` property | a sixth string on the game (owned copy, `NULL` for Steam): struct field, `GAME_PROP_COMMAND` before the count, `t_game_info.command` (borrowed), `HUB_GAME_COMMAND`, `init` / `finalize` / `hub_game_new`, install / set / get. **Trap:** `t_game_info` is filled field by field in `platforms.c` and `steam_app.c` without `ft_bzero`, so both must set `command` (a garbage pointer would be copied by `g_object_new`) | `structs.h`, `defaults.h`, `hub_game.c`, `hub_game_props.c`, `steam_app.c` |
+| `t_platform` | a section's values in one struct: `name` (borrowed from the scan's group list), `folder`, `extensions`, `command` (owned by `hub_platform_read`, freed at its end; each game copies the command). Lent down as `const t_platform *`: `hub_platform_folder` 4 → 2 parameters, `hub_platform_add` 4 → 3 | `structs.h`, `platforms.c` |
+| `hub_launch_argv` / `hub_launch_fill` | no shell: `g_shell_parse_argv` splits `command=` (from my own file) into words, a new `g_new0` array of `argc + 2` gets `gamemoderun`, every word copied, the word `%f` replaced by the game's path as **one** element, and the `NULL` end from `g_new0`. Copies everywhere, so `words` is freed whole (`g_strfreev`) and the caller owns `argv`. A shell string would re-read spaces, brackets, `'`, `$` or `;` in file names | `launch_argv.c` |
+| `hub_launch_emulator` | argv → `g_subprocess_newv((const gchar * const *)argv, G_SUBPROCESS_FLAGS_NONE, &error)` (the const cast C needs), argv freed at once, the old process dropped, the new one **moved** into `t_library.running` (one owned reference; dropping it doesn't stop the program). `hub_launch`'s placeholder replaced by this branch | `launch.c` |
+
+Checked by printing the argv as `[%s]` lines: all three platforms right, each path one element.
+
+**PrimeHack's pad (not hub code, ~0.1 h):** PrimeHack is its own Flatpak with its own settings, so the Night Blossom mapping from Dolphin (16 Nov) wasn't there: port 1 was set to `SDL/0/Generic X-Box pad` but mapped to keyboard keys. Its `GCPadNew.ini` had no PrimeHack-only keys (a `diff` of the key names showed only version differences), so Dolphin's file was copied over it (backup `GCPadNew.ini.bak`). Metroid Prime 1 + 2 play with the original GameCube controls; Prime 3 (Wii, PrimeHack's Metroid Wii Remote controls) still to do.
+
+### Piece 6: watch the process
+
+`g_subprocess_wait_async(proc, NULL, hub_game_exited, hub)` right after the launch: returns at once, the main loop calls back when the emulator ends (the wait keeps its own reference until then). `hub_game_exited` (the fixed `GAsyncReadyCallback` signature): `g_subprocess_wait_finish`; exited with a code other than 0 → `emulator ended with code N` (still a close, decision 2c.3); then, **only if the process is still `hub->library.running`** (pointer comparison: a late old process must not close a newer game's session), drop `running` and `hub_game_closed`. `running` also freed in `hub_free_hub`. Quitting the hub while an emulator runs: no warnings, the game keeps running.
+
+Found: Dolphin shows its own "file does not exist" dialog even with `-b`, and exits with 1 after OK. The process watch fires before GameMode's `UnregisterGame` lines, so it doesn't depend on GameMode.
+
+### Piece 7: between games is the library
+
+**Decided (7.1, A):** between games shows the library and the bar only; the Sound / power / stats sections stay hidden (they're back on the next game's session page). Rejected (B): sections there too (a much shorter list).
+
+- `hub_build_transit` now builds a slim **bar** (`GtkCenterBox`: "Between Games" · the countdown · End Session, the two widgets that already existed), borrowed as `t_timer.transit_bar`, appended above the stack; the `"transit"` page is gone.
+- `hub_show_timer_page`: no session **and** between games → `"library"`; one line `gtk_widget_set_visible(transit_bar, transit)` covers every state change.
+- `hub_library_activate`: between games → `hub_launch`, and if it worked → `hub_game_started` (the milestone-4 between → playing transition: state, break rule, session page), then `return`; a failed launch stays in the library.
+
+**Found: "Playing" sometimes never comes for Steam games.** `[cmd]` / `[pick]` prints (`g_printerr`: stdout is block-buffered in a pipe, so `g_print` lines were lost behind `| grep`; and a pipe keeps `grep` waiting while Steam, a child of the hub, still writes to it) showed the hub's order is right and the launch call returns at once, even when Steam has to start. The miss is GameMode's: inside Steam's container most processes can't load GameMode's library (`libgamemodeauto.so.0 … cannot be preloaded`, `dlopen failed - libgamemode.so`, notably for 32-bit games like Portal); when no process registers, GameMode never switches on, so there's no `start=` hook and no `--start`. Harmless for the session (it started at the pick, decision 1A); the label stays on "Starting …". Likely fix outside the hub: Fedora's 32-bit GameMode library (`gamemode.i686`), with the status item "GameMode's own tweaks never apply". The GameMode journal (`journalctl --user -u gamemoded`) shows each switch on / off by the `split_lock_mitigate` lines.
+
+### Piece 8: rescan + Refresh
+
+- `hub_library_rescan` (`library_store.c`): `g_list_store_remove_all`, then the Steam and platforms scans into the same store. The view and selection stay connected (the model's `items-changed`); `picked` and `running` survive because they hold their own references.
+- Called from `hub_page_changed` whenever the new page is `"library"` (startup, Back, between games, after End Session). The two scan lines left `hub_build_library`: the first `add_named` makes the library visible, which rescans, and `hub->library.games` is set by then.
+- `hub_build_library_page` (`library_build.c`): a vertical box with a **Refresh** button on the right (`halign` end) above the list; `hub_library_refresh` calls the rescan. The stack's `"library"` page is this box.
+- Side effect: scan messages (a broken `platforms.ini` section, a disc-ID warning) repeat at every rescan.
+
+### Piece 9: final check
+
+Norminette clean (one 82-column line found by the review, fixed). One evening start to finish: library → Portal → plan page → Back → Sonic Heroes → Start → "Starting / Playing" → close → library with the bar → Metroid Prime at once (pad working) → close → Portal from between games → quit → End Session → quit the hub: no hub warnings or `CRITICAL`s. At rest on the library: **0.0–0.5 % CPU, ~115 MB** (milestone 6: 0.3 %, ~113 MB). The library lists **74 games** (47 Steam + 27 dumps: 5 GameCube, 6 Wii, 13 PS2, 3 PrimeHack); Jak 1–3 make 77 once they're manual entries (step 15).
+
+**Tests (pieces 5–8):** commands arrive per platform, `(null)` for Steam; a section without `command=` skipped with its line; Sonic Heroes, Galaxy 2, Metroid Prime started from Start; a game closed → between games at once; a renamed dump → Dolphin's dialog → `ended with code 1` → between games; the hub quit while a game runs; Sonic → close → library with the bar → Galaxy 2 → Portal in the same session, countdown carrying on; a fake `Test Game (Europe) [TEST-1].iso` appearing after Back and after Refresh, gone after `rm`.
+
+**Noted for the styling step:** GNOME won't snap the hub to half the screen (edge tiling refuses a window whose minimum size doesn't fit); likely the stack's homogeneous height plus the sections. Ideas: `gtk_stack_set_vhomogeneous(stack, FALSE)`, a scrolled window around the sections.
+
+Bugs on the way: the set / get branches missing (the property installed but never stored), `plat.command` without `!` (every section skipped), a test print in `hub_activate` with no game picked (segfault), `plat.name` never set, an 84-column line, `g_shell_parse_argv` with the docs' parameter declaration and `&argv`, `g_new0` before `argc` was known, `g_free` on a `GError`, the fill loop over the empty `argv` / slot `i` instead of `i + 1` / `*words` / a double `g_strfreev`, `argv` never built in `hub_launch_emulator`, `running` not freed, a space in an indent, `error->code` on a `NULL` error and a `return` that skipped the close, the bar's three slots all given the label / returning the countdown / `gtk_box_append` on a center box, the bar visible in every state, the Refresh handler given `NULL`, the list built and thrown away, an 82-column line.
+
+Code `gaming_hub` `572b9c6` … `3652674` (+ the 82-column fix).

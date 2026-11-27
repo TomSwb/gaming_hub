@@ -147,7 +147,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 4. Auto-start with GameMode, single instance, `--start` / `--end`, between games; `make install` (app menu entry) and a guide to hook it to Steam, Heroic, Lutris and emulators (20 Nov)
 - [x] 5. Headset volume and mic with libpulse: sliders and Mute for both, in sync with GNOME, follows the headset off / on (21–22 Nov)
 - [x] 6. Power profile over D-Bus, battery alerts, the Sound section (output buttons, sliders on the default devices, headset battery from BlueZ) (22 Nov)
-- [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub (in progress: Steam and emulator games listed with clean names; a game is picked from the list and Steam games start from the hub, 24 Nov)
+- [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub (in progress: Steam and emulator games listed with clean names; step 8 done 27 Nov: games picked from the list and started by the hub, Steam and emulators, the between-games page is now the library, rescan + Refresh)
 - [ ] 8. Temperature graph with Cairo
 - [ ] 9. FPS from MangoHud (stretch)
 
@@ -167,7 +167,7 @@ Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, 
 | [`docs/power.md`](docs/power.md) | Milestone 6, steps 1–4: tuned-ppd and UPower by hand, the `GDBusProxy`, profile buttons and `Properties.Set`, battery alerts |
 | [`docs/bluez.md`](docs/bluez.md) | Milestone 6, step 5: the headset line, BlueZ's object manager, the default output's Bluetooth address from libpulse |
 | [`docs/sound.md`](docs/sound.md) | Milestone 6, steps 6–7: sliders on the default output and input, output buttons, the mic following, rebuilding when devices come and go |
-| [`docs/library.md`](docs/library.md) | Milestone 7: the steps, and what I found by hand (Steam's library files, my dumps' names and disc headers, where the covers are, emulator flags); step 8 in progress (picking a game, launching Steam games) |
+| [`docs/library.md`](docs/library.md) | Milestone 7: the steps, and what I found by hand (Steam's library files, my dumps' names and disc headers, where the covers are, emulator flags); step 8, launching games and the session loop |
 
 ## Resources
 
