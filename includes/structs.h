@@ -174,6 +174,14 @@ typedef struct s_game_info
 	const gchar		*command;
 }	t_game_info;
 
+typedef struct s_platforms
+{
+	const gchar	*name;
+	gchar		*folder;
+	gchar		**extensions;
+	gchar		*command;
+}	t_platform;
+
 typedef struct s_hub_game_class
 {
 	GObjectClass	parent_class;

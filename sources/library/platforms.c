@@ -40,22 +40,24 @@ void	hub_platforms_scan(GListStore *store)
 void	hub_platform_read(GListStore *store, GKeyFile *key_file,
 			const gchar *group)
 {
-	gchar	*folder;
-	gchar	**extensions;
+	t_platform	plat;
 
-	folder = g_key_file_get_string(key_file, group, HUB_PLAT_FOLDER, NULL);
-	extensions = g_key_file_get_string_list(key_file, group,
+	plat.folder = g_key_file_get_string(key_file, group, HUB_PLAT_FOLDER, NULL);
+	plat.command = g_key_file_get_string(key_file, group,
+			HUB_PLAT_COMMAND, NULL);
+	plat.extensions = g_key_file_get_string_list(key_file, group,
 			HUB_PLAT_EXTS, NULL, NULL);
-	if (!folder || !extensions)
-		g_printerr("%s: [%s] needs %s= and %s=\n", HUB_PLATFORMS_FILE,
-			group, HUB_PLAT_FOLDER, HUB_PLAT_EXTS);
+	if (!plat.folder || !plat.extensions || plat.command)
+		g_printerr("%s: [%s] needs %s=, %s= and %s=\n", HUB_PLATFORMS_FILE,
+			group, HUB_PLAT_FOLDER, HUB_PLAT_EXTS, HUB_PLAT_COMMAND);
 	else
 	{
-		hub_path_expand(&folder);
-		hub_platform_folder(store, group, folder, extensions);
+		hub_path_expand(&plat.folder);
+		hub_platform_folder(store, &plat);
 	}
-	g_free(folder);
-	g_strfreev(extensions);
+	g_free(plat.folder);
+	g_free(plat.command);
+	g_strfreev(plat.extensions);
 }
 
 gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions)
@@ -77,40 +79,39 @@ gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions)
 	return (FALSE);
 }
 
-void	hub_platform_folder(GListStore *store, const gchar *group,
-			const gchar *folder, gchar **extensions)
+void	hub_platform_folder(GListStore *store, t_platform *plat)
 {
 	GDir		*dir;
 	const gchar	*name;
 
-	dir = g_dir_open(folder, 0, NULL);
+	dir = g_dir_open(plat->folder, 0, NULL);
 	if (!dir)
 		return ;
 	name = g_dir_read_name(dir);
 	while (name)
 	{
-		if (hub_platform_ext_ok(name, extensions))
-			hub_platform_add(store, group, folder, name);
+		if (hub_platform_ext_ok(name, plat->extensions))
+			hub_platform_add(store, plat, name);
 		name = g_dir_read_name(dir);
 	}
 	g_dir_close(dir);
 }
 
-void	hub_platform_add(GListStore *store, const gchar *group,
-			const gchar *folder, const gchar *name)
+void	hub_platform_add(GListStore *store, const t_platform *plat,
+			const gchar *name)
 {
 	t_game_info	info;
 	gchar		*path;
 	t_dump_name	dump;
 
 	hub_name_parse(name, &dump);
-	path = g_build_filename(folder, name, NULL);
+	path = g_build_filename(plat->folder, name, NULL);
 	hub_disc_check(path, &dump);
 	info.source = GAME_EMULATOR;
-	info.platform = group;
+	info.platform = plat->name;
 	info.name = dump.title;
 	info.id = dump.id;
-	info.command = NULL;
+	info.command = plat->command;
 	info.path = path;
 	hub_library_add(store, &info);
 	hub_name_clear(&dump);

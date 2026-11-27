@@ -85,6 +85,7 @@
 # define HUB_PLATFORMS_FILE "platforms.ini"
 # define HUB_PLAT_FOLDER "folder"
 # define HUB_PLAT_EXTS "extensions"
+# define HUB_PLAT_COMMAND "command"
 # define HUB_HOME_PREFIX "~/"
 # define HUB_HOME_PREFIX_L 2
 
