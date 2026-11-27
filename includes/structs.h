@@ -174,7 +174,7 @@ typedef struct s_game_info
 	const gchar		*command;
 }	t_game_info;
 
-typedef struct s_platforms
+typedef struct s_platform
 {
 	const gchar	*name;
 	gchar		*folder;

@@ -62,7 +62,6 @@ void	hub_activate(GtkApplication *self, gpointer user_data)
 	hub_bluez_connect(hub);
 	hub_tick(hub);
 	gtk_window_present(window);
-	g_print("%s: %s\n", hub->library.picked->name, hub->library.picked->command);
 }
 
 gboolean	hub_tick(gpointer user_data)

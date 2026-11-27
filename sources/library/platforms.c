@@ -42,14 +42,15 @@ void	hub_platform_read(GListStore *store, GKeyFile *key_file,
 {
 	t_platform	plat;
 
-	plat.folder = g_key_file_get_string(key_file, group, HUB_PLAT_FOLDER, NULL);
-	plat.command = g_key_file_get_string(key_file, group,
+	plat.name = group;
+	plat.folder = g_key_file_get_string(key_file, plat.name, HUB_PLAT_FOLDER, NULL);
+	plat.command = g_key_file_get_string(key_file, plat.name,
 			HUB_PLAT_COMMAND, NULL);
-	plat.extensions = g_key_file_get_string_list(key_file, group,
+	plat.extensions = g_key_file_get_string_list(key_file, plat.name,
 			HUB_PLAT_EXTS, NULL, NULL);
-	if (!plat.folder || !plat.extensions || plat.command)
+	if (!plat.folder || !plat.extensions || !plat.command)
 		g_printerr("%s: [%s] needs %s=, %s= and %s=\n", HUB_PLATFORMS_FILE,
-			group, HUB_PLAT_FOLDER, HUB_PLAT_EXTS, HUB_PLAT_COMMAND);
+			plat.name, HUB_PLAT_FOLDER, HUB_PLAT_EXTS, HUB_PLAT_COMMAND);
 	else
 	{
 		hub_path_expand(&plat.folder);
@@ -79,7 +80,7 @@ gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions)
 	return (FALSE);
 }
 
-void	hub_platform_folder(GListStore *store, t_platform *plat)
+void	hub_platform_folder(GListStore *store, const t_platform *plat)
 {
 	GDir		*dir;
 	const gchar	*name;
