@@ -48,6 +48,8 @@ void	hub_game_set_property(GObject *object, guint prop_id,
 		hub_keep(&game->platform, g_value_get_string(value));
 	else if (prop_id == GAME_PROP_ID)
 		hub_keep(&game->id, g_value_get_string(value));
+	else if (prop_id == GAME_PROP_COMMAND)
+		hub_keep(&game->command, g_value_get_string(value));
 	else if (prop_id == GAME_PROP_PATH)
 		hub_keep(&game->path, g_value_get_string(value));
 	else
@@ -68,6 +70,8 @@ void	hub_game_get_property(GObject *object, guint prop_id,
 		g_value_set_string(value, game->platform);
 	else if (prop_id == GAME_PROP_ID)
 		g_value_set_string(value, game->id);
+	else if (prop_id == GAME_PROP_COMMAND)
+		g_value_set_string(value, game->command);
 	else if (prop_id == GAME_PROP_PATH)
 		g_value_set_string(value, game->path);
 	else
