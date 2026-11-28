@@ -143,4 +143,7 @@ uninstall:
 	rm -f ${BIN_DIR}/${NAME}
 	-update-desktop-database ${APP_DIR}
 
-.PHONY: all clean fclean re libft install uninstall
+norm:
+	@norminette sources includes
+
+.PHONY: all clean fclean re libft install uninstall norm

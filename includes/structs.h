@@ -31,6 +31,8 @@ typedef enum e_timer_state
 	TIMER_TRANSIT
 }	t_timer_state;
 
+// stored as a number in library.ini: add new sources at
+// the end only
 typedef enum e_game_source
 {
 	GAME_STEAM,

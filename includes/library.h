@@ -37,7 +37,6 @@ void		hub_game_get_property(GObject *object, guint prop_id,
 t_hub_game	*hub_game_cast(gpointer object);
 
 // library_store.c
-void		hub_library_add(GListStore *store, const t_game_info *info);
 void		hub_library_rescan(t_hub *hub);
 
 // library_rows.c
@@ -83,7 +82,7 @@ void		hub_steam_app_add(GKeyFile *file, t_steam_app *app,
 
 // platforms.c
 void		hub_platforms_scan(GKeyFile *file);
-void		hub_platform_read(GKeyFile *file, GKeyFile *key_file,
+void		hub_platform_read(GKeyFile *file, GKeyFile *platform,
 				const gchar *group);
 gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions);
 void		hub_platform_folder(GKeyFile *file, const t_platform *plat);

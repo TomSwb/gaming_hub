@@ -37,17 +37,17 @@ void	hub_platforms_scan(GKeyFile *file)
 	g_key_file_free(key_file);
 }
 
-void	hub_platform_read(GKeyFile *file, GKeyFile *key_file,
+void	hub_platform_read(GKeyFile *file, GKeyFile *platform,
 			const gchar *group)
 {
 	t_platform	plat;
 
 	plat.name = group;
-	plat.folder = g_key_file_get_string(key_file, plat.name,
+	plat.folder = g_key_file_get_string(platform, plat.name,
 			HUB_PLAT_FOLDER, NULL);
-	plat.command = g_key_file_get_string(key_file, plat.name,
+	plat.command = g_key_file_get_string(platform, plat.name,
 			HUB_PLAT_COMMAND, NULL);
-	plat.extensions = g_key_file_get_string_list(key_file, plat.name,
+	plat.extensions = g_key_file_get_string_list(platform, plat.name,
 			HUB_PLAT_EXTS, NULL, NULL);
 	if (!plat.folder || !plat.extensions || !plat.command)
 		g_printerr("%s: [%s] needs %s=, %s= and %s=\n", HUB_PLATFORMS_FILE,

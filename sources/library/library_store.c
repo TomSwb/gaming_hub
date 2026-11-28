@@ -12,15 +12,6 @@
 
 #include "gaming_hub.h"
 
-void	hub_library_add(GListStore *store, const t_game_info *info)
-{
-	t_hub_game	*game;
-
-	game = hub_game_new(info);
-	g_list_store_append(store, game);
-	g_object_unref(game);
-}
-
 void	hub_library_rescan(t_hub *hub)
 {
 	hub_steam_scan(hub->library.file);
