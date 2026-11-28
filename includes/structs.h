@@ -52,6 +52,7 @@ typedef enum e_game_prop
 	GAME_PROP_ID,
 	GAME_PROP_PATH,
 	GAME_PROP_COMMAND,
+	GAME_PROP_STATE,
 	GAME_PROP_COUNT
 }	t_game_prop;
 

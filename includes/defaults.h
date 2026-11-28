@@ -62,6 +62,8 @@
 # define HUB_GAME_ID "id"
 # define HUB_GAME_PATH "path"
 # define HUB_GAME_COMMAND "command"
+# define HUB_GAME_STATE "state"
+# define HUB_NOTIFY_STATE "notify::state"
 
 # define HUB_STEAM_PATH "path"
 # define HUB_STEAM_ROOT "libraryfolders"

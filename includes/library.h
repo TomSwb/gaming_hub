@@ -45,6 +45,10 @@ void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
 void		hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
 void		hub_row_state(GtkWidget *row, const t_hub_game *game);
+void		hub_row_notify(GObject *self, GParamSpec *pspec,
+				gpointer user_data);
+void		hub_row_unbind(GtkSignalListItemFactory *self, GObject *object,
+				gpointer user_data);
 
 // library_build.c
 GtkWidget	*hub_build_library(t_hub *hub);
@@ -132,5 +136,11 @@ void		hub_library_check(t_library *library);
 void		hub_drives_changed(GVolumeMonitor *self, gpointer object,
 				gpointer user_data);
 void		hub_drives_watch(t_hub *hub);
+void		hub_drive_woken(GObject *source, GAsyncResult *result,
+				gpointer user_data);
+void		hub_drive_wake(GHashTable *seen, t_hub_game *game,
+				t_library *library);
+void		hub_drive_added(GVolumeMonitor *self, GVolume *volume,
+				gpointer user_data);
 
 #endif

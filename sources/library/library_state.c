@@ -94,9 +94,9 @@ void	hub_library_check(t_library *library)
 		game = hub_game_cast(
 				g_list_model_get_item(G_LIST_MODEL(library->games), i));
 		hub_game_check(game, mounts);
+		g_object_notify(G_OBJECT(game), HUB_GAME_STATE);
 		g_object_unref(game);
 		i++;
 	}
 	g_list_free_full(mounts, (GDestroyNotify)g_unix_mount_entry_free);
-	g_list_model_items_changed(G_LIST_MODEL(library->games), 0, n, n);
 }

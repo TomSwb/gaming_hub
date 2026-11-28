@@ -28,6 +28,7 @@ GtkWidget	*hub_build_library(t_hub *hub)
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory, "setup", G_CALLBACK(hub_row_setup), NULL);
 	g_signal_connect(factory, "bind", G_CALLBACK(hub_row_bind), NULL);
+	g_signal_connect(factory, "unbind", G_CALLBACK(hub_row_unbind), NULL);
 	view = gtk_list_view_new(GTK_SELECTION_MODEL(selection), factory);
 	g_signal_connect(view, "activate", G_CALLBACK(hub_library_activate), hub);
 	scroll = gtk_scrolled_window_new();

@@ -41,8 +41,9 @@ void	hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 	gtk_label_set_text(GTK_LABEL(gtk_widget_get_first_child(row)),
 		game->name);
 	gtk_label_set_text(GTK_LABEL(gtk_widget_get_next_sibling(
-		gtk_widget_get_first_child(row))), game->platform);
+				gtk_widget_get_first_child(row))), game->platform);
 	hub_row_state(row, game);
+	g_signal_connect(game, HUB_NOTIFY_STATE, G_CALLBACK(hub_row_notify), row);
 }
 
 void	hub_row_state(GtkWidget *row, const t_hub_game *game)
@@ -66,4 +67,23 @@ void	hub_row_state(GtkWidget *row, const t_hub_game *game)
 	text = g_strdup_printf(HUB_PLUG_IN, ft_strrchr(game->drive, '/') + 1);
 	gtk_label_set_text(GTK_LABEL(label), text);
 	g_free(text);
+}
+
+void	hub_row_notify(GObject *self, GParamSpec *pspec,
+			gpointer user_data)
+{
+	(void)pspec;
+	hub_row_state(user_data, hub_game_cast(self));
+}
+
+void	hub_row_unbind(GtkSignalListItemFactory *self, GObject *object,
+			gpointer user_data)
+{
+	GtkListItem	*item;
+
+	(void)self;
+	(void)user_data;
+	item = GTK_LIST_ITEM(object);
+	g_signal_handlers_disconnect_by_data(gtk_list_item_get_item(item),
+		gtk_list_item_get_child(item));
 }

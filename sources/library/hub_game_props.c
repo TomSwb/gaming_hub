@@ -31,6 +31,9 @@ void	hub_game_install_props(GObjectClass *object_class)
 			NULL, flags);
 	props[GAME_PROP_PATH] = g_param_spec_string(HUB_GAME_PATH, NULL, NULL,
 			NULL, flags);
+	props[GAME_PROP_STATE] = g_param_spec_int(HUB_GAME_STATE, NULL, NULL,
+			GAME_READY, GAME_NOT_INSTALLED, GAME_READY,
+			G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 	g_object_class_install_properties(object_class, GAME_PROP_COUNT, props);
 }
 
@@ -74,6 +77,8 @@ void	hub_game_get_property(GObject *object, guint prop_id,
 		g_value_set_string(value, game->command);
 	else if (prop_id == GAME_PROP_PATH)
 		g_value_set_string(value, game->path);
+	else if (prop_id == GAME_PROP_STATE)
+		g_value_set_int(value, game->state);
 	else
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 }
