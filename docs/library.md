@@ -15,9 +15,9 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h (done 27 Nov, ~5.3 h: 24 Nov ~2.4 h, 27 Nov ~2.9 h) |
 | 9 | The hub's library file (`~/.local/share/gaming_hub/library.ini`) | 2–3 h (done 28 Nov, ~2.2 h) |
 | 10 | Three states, live drives | 2–3 h (done 28 Nov, ~2.8 h) |
-| 11 | Silent session log + play history | 3–5 h |
+| 11 | ~~Silent session log + play history~~ | moved to v2 on 28 Nov (with the "recently played" sort) |
 | 12 | Grid + toggle | 2 h |
-| 13 | Search, filters, sort | 2–3 h |
+| 13 | Search, filters, A–Z sort | 1.5–2.5 h |
 | 14 | Hide + Show hidden | 1–2 h |
 | 15 | Add manually | 2 h |
 | 16 | Grouping, Edit game dialog, group-by | 4–7 h |
@@ -58,7 +58,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | `name` | `Portal` | the name; **trim it** (`"Sonic Adventure™ 2 "` ends with a space); `™` is UTF-8, fine for GTK |
 | `installdir` | `Portal` | the game's folder: `<library path>/steamapps/common/<installdir>` (states, step 10) |
 | `StateFlags` | `4` | bit flags, 4 = fully installed |
-| `LastPlayed` | `1795264178` | Steam's last-played time (Unix seconds, `0` = never); possible bonus for the play history |
+| `LastPlayed` | `1795264178` | Steam's last-played time (Unix seconds, `0` = never); possible bonus for the play history (v2) |
 | `LastOwner` | `76561198310493486` or `0` | used to skip tools (below) |
 
 The blocks inside (`InstalledDepots`, `UserConfig`, `MountedConfig`) are skipped, so the parser must skip a whole block, nested `{ }` included.

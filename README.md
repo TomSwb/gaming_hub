@@ -34,7 +34,6 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Sound | Volume and mute of the output and the mic (milestone 5); a button per output to switch what I'm listening on, the mic following it, a Bluetooth headset's battery (milestone 6) | PipeWire through libpulse; battery from BlueZ over D-Bus |
 | Timer | Session plan, breaks, wind-down warning, 20-20-20 eye cue, pause button | GLib timers, GtkMediaFile, GNotification |
 | Power | Power Saver / Balanced / Performance buttons; alerts when unplugged or at 25 % during a session | power-profiles D-Bus API (tuned-ppd); charger and battery from `/sys` |
-| Session log | Silent: game, date and play time of library games, for the library's play history (milestone 7) | Own code, `~/.local/share/gaming_hub/` |
 | Library | All my games (Steam, GOG/Epic through Heroic, emulators) in one list, started from the hub | Steam `appmanifest_*.acf`, Heroic's library JSON, ROM folders |
 | Temp graph | Temperature over the whole session | GtkDrawingArea + Cairo |
 | FPS (stretch) | Frame rate and frame time | MangoHud's log, if it can be read live |
@@ -151,7 +150,7 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [ ] 8. Temperature graph with Cairo
 - [ ] 9. FPS from MangoHud (stretch)
 
-Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, monthly review); only a silent session log for the library's play history stays, inside milestone 7. The milestones after it were renumbered (old 8–10 are now 7–9; commits and docs before 20 Nov use the old numbers).
+Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, monthly review); only a silent session log for the library's play history stayed, inside milestone 7, and moved to v2 on 28 Nov 2026. The milestones after it were renumbered (old 8–10 are now 7–9; commits and docs before 20 Nov use the old numbers).
 
 ## Documentation
 
