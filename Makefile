@@ -100,7 +100,8 @@ FILES = ${SOURCES} \
 	${COMPUTER} ${TIMER} ${GAME} \
 	${HEADSET} ${POWER} ${LIBRARY}
 
-OBJS = ${FILES:.c=.o}
+OBJ_DIR = objs
+OBJS = ${FILES:%.c=${OBJ_DIR}/%.o}
 
 all: libft compile_flags.txt ${NAME}
 
@@ -114,12 +115,13 @@ ${NAME}: ${LIBFT} ${OBJS}
 compile_flags.txt: Makefile
 	@printf '%s\n' ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} > $@
 
-%.o: %.c ${HEADERS}
+${OBJ_DIR}/%.o: %.c ${HEADERS}
+	@mkdir -p ${dir $@}
 	@echo "CC $<"
 	@${CC} ${CFLAGS} ${PKG_CFLAGS} ${INCLUDES} -c $< -o $@
 
 clean:
-	@rm -f ${OBJS}
+	@rm -rf ${OBJ_DIR}
 	@${MAKE} -C ${LIBFT_DIR} clean --no-print-directory
 
 fclean: clean
