@@ -24,6 +24,12 @@ It is also a learning project: event-driven programming in C with GTK4, GLib/GOb
 
 <img src="assets/historic/headset_power_done/image.png" alt="Gaming Hub plan page: the Sound title, Speaker and Xbox Wireless Headset buttons, volume and mic sliders with Mute, the power profile buttons and the stats" width="300">
 
+**Milestone 7, step 12 (28 Nov):** the library's grid, next to the list (List / Grid switch, Refresh on the right). Simple tiles for now: the source icon, the name and the platform; covers come next.
+
+| Steam games (one selected) | Disc dumps (PS2) |
+| --- | --- |
+| <img src="assets/historic/library_done/first_grid_view_2.png" alt="Grid view: Steam icon tiles for Sonic Rumble Party (selected), Assassin's Creed II, Assassin's Creed Brotherhood and Trackmania, each with its name and Steam" width="300"> | <img src="assets/historic/library_done/first_grid_view.png" alt="Grid view: controller icon tiles for Asterix & Obelix XXL, 007 - Agent Under Fire, 007 - Nightfire, 007 - Everything or Nothing, I-Ninja, Burnout Revenge, Rayman Revolution and Asterix & Obelix XXL 2, each with its name and PS2" width="300"> |
+
 #### Brief overview:
 
 The window is snapped to one half of the laptop screen (Super+Left/Right), next to the YouTube Music app on the other half.
