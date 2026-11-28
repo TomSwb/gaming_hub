@@ -111,6 +111,7 @@
 # define HUB_PLUG_IN "Plug in %s"
 # define HUB_NOT_INSTALLED "Not installed"
 # define HUB_ROW_DIM 0.5
+# define HUB_NOT_READY "%s: not ready, not started\n"
 
 # define HUB_GAMEMODE "gamemoderun"
 # define HUB_FILE_MARK "%f"

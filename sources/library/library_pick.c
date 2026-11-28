@@ -22,6 +22,12 @@ void	hub_library_activate(GtkListView *self, guint position,
 	hub = user_data;
 	game = hub_game_cast(g_list_model_get_item(G_LIST_MODEL(
 					gtk_list_view_get_model(self)), position));
+	if (game->state != GAME_READY)
+	{
+		g_printerr(HUB_NOT_READY, game->name);
+		g_object_unref(game);
+		return ;
+	}
 	g_clear_object(&hub->library.picked);
 	hub->library.picked = game;
 	if (hub->timer.state == TIMER_TRANSIT)

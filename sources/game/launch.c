@@ -34,6 +34,11 @@ gboolean	hub_launch(t_hub *hub)
 {
 	gboolean	launch;
 
+	if (hub->library.picked && hub->library.picked->state != GAME_READY)
+	{
+		g_printerr(HUB_NOT_READY, hub->library.picked->name);
+		return (FALSE);
+	}
 	launch = TRUE;
 	if (hub->library.picked && hub->library.picked->source == GAME_STEAM)
 		launch = hub_launch_steam(hub->library.picked);
