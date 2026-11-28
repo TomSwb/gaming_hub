@@ -28,6 +28,7 @@
 
 // external:
 # include <fcntl.h>
+# include <glib/gstdio.h>
 
 // === Functions === //
 

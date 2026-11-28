@@ -52,6 +52,8 @@ void	hub_free_hub(t_hub *hub)
 		g_object_unref(hub->headset.obj_man);
 	g_clear_object(&hub->library.picked);
 	g_clear_object(&hub->library.running);
+	if (hub->library.file)
+		g_key_file_free(hub->library.file);
 }
 
 void	hub_gfree_hub(t_hub *hub)
@@ -67,6 +69,7 @@ void	hub_gfree_hub(t_hub *hub)
 	g_free(hub->headset.want_add);
 	g_free(hub->headset.head_mic);
 	g_free(hub->headset.lapt_mic);
+	g_free(hub->library.file_path);
 }
 
 void	hub_keep(gchar **slot, const char *name)

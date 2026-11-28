@@ -88,6 +88,9 @@
 # define HUB_PLAT_COMMAND "command"
 # define HUB_HOME_PREFIX "~/"
 # define HUB_HOME_PREFIX_L 2
+# define HUB_DATA_DIR "gaming_hub"
+# define HUB_LIBRARY_FILE "library.ini"
+# define HUB_BROKEN_SUFFIX ".broken"
 
 # define HUB_DISC_HEADER 32
 # define HUB_DISC_ID_LEN 6

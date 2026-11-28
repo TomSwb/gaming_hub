@@ -108,4 +108,7 @@ void		hub_library_activate(GtkListView *self, guint position,
 GtkWidget	*hub_build_plan_page(t_hub *hub);
 void		hub_library_back(GtkButton *self, gpointer user_data);
 
+// library_file.c
+void		hub_library_load(t_library *library);
+
 #endif

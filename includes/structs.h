@@ -195,6 +195,8 @@ typedef struct s_library
 	GtkWidget	*next;
 	GtkWidget	*playing;
 	GSubprocess	*running;
+	GKeyFile	*file;
+	gchar		*file_path;
 }	t_library;
 
 typedef struct s_kv_cursor
