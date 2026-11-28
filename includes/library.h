@@ -135,6 +135,7 @@ gboolean	hub_state_mount(GList *mounts, const gchar *path,
 				const gchar **point);
 void		hub_game_check(t_hub_game *game, GList *mounts);
 void		hub_library_check(t_library *library);
+gboolean	hub_state_present(const gchar *path);
 
 // library_drives.c
 void		hub_drives_changed(GVolumeMonitor *self, gpointer object,
@@ -155,7 +156,7 @@ void		hub_tile_bind(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
 GtkWidget	*hub_build_grid(t_hub *hub);
 
-/// library_view.c
+// library_view.c
 void		hub_view_focus(t_library *library);
 void		hub_view_save(const gchar *view);
 void		hub_view_changed(GObject *self,

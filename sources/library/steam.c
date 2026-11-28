@@ -69,6 +69,8 @@ void	hub_steam_library(GKeyFile *file, const gchar *lib)
 	GDir		*dir;
 	const gchar	*name;
 
+	if (!hub_state_present(lib))
+		return ;
 	path = g_build_filename(lib, HUB_STEAM_APPS, NULL);
 	dir = g_dir_open(path, 0, NULL);
 	if (!dir)

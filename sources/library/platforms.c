@@ -86,6 +86,8 @@ void	hub_platform_folder(GKeyFile *file, const t_platform *plat)
 	GDir		*dir;
 	const gchar	*name;
 
+	if (!hub_state_present(plat->folder))
+		return ;
 	dir = g_dir_open(plat->folder, 0, NULL);
 	if (!dir)
 		return ;

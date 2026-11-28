@@ -100,3 +100,15 @@ void	hub_library_check(t_library *library)
 	}
 	g_list_free_full(mounts, (GDestroyNotify)g_unix_mount_entry_free);
 }
+
+gboolean	hub_state_present(const gchar *path)
+{
+	GList		*mounts;
+	const gchar	*point;
+	gboolean	present;
+
+	mounts = g_unix_mount_entries_get(NULL);
+	present = hub_state_mount(mounts, path, &point);
+	g_list_free_full(mounts, (GDestroyNotify)g_unix_mount_entry_free);
+	return (present);
+}

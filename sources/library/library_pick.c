@@ -30,7 +30,6 @@ void	hub_library_activate(GtkWidget *self, guint position,
 	}
 	g_clear_object(&hub->library.picked);
 	hub->library.picked = game;
-	g_set_object(&hub->library.last, game);
 	if (hub->timer.state == TIMER_TRANSIT)
 	{
 		if (hub_launch(hub))

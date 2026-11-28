@@ -14,6 +14,8 @@
 
 void	hub_library_rescan(t_hub *hub)
 {
+	g_set_object(&hub->library.last,
+		gtk_single_selection_get_selected_item(hub->library.selection));
 	hub_steam_scan(hub->library.file);
 	hub_platforms_scan(hub->library.file);
 	hub_library_fill(&hub->library);
