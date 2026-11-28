@@ -64,6 +64,7 @@
 # define HUB_GAME_COMMAND "command"
 # define HUB_GAME_STATE "state"
 # define HUB_NOTIFY_STATE "notify::state"
+# define HUB_NOTIFY_VIEW "notify::visible-child-name"
 
 # define HUB_STEAM_PATH "path"
 # define HUB_STEAM_ROOT "libraryfolders"
@@ -114,6 +115,22 @@
 # define HUB_NOT_INSTALLED "Not installed"
 # define HUB_ROW_DIM 0.5
 # define HUB_NOT_READY "%s: not ready, not started\n"
+
+# define HUB_ICON_STEAM "steam"
+# define HUB_ICON_GAME "applications-games-symbolic"
+# define HUB_TILE_WIDTH 160
+# define HUB_TILE_HEIGHT 240
+# define HUB_TILE_ICON 64
+# define HUB_TILE_LINES 2
+# define HUB_TILE_CHARS 18
+# define HUB_GRID_COLUMNS 20
+# define HUB_VIEW_LIST "list"
+# define HUB_VIEW_GRID "grid"
+# define HUB_SETTINGS_FILE "settings.ini"
+# define HUB_VIEW_GROUP "library"
+# define HUB_VIEW_KEY "view"
+
+# define HUB_TILE_CSS "card"
 
 # define HUB_GAMEMODE "gamemoderun"
 # define HUB_FILE_MARK "%f"

@@ -12,16 +12,16 @@
 
 #include "gaming_hub.h"
 
-void	hub_library_activate(GtkListView *self, guint position,
+void	hub_library_activate(GtkWidget *self, guint position,
 			gpointer user_data)
 {
 	t_hub		*hub;
 	t_hub_game	*game;
-	gchar		*text;
 
+	(void)self;
 	hub = user_data;
 	game = hub_game_cast(g_list_model_get_item(G_LIST_MODEL(
-					gtk_list_view_get_model(self)), position));
+					hub->library.selection), position));
 	if (game->state != GAME_READY)
 	{
 		g_printerr(HUB_NOT_READY, game->name);
@@ -36,6 +36,13 @@ void	hub_library_activate(GtkListView *self, guint position,
 			hub_game_started(hub);
 		return ;
 	}
+	hub_library_plan(hub);
+}
+
+void	hub_library_plan(t_hub *hub)
+{
+	gchar	*text;
+
 	text = g_strdup_printf("Game: %s", hub->library.picked->name);
 	gtk_label_set_text(GTK_LABEL(hub->library.next), text);
 	gtk_stack_set_visible_child_name(GTK_STACK(hub->stack), "plan");

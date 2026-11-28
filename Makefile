@@ -91,7 +91,9 @@ LIBRARY = sources/library/hub_game.c \
 	sources/library/library_file.c \
 	sources/library/library_entry.c \
 	sources/library/library_state.c \
-	sources/library/library_drives.c
+	sources/library/library_drives.c \
+	sources/library/library_tiles.c \
+	sources/library/library_view.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

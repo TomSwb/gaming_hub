@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                            :::::::    :::     :::  :::::   */
-/*   library_rows.c                           :+:   :+:  :+:+: :+:+:   :+:    */
+/*   library_rows.c                          :+:   :+:  :+:+: :+:+:   :+:    */
 /*                                            +#++:+#+   +#+ +:+ +#+   +#+    */
 /*   By: TomSwb <github.com/TomSwb>           +#+   +#+  +#+     +#+   +#+    */
 /*                                            ########   ###     ###  #####   */
@@ -42,23 +42,23 @@ void	hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 		game->name);
 	gtk_label_set_text(GTK_LABEL(gtk_widget_get_next_sibling(
 				gtk_widget_get_first_child(row))), game->platform);
-	hub_row_state(row, game);
-	g_signal_connect(game, HUB_NOTIFY_STATE, G_CALLBACK(hub_row_notify), row);
+	hub_item_state(row, game);
+	g_signal_connect(game, HUB_NOTIFY_STATE, G_CALLBACK(hub_item_notify), row);
 }
 
-void	hub_row_state(GtkWidget *row, const t_hub_game *game)
+void	hub_item_state(GtkWidget *widget, const t_hub_game *game)
 {
 	GtkWidget	*label;
 	gchar		*text;
 
-	label = gtk_widget_get_last_child(row);
-	gtk_widget_set_opacity(row, 1.0);
+	label = gtk_widget_get_last_child(widget);
+	gtk_widget_set_opacity(widget, 1.0);
 	if (game->state == GAME_READY)
 	{
 		gtk_label_set_text(GTK_LABEL(label), "");
 		return ;
 	}
-	gtk_widget_set_opacity(row, HUB_ROW_DIM);
+	gtk_widget_set_opacity(widget, HUB_ROW_DIM);
 	if (game->state == GAME_NOT_INSTALLED)
 	{
 		gtk_label_set_text(GTK_LABEL(label), HUB_NOT_INSTALLED);
@@ -69,14 +69,14 @@ void	hub_row_state(GtkWidget *row, const t_hub_game *game)
 	g_free(text);
 }
 
-void	hub_row_notify(GObject *self, GParamSpec *pspec,
+void	hub_item_notify(GObject *self, GParamSpec *pspec,
 			gpointer user_data)
 {
 	(void)pspec;
-	hub_row_state(user_data, hub_game_cast(self));
+	hub_item_state(user_data, hub_game_cast(self));
 }
 
-void	hub_row_unbind(GtkSignalListItemFactory *self, GObject *object,
+void	hub_item_unbind(GtkSignalListItemFactory *self, GObject *object,
 			gpointer user_data)
 {
 	GtkListItem	*item;

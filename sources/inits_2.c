@@ -22,6 +22,8 @@ void	hub_power_init(t_hub *hub)
 void	hub_library_init(t_hub *hub)
 {
 	hub->library.games = NULL;
+	hub->library.selection = NULL;
+	hub->library.views = NULL;
 	hub->library.picked = NULL;
 	hub->library.next = NULL;
 	hub->library.playing = NULL;

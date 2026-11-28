@@ -44,14 +44,15 @@ void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
 void		hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
-void		hub_row_state(GtkWidget *row, const t_hub_game *game);
-void		hub_row_notify(GObject *self, GParamSpec *pspec,
+void		hub_item_state(GtkWidget *widget, const t_hub_game *game);
+void		hub_item_notify(GObject *self, GParamSpec *pspec,
 				gpointer user_data);
-void		hub_row_unbind(GtkSignalListItemFactory *self, GObject *object,
+void		hub_item_unbind(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
 
 // library_build.c
 GtkWidget	*hub_build_library(t_hub *hub);
+GtkWidget	*hub_build_list(t_hub *hub);
 GtkWidget	*hub_build_library_page(t_hub *hub);
 void		hub_library_refresh(GtkButton *self, gpointer user_data);
 
@@ -107,8 +108,9 @@ gboolean	hub_disc_id(const gchar *path, gchar *id);
 void		hub_disc_check(const gchar *path, t_dump_name *dump);
 
 // library_pick.c
-void		hub_library_activate(GtkListView *self, guint position,
+void		hub_library_activate(GtkWidget *self, guint position,
 				gpointer user_data);
+void		hub_library_plan(t_hub *hub);
 GtkWidget	*hub_build_plan_page(t_hub *hub);
 void		hub_library_back(GtkButton *self, gpointer user_data);
 
@@ -142,5 +144,19 @@ void		hub_drive_wake(GHashTable *seen, t_hub_game *game,
 				t_library *library);
 void		hub_drive_added(GVolumeMonitor *self, GVolume *volume,
 				gpointer user_data);
+
+// library_tiles.c
+GtkWidget	*hub_tile_slot(void);
+void		hub_tile_setup(GtkSignalListItemFactory *self, GObject *object,
+				gpointer user_data);
+void		hub_tile_bind(GtkSignalListItemFactory *self, GObject *object,
+				gpointer user_data);
+GtkWidget	*hub_build_grid(t_hub *hub);
+
+/// library_view.c
+void		hub_view_focus(t_library *library);
+void		hub_view_save(const gchar *view);
+void		hub_view_changed(GObject *self,
+				GParamSpec *pspec, gpointer user_data);
 
 #endif
