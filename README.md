@@ -41,8 +41,8 @@ The window is snapped to one half of the laptop screen (Super+Left/Right), next 
 | Timer | Session plan, breaks, wind-down warning, 20-20-20 eye cue, pause button | GLib timers, GtkMediaFile, GNotification |
 | Power | Power Saver / Balanced / Performance buttons; alerts when unplugged or at 25 % during a session | power-profiles D-Bus API (tuned-ppd); charger and battery from `/sys` |
 | Library | All my games (Steam, GOG/Epic through Heroic, emulators) in one list, started from the hub | Steam `appmanifest_*.acf`, Heroic's library JSON, ROM folders |
-| Temp graph | Temperature over the whole session | GtkDrawingArea + Cairo |
-| FPS (stretch) | Frame rate and frame time | MangoHud's log, if it can be read live |
+| Temp graph (v2) | Temperature over the whole session | GtkDrawingArea + Cairo |
+| FPS (stretch, v2) | Frame rate and frame time | MangoHud's log, if it can be read live |
 
 **Starts and stops by itself:** every game launches through `gamemoderun`, and GameMode's `[custom] start=` / `end=` hooks run the hub. It is single-instance (GtkApplication), so the end hook just tells the running window to close the session. Emulators get `gamemoderun` added once to their app shortcut, so they open the hub too.
 
@@ -153,8 +153,8 @@ Each one is usable on its own. Full plan: [`docs/gaming-hub/game-dashboard.md`](
 - [x] 5. Headset volume and mic with libpulse: sliders and Mute for both, in sync with GNOME, follows the headset off / on (21–22 Nov)
 - [x] 6. Power profile over D-Bus, battery alerts, the Sound section (output buttons, sliders on the default devices, headset battery from BlueZ) (22 Nov)
 - [ ] 7. Game library + launcher: Steam, GOG/Epic (Heroic) and emulator games in one list, started from the hub (in progress: Steam and emulator games listed with clean names; step 8 done 27 Nov: games picked from the list and started by the hub, Steam and emulators, the between-games page is now the library, rescan + Refresh; step 9 done 28 Nov: the hub's own library file remembers every game it has seen, so uninstalled games and games on an unplugged drive stay listed; step 10 done 28 Nov: each game is Ready, Drive not connected ("Plug in Steam2TB", dimmed) or Not installed (dimmed), only Ready games start, and the states follow drives being plugged in and out live; step 12 done 28 Nov: a List / Grid switch, the grid with simple tiles on the same games, the last view remembered in `settings.ini`, and the selected game kept when coming back to the library)
-- [ ] 8. Temperature graph with Cairo
-- [ ] 9. FPS from MangoHud (stretch)
+- [ ] 8. Temperature graph with Cairo (moved to v2 on 28 Nov 2026)
+- [ ] 9. FPS from MangoHud (stretch, moved to v2 on 28 Nov 2026)
 
 Dropped 20 Nov 2026: the old milestone 7 (session log, game notes, stop ritual, monthly review); only a silent session log for the library's play history stayed, inside milestone 7, and moved to v2 on 28 Nov 2026. The milestones after it were renumbered (old 8–10 are now 7–9; commits and docs before 20 Nov use the old numbers).
 
