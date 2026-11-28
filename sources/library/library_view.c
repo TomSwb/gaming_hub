@@ -60,3 +60,26 @@ void	hub_view_changed(GObject *self, GParamSpec *pspec, gpointer user_data)
 	hub_view_save(gtk_stack_get_visible_child_name(GTK_STACK(self)));
 	hub_view_focus(user_data);
 }
+
+void	hub_view_load(t_library *library)
+{
+	gchar		*path;
+	GKeyFile	*file;
+	gchar		*view;
+
+	path = g_build_filename(g_get_user_config_dir(), HUB_CONFIG_DIR,
+			HUB_SETTINGS_FILE, NULL);
+	file = g_key_file_new();
+	view = NULL;
+	if (g_key_file_load_from_file(file, path, G_KEY_FILE_NONE, NULL))
+		view = g_key_file_get_string(file, HUB_VIEW_GROUP, HUB_VIEW_KEY, NULL);
+	if (g_strcmp0(view, HUB_VIEW_GRID) == 0)
+		gtk_stack_set_visible_child_name(GTK_STACK(library->views),
+			HUB_VIEW_GRID);
+	else if (view && g_strcmp0(view, HUB_VIEW_LIST) != 0)
+		g_printerr("%s: %s=%s unknown - using %s\n", HUB_SETTINGS_FILE,
+			HUB_VIEW_KEY, view, HUB_VIEW_LIST);
+	g_free(view);
+	g_key_file_free(file);
+	g_free(path);
+}

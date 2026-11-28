@@ -158,5 +158,6 @@ void		hub_view_focus(t_library *library);
 void		hub_view_save(const gchar *view);
 void		hub_view_changed(GObject *self,
 				GParamSpec *pspec, gpointer user_data);
+void		hub_view_load(t_library *library);
 
 #endif

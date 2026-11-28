@@ -28,6 +28,7 @@ GtkWidget	*hub_build_library(t_hub *hub)
 		HUB_VIEW_LIST, "List");
 	gtk_stack_add_titled(GTK_STACK(stack), hub_build_grid(hub),
 		HUB_VIEW_GRID, "Grid");
+	hub_view_load(&hub->library);
 	g_signal_connect(stack, HUB_NOTIFY_VIEW,
 		G_CALLBACK(hub_view_changed), &hub->library);
 	return (stack);
