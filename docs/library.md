@@ -13,7 +13,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 6 | Emulator source: platforms file, ROM folders by extension | 3–4 h |
 | 7 | Names from file names, disc header check | 1–2 h (done 24 Nov, ~1.2 h) |
 | 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h (done 27 Nov, ~5.3 h: 24 Nov ~2.4 h, 27 Nov ~2.9 h) |
-| 9 | The hub's library file | 2–3 h |
+| 9 | The hub's library file (`~/.local/share/gaming_hub/library.ini`) | 2–3 h (done 28 Nov, ~2.2 h) |
 | 10 | Three states, live drives | 2–3 h |
 | 11 | Silent session log + play history | 3–5 h |
 | 12 | Grid + toggle | 2 h |
@@ -417,3 +417,67 @@ Norminette clean (one 82-column line found by the review, fixed). One evening st
 Bugs on the way: the set / get branches missing (the property installed but never stored), `plat.command` without `!` (every section skipped), a test print in `hub_activate` with no game picked (segfault), `plat.name` never set, an 84-column line, `g_shell_parse_argv` with the docs' parameter declaration and `&argv`, `g_new0` before `argc` was known, `g_free` on a `GError`, the fill loop over the empty `argv` / slot `i` instead of `i + 1` / `*words` / a double `g_strfreev`, `argv` never built in `hub_launch_emulator`, `running` not freed, a space in an indent, `error->code` on a `NULL` error and a `return` that skipped the close, the bar's three slots all given the label / returning the countdown / `gtk_box_append` on a center box, the bar visible in every state, the Refresh handler given `NULL`, the list built and thrown away, an 82-column line.
 
 Code `gaming_hub` `572b9c6` … `3652674` (+ the 82-column fix).
+
+## Step 9: the hub's library file (27–28 Nov, ~2.2 h)
+
+The hub now remembers **every game it has ever seen** in `~/.local/share/gaming_hub/library.ini`. A rescan writes what it finds into that file, and the list is built from the file, so a game stays listed after an uninstall, when its drive is unplugged, or when its dump is moved away. Which of those it is (Ready / Drive not connected / Not installed) is step 10, worked out from each entry's `path=`.
+
+### Decisions (piece 1)
+
+| # | Question | Decided | Rejected |
+| --- | --- | --- | --- |
+| 1 | Format | **A. GKeyFile**, like `settings.ini` and `platforms.ini`: setting the keys a scan found leaves other keys alone (later `hidden=`, `universe=`, a hand-fixed name), GLib escapes the values, `g_key_file_save_to_file` is atomic (temp file + rename), readable by hand | B. JSON with json-glib (a new library, no merge for free), C. my own line format (parser + writer + escaping) |
+| 2 | What identifies a game | **A. source + id**: `[steam:400]`, `[emulator:SLES-51950]`; a renamed or moved dump, a game moved to another Steam library or a renamed `platforms.ini` section stays one entry. No ID: `emulator:` + the name through `g_uri_escape_string` (`[` and `]` aren't allowed in group names). Manual entries: `manual:` + their own id at step 15 | B. source + path (a rename makes a second entry, brackets to escape), C. platform + id (a renamed section leaves ghosts) |
+| 3 | What an entry stores | **A. the six properties** as keys named like the properties (`source`, `name`, `platform`, `id`, `path`, `command`), `source` as a **number**; `structs.h` says new sources go at the end of the enum only. An `.ini` holds text only, so an enum can be stored as its number or as a word of my own (GLib's registered enums would need the type registered by hand, like `HubGame`) | B. `source` as a word (two conversion functions), C. only what a scan can't give back (an unfound game couldn't be rebuilt) |
+| 4 | When it's written | **A. after every rescan** (a few KB, 5–15 times an evening) | B. only when the text changed (`g_key_file_to_data` + a kept copy), C. only at exit (a crash loses everything) |
+| 5 | Merge | **A. the scanners write into the key file kept in memory, then the store is built from it**: a new game makes a section, a known one gets its keys overwritten, an unfound one is left alone, unknown keys are never touched. Edit the file by hand only with the hub closed (the next save overwrites it) | B. scan into the store, then merge with a `GHashTable` of found keys, C. reload the file at every rescan |
+| 6 | Missing / broken | **A.** missing → empty, quiet, created at the first save; broken → one line, renamed to `library.ini.broken` (`g_rename`), start empty; a section without `name=` → skipped with one line, kept in the file | B. don't save that run (a flag), C. overwrite it |
+| 4b | Building a game from a section | **A.** an empty game (`g_object_new` with **no** property pairs) and the owned strings from `g_key_file_get_string` moved straight into its public fields; `finalize` frees them. Values skip `set_property` there, but the variadic risk step 2 guarded against isn't there | B. a `t_entry` struct of owned strings lent through `t_game_info` (a struct, two functions, every string copied twice) |
+
+### The chain
+
+```
+startup: hub_build_library
+└─ hub_library_load(&hub->library)          file_path built, file loaded (missing: empty; broken: .broken + empty)
+every time the library is shown, and Refresh: hub_library_rescan
+├─ hub_steam_scan(file)                     … hub_steam_app_add → hub_library_remember(file, &info)
+├─ hub_platforms_scan(file)                 … hub_platform_add  → hub_library_remember(file, &info)
+│     hub_library_remember                  group = hub_library_key(info); source + 5 × hub_library_set
+├─ hub_library_fill(&hub->library)          store emptied, one hub_library_entry per section
+└─ hub_library_save(&hub->library)          folder made (0700), file written atomically
+```
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `t_library.file`, `.file_path` | the key file in memory (**owned**, freed with `g_key_file_free`: it's not a GObject, so no `g_object_unref` / `g_clear_object`; the `if` guards against `NULL`, which `g_key_file_free` refuses) and its path (owned) | `structs.h`, `inits_2.c`, `utils.c` |
+| `hub_library_load` | path from `g_get_user_data_dir` + `HUB_DATA_DIR` + `HUB_LIBRARY_FILE`; load; on failure `g_error_matches(…, G_FILE_ERROR_NOENT)` tells missing (quiet) from broken (`g_strconcat` with `HUB_BROKEN_SUFFIX`, one line, `g_rename`); then the key file freed and made again, because a half-read file may hold half its sections. `hub_key_file_error` couldn't be reused: it returns `FALSE` for both | `library_file.c` |
+| `hub_library_key` | `HUB_KEY_STEAM` / `_EMULATOR` / `_MANUAL` (`"steam:%s"` …) chosen with `if` / `else if`, then `g_strdup_printf` with the id; no id → the name through `g_uri_escape_string(name, NULL, FALSE)` (ASCII-only keys), freed after use. The caller owns the key | `library_entry.c` |
+| `hub_library_set` | `g_key_file_set_string` (which creates the section if needed), or `g_key_file_remove_key` when the value is `NULL` (`set_string` refuses `NULL`, and a value that's gone mustn't stay in the file: `command` for Steam, `id` for a dump without one) | `library_entry.c` |
+| `hub_library_remember` | one game into the key file: the key, `source` with `g_key_file_set_integer`, five `hub_library_set`, key freed. Replaces `hub_library_add` for the scanners | `library_entry.c` |
+| Scanners | `GListStore *store` → `GKeyFile *file` in 9 functions (`steam.c`, `steam_app.c`, `platforms.c`); the locals named `file` in `hub_steam_scan` / `hub_steam_app` renamed `path` (the same name as the new parameter wouldn't compile); `hub_platform_read`'s `key_file` renamed `platform` (two key files side by side) | `steam.c`, `steam_app.c`, `platforms.c`, `library.h` |
+| `hub_library_entry` | `g_object_new(hub_game_get_type(), NULL)` (one reference, mine), `source` with `g_key_file_get_integer`, five `g_key_file_get_string` moved into the fields; no `name=` → one line, else `g_list_store_append` (the store takes its own reference); `g_object_unref` (a skipped game's last: `finalize` frees its strings). A missing `source=` reads as `0` (Steam): only after a bad hand edit | `library_file.c` |
+| `hub_library_fill` | `g_list_store_remove_all`, `g_key_file_get_groups` (owned strv), one entry per group, `g_strfreev` | `library_file.c` |
+| `hub_library_save` | `g_path_get_dirname` (owned) → `g_mkdir_with_parents(dir, 0700)` (like `mkdir -p`; 0700 as XDG asks for data folders) → `g_key_file_save_to_file`; `FALSE` → one line with the path | `library_file.c` |
+| `hub_library_rescan` | Steam scan, platforms scan, fill, save (the `remove_all` moved into the fill); `hub_library_add` deleted (no caller left) | `library_store.c` |
+| `make norm` | `norminette sources includes` (not libft) | `Makefile` |
+
+Order of the list: the file's section order (the order games were first seen; new games at the end). Sorting is step 13.
+
+An entry (Portal):
+
+```ini
+[steam:400]
+source=0
+name=Portal
+platform=Steam
+id=400
+path=/mnt/Steam2TB/SteamLibrary/steamapps/common/Portal
+```
+
+**Tests:** 74 sections after the first run (the list unchanged); a fake `Test Game (Europe) [TEST-1].iso` → 75, deleted → still 75 and still listed; the same ID under a new name → still 75, `[emulator:TEST-1]` with the new `name=` and `path=`; a line that isn't `key=value` appended with the hub closed → the error line, `library.ini.broken` kept, a fresh file with the 75 games on disk; both files and the fake disc removed → no line, 74; no `CRITICAL` on quit; norminette clean.
+
+**Noted:** `hub_game_new` (and with it `t_game_info` as its input) has no caller since `hub_library_add` went: the scanners fill a `t_game_info` for `hub_library_remember` only. Keep or delete at the wrap-up (step 18). Steam's own duplicate manifests (a game in two libraries) now merge into one entry by app id.
+
+Bugs on the way: `g_get_user_data_dir` given a path, `g_build_filename` without its `NULL`, `error` not set to `NULL`, `g_key_file_load_from_file` missing the path and flags, a space after `(`, the values written as the literal words (`name=name`), my example text printed for every bad section and a missing `\n`, an 81- and a 94-column line, the save's `if` the wrong way round (`error->message` on `NULL`), the fill missing from the rescan, a space missing after a comma.
+
+Code `gaming_hub` `b4573eb` … `532d4ed`.
