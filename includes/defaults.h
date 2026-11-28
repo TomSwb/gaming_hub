@@ -91,6 +91,9 @@
 # define HUB_DATA_DIR "gaming_hub"
 # define HUB_LIBRARY_FILE "library.ini"
 # define HUB_BROKEN_SUFFIX ".broken"
+# define HUB_KEY_STEAM "steam:%s"
+# define HUB_KEY_EMULATOR "emulator:%s"
+# define HUB_KEY_MANUAL "manual:%s"
 
 # define HUB_DISC_HEADER 32
 # define HUB_DISC_ID_LEN 6

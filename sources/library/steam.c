@@ -12,30 +12,30 @@
 
 #include "gaming_hub.h"
 
-void	hub_steam_scan(GListStore *store)
+void	hub_steam_scan(GKeyFile *file)
 {
-	gchar		*file;
+	gchar		*path;
 	gchar		*buffer;
 	t_kv_cursor	cursor;
 
-	file = g_build_filename(g_get_home_dir(), HUB_STEAM_FOLDERS, NULL);
-	buffer = hub_kv_load(file, &cursor);
+	path = g_build_filename(g_get_home_dir(), HUB_STEAM_FOLDERS, NULL);
+	buffer = hub_kv_load(path, &cursor);
 	if (!buffer)
 	{
-		g_free(file);
+		g_free(path);
 		return ;
 	}
 	if (!hub_kv_enter(&cursor, HUB_STEAM_ROOT)
-		|| !hub_steam_folders(store, &cursor))
+		|| !hub_steam_folders(file, &cursor))
 	{
-		g_printerr("%s: line %d: not a valid Steam library list\n", file,
+		g_printerr("%s: line %d: not a valid Steam library list\n", path,
 			cursor.line);
 	}
 	g_free(buffer);
-	g_free(file);
+	g_free(path);
 }
 
-gboolean	hub_steam_folders(GListStore *store, t_kv_cursor *cursor)
+gboolean	hub_steam_folders(GKeyFile *file, t_kv_cursor *cursor)
 {
 	t_kv_token	token;
 	gchar		*name;
@@ -56,14 +56,14 @@ gboolean	hub_steam_folders(GListStore *store, t_kv_cursor *cursor)
 			token = hub_kv_pair(cursor, &name, &value);
 		if (path)
 		{
-			hub_steam_library(store, path);
+			hub_steam_library(file, path);
 			g_free(path);
 		}
 	}
 	return (token == KV_CLOSE);
 }
 
-void	hub_steam_library(GListStore *store, const gchar *lib)
+void	hub_steam_library(GKeyFile *file, const gchar *lib)
 {
 	gchar		*path;
 	GDir		*dir;
@@ -81,7 +81,7 @@ void	hub_steam_library(GListStore *store, const gchar *lib)
 	{
 		if (g_str_has_prefix(name, HUB_STEAM_PREFIX)
 			&& g_str_has_suffix(name, HUB_STEAM_SUFFIX))
-			hub_steam_app(store, path, name);
+			hub_steam_app(file, path, name);
 		name = g_dir_read_name(dir);
 	}
 	g_dir_close(dir);

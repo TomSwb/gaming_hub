@@ -12,7 +12,7 @@
 
 #include "gaming_hub.h"
 
-void	hub_platforms_scan(GListStore *store)
+void	hub_platforms_scan(GKeyFile *file)
 {
 	gchar		*path;
 	GKeyFile	*key_file;
@@ -28,7 +28,7 @@ void	hub_platforms_scan(GListStore *store)
 		groups = g_key_file_get_groups(key_file, NULL);
 		while (groups[i])
 		{
-			hub_platform_read(store, key_file, groups[i]);
+			hub_platform_read(file, key_file, groups[i]);
 			i++;
 		}
 		g_strfreev(groups);
@@ -37,7 +37,7 @@ void	hub_platforms_scan(GListStore *store)
 	g_key_file_free(key_file);
 }
 
-void	hub_platform_read(GListStore *store, GKeyFile *key_file,
+void	hub_platform_read(GKeyFile *file, GKeyFile *key_file,
 			const gchar *group)
 {
 	t_platform	plat;
@@ -55,7 +55,7 @@ void	hub_platform_read(GListStore *store, GKeyFile *key_file,
 	else
 	{
 		hub_path_expand(&plat.folder);
-		hub_platform_folder(store, &plat);
+		hub_platform_folder(file, &plat);
 	}
 	g_free(plat.folder);
 	g_free(plat.command);
@@ -81,7 +81,7 @@ gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions)
 	return (FALSE);
 }
 
-void	hub_platform_folder(GListStore *store, const t_platform *plat)
+void	hub_platform_folder(GKeyFile *file, const t_platform *plat)
 {
 	GDir		*dir;
 	const gchar	*name;
@@ -93,13 +93,13 @@ void	hub_platform_folder(GListStore *store, const t_platform *plat)
 	while (name)
 	{
 		if (hub_platform_ext_ok(name, plat->extensions))
-			hub_platform_add(store, plat, name);
+			hub_platform_add(file, plat, name);
 		name = g_dir_read_name(dir);
 	}
 	g_dir_close(dir);
 }
 
-void	hub_platform_add(GListStore *store, const t_platform *plat,
+void	hub_platform_add(GKeyFile *file, const t_platform *plat,
 			const gchar *name)
 {
 	t_game_info	info;
@@ -115,7 +115,7 @@ void	hub_platform_add(GListStore *store, const t_platform *plat,
 	info.id = dump.id;
 	info.command = plat->command;
 	info.path = path;
-	hub_library_add(store, &info);
+	hub_library_remember(file, &info);
 	hub_name_clear(&dump);
 	g_free(path);
 }

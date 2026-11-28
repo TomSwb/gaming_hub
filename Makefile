@@ -88,7 +88,8 @@ LIBRARY = sources/library/hub_game.c \
 	sources/library/names.c \
 	sources/library/disc.c \
 	sources/library/library_pick.c \
-	sources/library/library_file.c
+	sources/library/library_file.c \
+	sources/library/library_entry.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

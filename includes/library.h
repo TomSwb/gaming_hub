@@ -65,29 +65,29 @@ t_kv_token	hub_kv_pair(t_kv_cursor *cursor, gchar **name,
 void		hub_kv_take(gchar **slot, gchar **value);
 
 // steam.c
-void		hub_steam_scan(GListStore *store);
-gboolean	hub_steam_folders(GListStore *store, t_kv_cursor *cursor);
-void		hub_steam_library(GListStore *store, const gchar *lib);
+void		hub_steam_scan(GKeyFile *file);
+gboolean	hub_steam_folders(GKeyFile *file, t_kv_cursor *cursor);
+void		hub_steam_library(GKeyFile *file, const gchar *lib);
 gchar		*hub_steam_lib_path(t_kv_cursor *cursor);
 void		hub_steam_app_free(t_steam_app *app);
 
 // steam_app.c
-void		hub_steam_app(GListStore *store, const gchar *folder,
+void		hub_steam_app(GKeyFile *file, const gchar *folder,
 				const gchar *name);
 void		hub_steam_app_keep(t_steam_app *app, const gchar *key,
 				gchar **value);
 gboolean	hub_steam_app_read(t_kv_cursor *cursor, t_steam_app *app);
 gboolean	hub_steam_app_skip(const t_steam_app *app);
-void		hub_steam_app_add(GListStore *store, t_steam_app *app,
+void		hub_steam_app_add(GKeyFile *file, t_steam_app *app,
 				const gchar *folder);
 
 // platforms.c
-void		hub_platforms_scan(GListStore *store);
-void		hub_platform_read(GListStore *store, GKeyFile *key_file,
+void		hub_platforms_scan(GKeyFile *file);
+void		hub_platform_read(GKeyFile *file, GKeyFile *key_file,
 				const gchar *group);
 gboolean	hub_platform_ext_ok(const gchar *name, gchar **extensions);
-void		hub_platform_folder(GListStore *store, const t_platform *plat);
-void		hub_platform_add(GListStore *store, const t_platform *plat,
+void		hub_platform_folder(GKeyFile *file, const t_platform *plat);
+void		hub_platform_add(GKeyFile *file, const t_platform *plat,
 				const gchar *name);
 
 // paths.c
@@ -110,5 +110,14 @@ void		hub_library_back(GtkButton *self, gpointer user_data);
 
 // library_file.c
 void		hub_library_load(t_library *library);
+void		hub_library_entry(GListStore *store, GKeyFile *file,
+				const gchar *group);
+void		hub_library_fill(t_library *library);
+
+// library_entry.c
+gchar		*hub_library_key(const t_game_info *info);
+void		hub_library_set(GKeyFile *file, const gchar *group,
+				const gchar *key, const gchar *value);
+void		hub_library_remember(GKeyFile *file, const t_game_info *info);
 
 #endif

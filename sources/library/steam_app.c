@@ -12,31 +12,31 @@
 
 #include "gaming_hub.h"
 
-void	hub_steam_app(GListStore *store, const gchar *folder,
+void	hub_steam_app(GKeyFile *file, const gchar *folder,
 			const gchar *name)
 {
-	gchar		*file;
+	gchar		*path;
 	gchar		*buffer;
 	t_kv_cursor	cursor;
 	t_steam_app	app;
 
-	file = g_build_filename(folder, name, NULL);
-	buffer = hub_kv_load(file, &cursor);
+	path = g_build_filename(folder, name, NULL);
+	buffer = hub_kv_load(path, &cursor);
 	if (!buffer)
 	{
-		g_free(file);
+		g_free(path);
 		return ;
 	}
 	ft_bzero(&app, sizeof(app));
 	if (!hub_kv_enter(&cursor, HUB_STEAM_STATE)
 		|| !hub_steam_app_read(&cursor, &app))
 		g_printerr("%s, line %d, not a valid Steam manifest\n",
-			file, cursor.line);
+			path, cursor.line);
 	else if (!hub_steam_app_skip(&app))
-		hub_steam_app_add(store, &app, folder);
+		hub_steam_app_add(file, &app, folder);
 	hub_steam_app_free(&app);
 	g_free(buffer);
-	g_free(file);
+	g_free(path);
 }
 
 void	hub_steam_app_keep(t_steam_app *app, const gchar *key,
@@ -88,7 +88,7 @@ gboolean	hub_steam_app_skip(const t_steam_app *app)
 	return (skip);
 }
 
-void	hub_steam_app_add(GListStore *store, t_steam_app *app,
+void	hub_steam_app_add(GKeyFile *file, t_steam_app *app,
 			const gchar *folder)
 {
 	t_game_info	info;
@@ -102,6 +102,6 @@ void	hub_steam_app_add(GListStore *store, t_steam_app *app,
 	info.id = app->id;
 	info.command = NULL;
 	info.path = path;
-	hub_library_add(store, &info);
+	hub_library_remember(file, &info);
 	g_free(path);
 }

@@ -36,3 +36,40 @@ void	hub_library_load(t_library *library)
 	g_key_file_free(library->file);
 	library->file = g_key_file_new();
 }
+
+void	hub_library_entry(GListStore *store, GKeyFile *file,
+			const gchar *group)
+{
+	t_hub_game	*game;
+
+	game = g_object_new(hub_game_get_type(), NULL);
+	game->source = g_key_file_get_integer(file, group, HUB_GAME_SOURCE, NULL);
+	game->name = g_key_file_get_string(file, group, HUB_GAME_NAME, NULL);
+	game->platform = g_key_file_get_string(file, group,
+			HUB_GAME_PLATFORM, NULL);
+	game->id = g_key_file_get_string(file, group, HUB_GAME_ID, NULL);
+	game->path = g_key_file_get_string(file, group, HUB_GAME_PATH, NULL);
+	game->command = g_key_file_get_string(file, group, HUB_GAME_COMMAND, NULL);
+	if (game->name == NULL)
+		g_printerr("%s: [%s] has no %s=, skipped\n",
+			HUB_LIBRARY_FILE, group, HUB_GAME_NAME);
+	else
+	 	g_list_store_append(store, game);
+	g_object_unref(game);
+}
+
+void	hub_library_fill(t_library *library)
+{
+	gchar	**groups;
+	gsize	i;
+
+	g_list_store_remove_all(library->games);
+	groups = g_key_file_get_groups(library->file, NULL);
+	i = 0;
+	while (groups[i])
+	{
+		hub_library_entry(library->games, library->file, groups[i]);
+		i++;
+	}
+	g_strfreev(groups);
+}
