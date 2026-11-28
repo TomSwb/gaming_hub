@@ -113,6 +113,7 @@ void		hub_library_load(t_library *library);
 void		hub_library_entry(GListStore *store, GKeyFile *file,
 				const gchar *group);
 void		hub_library_fill(t_library *library);
+void		hub_library_save(t_library *library);
 
 // library_entry.c
 gchar		*hub_library_key(const t_game_info *info);

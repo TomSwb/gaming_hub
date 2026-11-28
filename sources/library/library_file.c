@@ -73,3 +73,19 @@ void	hub_library_fill(t_library *library)
 	}
 	g_strfreev(groups);
 }
+
+void	hub_library_save(t_library *library)
+{
+	gchar	*dir;
+	GError	*error;
+
+	dir = g_path_get_dirname(library->file_path);
+	g_mkdir_with_parents(dir, 0700);
+	g_free(dir);
+	error = NULL;
+	if (!g_key_file_save_to_file(library->file, library->file_path, &error))
+	{
+		g_printerr("%s: %s\n", library->file_path, error->message);
+		g_error_free(error);
+	}
+}
