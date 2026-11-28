@@ -14,7 +14,7 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 7 | Names from file names, disc header check | 1–2 h (done 24 Nov, ~1.2 h) |
 | 8 | Launch and the session loop (`steam://`, emulators watched as a process); rescan when the library page is shown + a Refresh button (added 23 Nov; live folder watching is v2) | 4.5–7 h (done 27 Nov, ~5.3 h: 24 Nov ~2.4 h, 27 Nov ~2.9 h) |
 | 9 | The hub's library file (`~/.local/share/gaming_hub/library.ini`) | 2–3 h (done 28 Nov, ~2.2 h) |
-| 10 | Three states, live drives | 2–3 h |
+| 10 | Three states, live drives | 2–3 h (done 28 Nov, ~2.8 h) |
 | 11 | Silent session log + play history | 3–5 h |
 | 12 | Grid + toggle | 2 h |
 | 13 | Search, filters, sort | 2–3 h |
@@ -481,3 +481,87 @@ path=/mnt/Steam2TB/SteamLibrary/steamapps/common/Portal
 Bugs on the way: `g_get_user_data_dir` given a path, `g_build_filename` without its `NULL`, `error` not set to `NULL`, `g_key_file_load_from_file` missing the path and flags, a space after `(`, the values written as the literal words (`name=name`), my example text printed for every bad section and a missing `\n`, an 81- and a 94-column line, the save's `if` the wrong way round (`error->message` on `NULL`), the fill missing from the rescan, a space missing after a comma.
 
 Code `gaming_hub` `b4573eb` … `532d4ed`.
+
+## Step 10: the three states and live drives (28 Nov, ~2.8 h)
+
+Every game now shows one of three states, and they follow the drives live: unplug Steam2TB and its 47 games dim with **Plug in Steam2TB** within a second; plug it back in and they turn normal once the disk has spun up, without the window freezing. A game that isn't Ready can't be picked or started. 7 pieces: look by hand, decisions, the state on each game, the row, what can start, live drives, tests.
+
+| State | Meaning | Row |
+| --- | --- | --- |
+| Ready | the disk holding the game is mounted and its `path=` exists (or the game has no path) | normal |
+| Drive not connected | only systemd's `autofs` placeholder is mounted where the game's drive should be | dimmed, `Plug in Steam2TB` |
+| Not installed | the disk is mounted, but `path=` is gone (uninstalled, dump deleted) | dimmed, `Not installed` |
+
+### Piece 1: by hand
+
+| Check | Found |
+| --- | --- |
+| `findmnt /mnt/Steam2TB`, plugged in | two entries on the same folder: `systemd-1 autofs` (the automount placeholder, there from boot, `timeout=0`: never unmounted by itself) and `/dev/sda1 ext4` on top |
+| same, unplugged (after `umount`) | only the `autofs` line: "a non-`autofs` mount at the mount point" tells plugged from unplugged; the folder itself always exists |
+| `timeout 15 ls /mnt/Steam2TB/SteamLibrary`, unplugged | `No such device` at once (exit 2): touching an unplugged automount fails immediately, no freeze |
+| the same right after plugging in | waits a few seconds (spin-up + mount): touching a just-plugged disk from the main loop would freeze the window |
+| `StateFlags` in all 53 manifests | all `4`; an uninstall deletes the manifest instead, so the flag can't say "not installed" |
+| `lsblk -o NAME,LABEL,MOUNTPOINTS` | label `Steam2TB` = folder name; a label can't be read once the drive is unplugged |
+| `gio mount -l` / `gio mount -o` | GIO sees Drive → Volume `Steam2TB` → Mount. Unplug: drive disconnected, volume removed, mount removed. Plug in: drive connected, volume added, **no mount** (automount: nothing mounted until touched). After a `umount`, GIO reports a Mount again: it counts the `autofs` placeholder. So GIO's signals are triggers, the kernel's mount list is the truth |
+
+### Piece 2: decisions (28 Nov)
+
+| # | Question | Decided | Rejected |
+| --- | --- | --- | --- |
+| 1 | How a state is worked out | **A. From the kernel's mount list** (`g_unix_mount_entries_get`, reads `/proc/self/mountinfo`, touches no disk): the longest mount path the game's `path=` is under; only `autofs` entries there → Drive not connected; else `path=` tested → Ready / Not installed. Corrected while deciding: `g_unix_mount_entry_for` (path → its mount) **touches the path** (`NULL` when it doesn't exist), so it can't tell unplugged from uninstalled and would block after a plug-in | B. A + the `fstab` entries (for drives without automount; none here), C. the path only (can't tell the two apart, may freeze) |
+| 2 | Where the state lives | **A. A field on the game**, worked out after every fill and on drive signals, never saved. Changed at piece 6: also a **read-only property** (decision 6b) | B. computed in `bind` (a lookup per drawn row), C. saved in `library.ini` (stale after an unplug with the hub closed) |
+| 3 | Drive not connected vs Not installed | the mount point (from the kernel), then the game's own path | |
+| 4 | The name shown | **A. The mount point's last part** (`/mnt/Steam2TB` → `Steam2TB`): known while unplugged. `drive` keeps the whole mount path (piece 6 needs it); the row shows what follows its last `/`. A drive GNOME mounts by itself under `/run/media/…` vanishes completely when unplugged, so its games would show Not installed (option 1B's case) | B. the filesystem label, remembered, C. no name |
+| 5 | What can start | **A. Only Ready**, checked at the pick (`hub_library_activate`, which also covers a pick between games) and at Start (`hub_launch`, in case the drive went away on the plan page) | B. Drive not connected can be planned, C. Not installed opens `steam://install/<id>` (a possible extra next to Hide) |
+| 6 | Live updates | **A. GVolumeMonitor signals → re-check from the mount list; on `volume-added` also open each waiting drive in the background**, then re-check | B. a full rescan on `volume-added` (freezes the window during the spin-up), C. re-check only (a plug-in waits for Refresh) |
+| 6b | How a row learns its game changed (found while testing piece 6) | **A. `state` becomes a read-only property; `g_object_notify` after each check; each row listens to its game's `notify::state` from `bind` to `unbind`** | B. rebuild the store on every signal (`picked` would keep an old object), C. swap the view's model (jumps to the top) |
+
+### The chain
+
+```
+startup and every rescan
+├─ hub_steam_scan, hub_platforms_scan      their folder opens mount any drive that's plugged in
+├─ hub_library_fill                        new games, state Ready by default
+├─ hub_library_check(library)              mount list once
+│  └─ each game: hub_game_check(game, mounts) + g_object_notify(game, "state")
+│     ├─ no path → Ready
+│     ├─ hub_state_mount(mounts, path, &point)       longest mount point, any non-autofs there?
+│     │  └─ hub_state_under(path, mount path)        length if inside, else 0
+│     ├─ FALSE → Drive not connected, drive = copy of point
+│     └─ g_file_test(path, EXISTS) → Ready / Not installed
+└─ hub_library_save
+
+rows: bind → hub_row_state + connect notify::state → hub_row_notify → hub_row_state; unbind → disconnect
+
+GVolumeMonitor (hub_drives_watch, once at startup)
+├─ volume-removed, mount-added, mount-removed → hub_drives_changed → hub_library_check
+└─ volume-added → hub_drive_added
+   ├─ hub_library_check
+   └─ each game: hub_drive_wake(seen, game, library)  Drive not connected and drive not in the set yet
+      └─ g_file_enumerate_children_async(drive)  → systemd mounts it in GIO's worker thread
+         └─ hub_drive_woken → result freed → hub_library_check → rows turn Ready
+```
+
+| Piece | What | Where |
+| --- | --- | --- |
+| `t_game_state`, `state`, `drive` | the enum; the field; the mount point of a missing drive (owned, `NULL` otherwise, freed in `finalize`) | `structs.h`, `hub_game.c` |
+| gio-unix | `gio-unix-2.0` added to both `pkg-config` lines, `<gio/gunixmounts.h>` in `structs.h` (with `<fcntl.h>` and `<glib/gstdio.h>`, moved from `gaming_hub.h`). `GUnixMountEntry` is a **current** mount (mtab), `GUnixMountPoint` an `fstab` line: same-looking getters, different types, and `node->data` is a `gpointer`, so the compiler doesn't catch a mix-up | `Makefile`, `structs.h` |
+| `hub_state_under` | `"/"` → 1; not a prefix → 0; the character after the mount path must be `/` or the end | `library_state.c` |
+| `hub_state_mount` | walks the list with the `mounts` parameter itself (a copy of the pointer: the caller keeps the head), keeps the longest match in `*point` (borrowed from the entry), `real` reset on a longer match and set by a non-`autofs` entry at the same length, so the order of the two stacked entries doesn't matter | `library_state.c` |
+| `hub_game_check` | the only place that touches the disk, and only after the mount check; `hub_keep` copies or clears `drive` | `library_state.c` |
+| `hub_library_check` | `g_unix_mount_entries_get(NULL)` (list and entries owned) → each game (`g_list_model_get_item` gives a **new reference**, given back each turn) → `g_list_free_full(…, (GDestroyNotify)g_unix_mount_entry_free)` | `library_state.c` |
+| `state` property | `g_param_spec_int`, `G_PARAM_READABLE` only, so `set_property` is never called for it; `get_property` reads the field. `g_object_notify` only announces: the field is written directly | `hub_game_props.c` |
+| Row | a third label; `hub_row_state` resets the opacity to 1 first (rows are reused), then 0.5 for anything not Ready; `Plug in %s` with `ft_strrchr(drive, '/') + 1`; `bind` connects `notify::state` with the row as data, `unbind` disconnects it with `g_signal_handlers_disconnect_by_data(game, row)` | `library_rows.c`, `library_build.c` |
+| Start refused | `HUB_NOT_READY` line; the pick gives back its new reference before returning; `hub_launch` returns `FALSE`, so Start stays on the plan page | `library_pick.c`, `launch.c` |
+| Volume monitor | `g_volume_monitor_get` (one reference, kept in `t_library.volumes`); in `hub_free_hub` the handlers are disconnected **before** the unref, because the monitor is shared in the process | `library_drives.c`, `utils.c`, `inits_2.c` |
+| Background open | `g_file_new_for_path` (doesn't touch the disk), `g_file_enumerate_children_async` (the operation keeps its own reference, so the `GFile` is unreffed at once), `_finish` in the callback: an enumerator to unref, or an error to free (an unrelated disk: `No such device`, quiet). A `GHashTable` set (`g_str_hash`, `g_str_equal`, keys borrowed from the games) opens each drive once, not 47 times | `library_drives.c` |
+
+**Found on the way:** `g_list_model_items_changed(store, 0, n, n)` with the **same** objects doesn't redraw anything: GTK's list view keeps the rows of items it already has and doesn't call `bind` again. That's why a row has to listen to its own game (6b). Refresh did redraw, because it builds new objects from the library file.
+
+**Tests:** unplugged at startup → 47 Steam rows dimmed with `Plug in Steam2TB`, 27 dumps normal; only `umount` without unplugging → still Ready (the scan mounts the drive again: it is connected); hub open, safe unplug (`sudo umount /mnt/Steam2TB; and udisksctl power-off -b /dev/sda`) → the rows dim at once; plugged back in → normal after the spin-up, the window responsive meanwhile; a fake `Test Game (Europe) [TEST-1].iso` → Ready, deleted + Refresh → `Not installed`, double-click → `Test Game: not ready, not started` (then its section removed from `library.ini` by hand); Portal picked, drive unplugged on the plan page → Start refused; `make norm` clean; **0.0–0.5 % CPU, ~116 MB** at rest.
+
+**Noted:** the first start after the disk has spun down waits a few seconds (the startup scan reads Steam2TB's manifests): a background startup scan is a v2 item. smartd's "unable to open ATA device" notifications came from unplugging (the disk wasn't there at its check); `smartctl -H` says PASSED.
+
+Bugs on the way: `g_str_has_prefix`'s and `g_file_test`'s answers thrown away, the length of the wrong string, the root case returning `0`, `g_unix_mount_point_get_mount_path` (an `fstab` getter) on a mount entry, the entry itself given to `g_strcmp0` instead of its type, 26 lines (`node` dropped), branch 2 falling through into the disk test, `state` never set, a list freed before the loop, `t_hube`, `"volumes-removed"`, a space before a tab, `make` forgotten before a test.
+
+Code `gaming_hub` `05db59b` … `620e7d4`.
