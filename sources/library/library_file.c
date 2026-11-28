@@ -28,7 +28,7 @@ void	hub_library_load(t_library *library)
 	{
 		broken = g_strconcat(library->file_path, HUB_BROKEN_SUFFIX, NULL);
 		g_printerr("%s: %s - kept as %s, starting fresh\n",
-				library->file_path, error->message, broken);
+			library->file_path, error->message, broken);
 		g_rename(library->file_path, broken);
 		g_free(broken);
 	}
@@ -54,7 +54,7 @@ void	hub_library_entry(GListStore *store, GKeyFile *file,
 		g_printerr("%s: [%s] has no %s=, skipped\n",
 			HUB_LIBRARY_FILE, group, HUB_GAME_NAME);
 	else
-	 	g_list_store_append(store, game);
+		g_list_store_append(store, game);
 	g_object_unref(game);
 }
 

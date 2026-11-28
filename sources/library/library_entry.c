@@ -41,7 +41,7 @@ void	hub_library_set(GKeyFile *file, const gchar *group,
 	if (value)
 		g_key_file_set_string(file, group, key, value);
 	else
-	 	g_key_file_remove_key(file, group, key, NULL);
+		g_key_file_remove_key(file, group, key, NULL);
 }
 
 void	hub_library_remember(GKeyFile *file, const t_game_info *info)
