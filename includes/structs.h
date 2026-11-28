@@ -204,13 +204,14 @@ typedef struct s_hub_game_class
 
 typedef struct s_library
 {
-	GListStore	*games;
-	t_hub_game	*picked;
-	GtkWidget	*next;
-	GtkWidget	*playing;
-	GSubprocess	*running;
-	GKeyFile	*file;
-	gchar		*file_path;
+	GListStore		*games;
+	t_hub_game		*picked;
+	GtkWidget		*next;
+	GtkWidget		*playing;
+	GSubprocess		*running;
+	GKeyFile		*file;
+	gchar			*file_path;
+	GVolumeMonitor	*volumes;
 }	t_library;
 
 typedef struct s_kv_cursor

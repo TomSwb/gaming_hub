@@ -128,4 +128,9 @@ gboolean	hub_state_mount(GList *mounts, const gchar *path,
 void		hub_game_check(t_hub_game *game, GList *mounts);
 void		hub_library_check(t_library *library);
 
+// library_drives.c
+void		hub_drives_changed(GVolumeMonitor *self, gpointer object,
+				gpointer user_data);
+void		hub_drives_watch(t_hub *hub);
+
 #endif

@@ -54,6 +54,11 @@ void	hub_free_hub(t_hub *hub)
 	g_clear_object(&hub->library.running);
 	if (hub->library.file)
 		g_key_file_free(hub->library.file);
+	if (hub->library.volumes)
+	{
+		g_signal_handlers_disconnect_by_data(hub->library.volumes, hub);
+		g_clear_object(&hub->library.volumes);
+	}
 }
 
 void	hub_gfree_hub(t_hub *hub)

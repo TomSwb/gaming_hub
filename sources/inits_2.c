@@ -28,4 +28,5 @@ void	hub_library_init(t_hub *hub)
 	hub->library.running = NULL;
 	hub->library.file = NULL;
 	hub->library.file_path = NULL;
+	hub->library.volumes = NULL;
 }
