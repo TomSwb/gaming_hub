@@ -17,5 +17,6 @@ void	hub_library_rescan(t_hub *hub)
 	hub_steam_scan(hub->library.file);
 	hub_platforms_scan(hub->library.file);
 	hub_library_fill(&hub->library);
+	hub_library_check(&hub->library);
 	hub_library_save(&hub->library);
 }

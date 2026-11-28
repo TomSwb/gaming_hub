@@ -15,7 +15,6 @@
 
 // === Librairies === //
 
-// internal:
 # include "libft.h"
 # include "structs.h"
 # include "defaults.h"
@@ -25,10 +24,6 @@
 # include "headset.h"
 # include "power.h"
 # include "library.h"
-
-// external:
-# include <fcntl.h>
-# include <glib/gstdio.h>
 
 // === Functions === //
 

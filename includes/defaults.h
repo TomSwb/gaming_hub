@@ -87,6 +87,8 @@
 # define HUB_PLAT_EXTS "extensions"
 # define HUB_PLAT_COMMAND "command"
 # define HUB_HOME_PREFIX "~/"
+# define HUB_ROOT_DIR '/'
+# define HUB_AUTOFS "autofs"
 # define HUB_HOME_PREFIX_L 2
 # define HUB_DATA_DIR "gaming_hub"
 # define HUB_LIBRARY_FILE "library.ini"
@@ -105,6 +107,9 @@
 
 # define HUB_STARTING "Starting %s ..."
 # define HUB_PLAYING "Playing %s"
+# define HUB_PLUG_IN "Plug in %s"
+# define HUB_NOT_INSTALLED "Not installed"
+# define HUB_ROW_DIM 0.5
 
 # define HUB_GAMEMODE "gamemoderun"
 # define HUB_FILE_MARK "%f"

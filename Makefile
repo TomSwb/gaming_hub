@@ -35,8 +35,8 @@ HEADERS = ${INC_DIR}/gaming_hub.h \
 		${INC_DIR}/power.h ${INC_DIR}/library.h \
 		${LIBFT_DIR}/libft.h
 
-PKG_CFLAGS := ${shell pkg-config --cflags gtk4 libpulse-mainloop-glib}
-PKG_LIBS := ${shell pkg-config --libs gtk4 libpulse-mainloop-glib}
+PKG_CFLAGS := ${shell pkg-config --cflags gtk4 libpulse-mainloop-glib gio-unix-2.0}
+PKG_LIBS := ${shell pkg-config --libs gtk4 libpulse-mainloop-glib gio-unix-2.0}
 
 COMPUTER = sources/computer/ram.c \
 	sources/computer/cpu.c \
@@ -89,7 +89,8 @@ LIBRARY = sources/library/hub_game.c \
 	sources/library/disc.c \
 	sources/library/library_pick.c \
 	sources/library/library_file.c \
-	sources/library/library_entry.c
+	sources/library/library_entry.c \
+	sources/library/library_state.c
 
 SOURCES = sources/main.c \
 	sources/utils.c \

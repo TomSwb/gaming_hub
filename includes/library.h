@@ -44,6 +44,7 @@ void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
 void		hub_row_bind(GtkSignalListItemFactory *self, GObject *object,
 				gpointer user_data);
+void		hub_row_state(GtkWidget *row, const t_hub_game *game);
 
 // library_build.c
 GtkWidget	*hub_build_library(t_hub *hub);
@@ -119,5 +120,12 @@ gchar		*hub_library_key(const t_game_info *info);
 void		hub_library_set(GKeyFile *file, const gchar *group,
 				const gchar *key, const gchar *value);
 void		hub_library_remember(GKeyFile *file, const t_game_info *info);
+
+// library_state.c
+gsize		hub_state_under(const gchar *path, const gchar *point);
+gboolean	hub_state_mount(GList *mounts, const gchar *path,
+				const gchar **point);
+void		hub_game_check(t_hub_game *game, GList *mounts);
+void		hub_library_check(t_library *library);
 
 #endif

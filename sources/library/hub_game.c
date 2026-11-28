@@ -52,6 +52,8 @@ void	hub_game_init(GTypeInstance *instance, gpointer klass)
 	game->path = NULL;
 	game->source = GAME_MANUAL;
 	game->command = NULL;
+	game->state = GAME_READY;
+	game->drive = NULL;
 }
 
 void	hub_game_finalize(GObject *object)
@@ -65,6 +67,7 @@ void	hub_game_finalize(GObject *object)
 	g_free(game->id);
 	g_free(game->path);
 	g_free(game->command);
+	g_free(game->drive);
 	parent = g_type_class_peek_parent(G_OBJECT_GET_CLASS(object));
 	parent->finalize(object);
 }

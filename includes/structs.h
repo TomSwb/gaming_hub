@@ -18,6 +18,9 @@
 # include <gtk/gtk.h>
 # include <pulse/pulseaudio.h>
 # include <pulse/glib-mainloop.h>
+# include <fcntl.h>
+# include <glib/gstdio.h>
+# include <gio/gunixmounts.h>
 
 // === Enums === //
 
@@ -60,6 +63,13 @@ typedef enum e_kv_token
 	KV_END,
 	KV_ERROR
 }	t_kv_token;
+
+typedef enum e_game_state
+{
+	GAME_READY,
+	GAME_DRIVE_NOT_CONNECTED,
+	GAME_NOT_INSTALLED
+}	t_game_state;
 
 // === Structs === //
 
@@ -165,6 +175,8 @@ typedef struct s_hub_game
 	gchar			*id;
 	gchar			*path;
 	gchar			*command;
+	t_game_state	state;
+	gchar			*drive;
 }	t_hub_game;
 
 typedef struct s_game_info
