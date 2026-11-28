@@ -16,12 +16,12 @@ The hub's home screen: every game (Steam and my GameCube, Wii and PS2 dumps) in 
 | 9 | The hub's library file (`~/.local/share/gaming_hub/library.ini`) | 2–3 h (done 28 Nov, ~2.2 h) |
 | 10 | Three states, live drives | 2–3 h (done 28 Nov, ~2.8 h) |
 | 11 | ~~Silent session log + play history~~ | moved to v2 on 28 Nov (with the "recently played" sort) |
-| 12 | Grid + toggle | 2 h |
+| 12 | Grid + toggle | 2 h (done 28 Nov, ~2.3 h, with keeping the selection after a rescan, added that day; + ~0.15 h fixing an older freeze) |
 | 13 | Search, filters, A–Z sort | 1.5–2.5 h |
 | 14 | Hide + Show hidden | 1–2 h |
 | 15 | Add manually | 2 h |
 | 16 | Grouping, Edit game dialog, group-by | 4–7 h |
-| 17 | Covers | 2–3 h |
+| 17 | Covers (**done next, right after step 12**: decided 28 Nov; the numbers stay) | 2–3 h |
 | 18 | Wrap-up: fps check (`glmark2`), norm, CPU / RAM | ~0.5 h |
 
 ## Step 1: look by hand (22 Nov, ~0.3 h)
@@ -565,3 +565,74 @@ GVolumeMonitor (hub_drives_watch, once at startup)
 Bugs on the way: `g_str_has_prefix`'s and `g_file_test`'s answers thrown away, the length of the wrong string, the root case returning `0`, `g_unix_mount_point_get_mount_path` (an `fstab` getter) on a mount entry, the entry itself given to `g_strcmp0` instead of its type, 26 lines (`node` dropped), branch 2 falling through into the disk test, `state` never set, a list freed before the loop, `t_hube`, `"volumes-removed"`, a space before a tab, `make` forgotten before a test.
 
 Code `gaming_hub` `05db59b` … `620e7d4`.
+
+## Step 12: the grid and the list / grid toggle (28 Nov, ~2.3 h)
+
+The library has a **List / Grid** switch now. The grid shows the same 74 games as simple tiles: a 160 × 240 block with the source icon, the name under it, the platform tag and the state line. Tiles dim with **Plug in Steam2TB** like the rows. Double-click or Enter on a tile picks the game exactly like the list. The last view is remembered in `settings.ini`. Switching views keeps the selected game, scrolls to it and gives it the keyboard focus. Since this step, the selected game also stays selected after every rescan (Back to library, Refresh, between games). 11 pieces: decisions, the selection and the list split, the rename, the tiles, the grid, one pick for both views, the stack and the switcher, focus, saving, loading, keeping the selection, plus a fix for an older freeze found while testing.
+
+### Decisions (28 Nov)
+
+| # | Question | Decided | Rejected |
+| --- | --- | --- | --- |
+| 1 | How both views share one selection | **A. One `GtkSingleSelection`**, `g_object_ref` once before the second view: `gtk_list_view_new` and `gtk_grid_view_new` both take their model with **transfer full**, so each view owns one reference; the last one destroyed frees the selection, which frees the store. The selected game stays when switching, and step 13's filters go in once | B. Two selections on the same store (the selection lost when switching, both selections wrapping step 13's filters) |
+| 2 | Where the views live | **A. An inner `GtkStack`** in the library page, children `"list"` and `"grid"`, each a scrolled window (a view scrolls only as the direct child of a `GtkScrolledWindow`: it's a `GtkScrollable`); no transition (fps rule); the child's name is the value saved | B. One scrolled window swapping its child (replacing it destroys the old view), C. both in a box, one hidden |
+| 3 | The toggle and where it sits | **A. A `GtkStackSwitcher`** on the inner stack (`gtk_stack_add_titled` gives it "List" / "Grid"; no switching code), at the start of a `GtkCenterBox` row, Refresh at the end | B. Two grouped toggle buttons, C. one button that flips |
+| 4 | The tile | **A.** A **160 × 240 slot** (2:3: Steam's covers and Dolphin's 160 × 224 fit at step 17 without the grid changing size), a plain block with the source icon at 64 px (`steam`, from the RPM; `applications-games-symbolic`, Adwaita's, for emulator games), then the name (2 lines, "…"), the platform tag and the state line **last**; dimmed when not Ready; `max-columns` 20 (GTK's default is 7: cells would stretch) and each tile centred in its cell. Name and state **under** the slot so they stay readable on covers; the platform tag tells the source on a cover too | B. Each emulator's own icon now (`icon=` in `platforms.ini`: noted for the styling step), C. height from the content (the grid would jump at step 17) |
+| 4b | When covers come (asked while deciding 4) | **Straight after step 12**: nothing in steps 13–16 is needed for them, only the tiles; they were last by priority, not by need. The numbers stay (step 17 before 13), so the docs keep their numbering | covers inside step 12 (two sets of new things in one step, ~4–5 h) |
+| 5 | Does the tile reuse the row's state code | **B. Yes, renamed**: `hub_row_state` / `_notify` / `_unbind` → `hub_item_state` / `_notify` / `_unbind` (they only use the widget's last child and opacity, and a grid's factory gets the same `GtkListItem`s) | A. Reused with the old names, C. copies for the tiles |
+| 6 | How the grid's `activate` reaches the pick | **A. One handler for both**: `hub_library_activate(GtkWidget *self, …)`, `self` unused, the game read from `hub->library.selection`, where `position` counts (after step 13's filters too, never from the store) | B. Two thin handlers + a shared function (`library_pick.c` full), C. a copy with `gtk_grid_view_get_model` |
+| 7 | The settings key and when it's saved | **A. `[library]` `view=list` / `view=grid` in `settings.ini`, saved at each switch**: loaded fresh with `G_KEY_FILE_KEEP_COMMENTS`, one key set, saved atomically; a missing file is fine, a broken one left alone (saving would replace the timer values) | B. Saved on quit (lost when killed), C. the timer's key file kept in memory (overwrites hand edits) |
+| 8 | Keyboard in the grid | **A.** GTK gives arrows, Enter, Tab; on each switch the selected game is **scrolled into view with focus** (`GTK_LIST_SCROLL_FOCUS`), else focus stays on the switcher | B. GTK's defaults only, C. A + a shortcut |
+| 9 | Coming back to the library always selected the first game (found during the step, added the same day) | **The game selected before a rescan is kept** (`t_library.last`, one reference) and the new object that is the same game (`hub_game_same`: source, then `id`, else `name`, the rule of `hub_library_key`) is selected again, then focused. First kept at the pick, changed after the Refresh test: a game only clicked wasn't kept | keeping the pointer (the rescan builds new objects), keeping `picked` (Back clears it) |
+
+### The chain
+
+```
+hub_build_library_page
+├─ GtkCenterBox row: GtkStackSwitcher (start) · Refresh (end)
+└─ hub_build_library
+   ├─ store → library file loaded → drives watched
+   ├─ selection = gtk_single_selection_new(store)       the one reference: the list takes it
+   ├─ inner stack (views)
+   │  ├─ "list": hub_build_list → row factory, gtk_list_view_new(selection)
+   │  └─ "grid": hub_build_grid → tile factory, g_object_ref(selection), gtk_grid_view_new(selection)
+   ├─ hub_view_load      settings.ini view=grid → grid shown
+   └─ notify::visible-child-name → hub_view_changed → hub_view_save + hub_view_focus
+   (switcher pointed at the stack last)
+
+both views' activate → hub_library_activate(self unused) → game from the selection → picked / plan / launch
+
+every rescan (library shown, Refresh)
+├─ last = the selected game (g_set_object)
+├─ scans (folders on unplugged drives skipped: hub_state_present), fill, check, save
+└─ hub_library_reselect → the same game selected again (hub_game_same) → hub_view_focus
+
+tile: [slot 160 × 240: icon] [name, 2 lines] [platform] [state, last child]
+bind → icon, texts, hub_item_state + notify::state (data: tile); unbind → hub_item_unbind
+```
+
+### Pieces
+
+| Piece | What | Where |
+| --- | --- | --- |
+| Fields | `selection` (`GtkSingleSelection *`, borrowed: the views own it), `views` (the inner stack, borrowed: the page owns it), `last` (one reference owned, `g_set_object` to assign, `g_clear_object` in `hub_free_hub`); the struct re-aligned (`GtkSingleSelection` is the longest type now) | `structs.h`, `inits_2.c`, `utils.c` |
+| List split | `hub_build_library` was at 5 locals: the list's factory, view and scrolled window moved into `hub_build_list` | `library_build.c` |
+| Rename | `hub_item_state(GtkWidget *widget, …)`, `hub_item_notify`, `hub_item_unbind`: shared by rows and tiles | `library_rows.c` |
+| Icons, by hand | `steam` (RPM, `hicolor` up to 256 px), `applications-games-symbolic` (Adwaita SVG). Found: Steam's per-game `steam_icon_<appid>` (48 px, only games with a desktop shortcut), a possible small fallback for step 17 | |
+| Tile | `hub_tile_slot` (the `card` block, `set_size_request`, a `GtkImage` with `vexpand`: a `GtkImage` draws its icon in the middle of its space), `hub_tile_setup` (halign centre; the name with `set_wrap`, `set_lines` (works only with `set_ellipsize`), `set_max_width_chars` (a wrapping label otherwise asks for its whole text on one line) and centred justify), `hub_tile_bind` (all borrowed: `get_item` and `get_child` are transfer none; the icon set on every bind, tiles are reused) | `library_tiles.c` |
+| Grid | `hub_build_grid`: the extra `g_object_ref` **before** `gtk_grid_view_new`, `gtk_grid_view_set_max_columns` 20 | `library_tiles.c` |
+| One pick | `hub_library_activate(GtkWidget *self, …)`: `G_CALLBACK` casts any handler and both views pass an object pointer, so one function serves both signals; `hub_library_plan` split out (norminette counts the declarations and the blank line in the 25) | `library_pick.c` |
+| Stack + switcher | `gtk_stack_add_titled` (the first child is shown until told otherwise), the switcher keeps its own reference to the stack | `library_build.c` |
+| Focus | `hub_view_focus`: the visible scrolled window's child, `GTK_IS_GRID_VIEW` to pick `gtk_grid_view_scroll_to` or `gtk_list_view_scroll_to` (GTK 4.12+) | `library_view.c` |
+| Save / load | `hub_view_save` (`load_from_file(…, KEEP_COMMENTS, &error) || g_error_matches(…, NOENT)`, then `set_string`, `g_clear_error`, `save_to_file`), `hub_view_changed`, `hub_view_load` (connected **after** the load, so restoring doesn't save) | `library_view.c` |
+| Keep the selection | `hub_library_rescan` first keeps `gtk_single_selection_get_selected_item` in `last` (transfer none; `g_set_object` takes its own); `hub_library_reselect` walks the selection (each `get_item` given back), `gtk_single_selection_set_selected`, then focus. A rebuilt store lost the selection and `autoselect` picked the first game | `library_store.c`, `hub_game_props.c` |
+
+### Fix: the rescan froze the window with Steam2TB unplugged (older bug, ~0.15 h)
+
+Found while testing the grid: plan page on a present game, Steam2TB unplugged, **Back to library** → the window froze and GNOME offered Force Quit. Cause, from steps 8 and 10: the rescan opens every Steam library folder in the main loop, and touching the unplugged automount waits for the disk (`time ls /mnt/Steam2TB/SteamLibrary`: **4.3 s**, then `No such device`; `x-systemd.device-timeout=5s` in `fstab`). Step 10's "fails at once" was measured after a `umount` with the disk still connected. Fixed: `hub_state_present(path)` (the kernel's mount list, no disk touched, the step 10 rule: a real non-`autofs` mount holds the path) at the start of `hub_steam_library` and `hub_platform_folder`; a skipped library's games stay in `library.ini` and show `Plug in Steam2TB`. The slow first start after a spin-down (v2, background startup scan) is a milder form of the same wait and stays as noted.
+
+**Tests:** list and grid on the same selection, switch keeps the game and focus, arrows go on from it; tiles 160 px, icons, names on 2 lines, platform, state; double-click / arrows + Enter on a tile picks; `view=grid` → opens on the grid, `view=tiles` → list + one line, no key → list, quiet; `settings.ini`'s timer values untouched; Back to library and Refresh keep the selected game (after the fix), in both views; Steam2TB safely unplugged with the grid shown → 47 tiles dimmed with `Plug in Steam2TB`, a pick refused; Back to library while unplugged → instant (after the fix); plugged back → normal; `make norm` clean; **0.2 % CPU at rest, ~118 MB** (+2 MB: the second view).
+
+Bugs on the way: norminette's 25 lines counted with the declarations and the blank line (Claude's count left them out: `hub_library_activate` at 26), the second `set_child` instead of `set_vexpand`, `last` kept only at the pick (Refresh lost a clicked game), a header line one space short after the rename, `///` in `library.h`.
+
+Code `gaming_hub` `27bde89` … `e95f6d0`.
