@@ -35,9 +35,11 @@ void		hub_game_set_property(GObject *object, guint prop_id,
 void		hub_game_get_property(GObject *object, guint prop_id,
 				GValue *value, GParamSpec *pspec);
 t_hub_game	*hub_game_cast(gpointer object);
+gboolean	hub_game_same(const t_hub_game *game, const t_hub_game *other);
 
 // library_store.c
 void		hub_library_rescan(t_hub *hub);
+void		hub_library_reselect(t_library *library);
 
 // library_rows.c
 void		hub_row_setup(GtkSignalListItemFactory *self, GObject *object,

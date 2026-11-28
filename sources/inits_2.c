@@ -25,6 +25,7 @@ void	hub_library_init(t_hub *hub)
 	hub->library.selection = NULL;
 	hub->library.views = NULL;
 	hub->library.picked = NULL;
+	hub->library.last = NULL;
 	hub->library.next = NULL;
 	hub->library.playing = NULL;
 	hub->library.running = NULL;

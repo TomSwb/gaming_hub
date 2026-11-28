@@ -209,6 +209,7 @@ typedef struct s_library
 	GtkSingleSelection	*selection;
 	GtkWidget			*views;
 	t_hub_game			*picked;
+	t_hub_game			*last;
 	GtkWidget			*next;
 	GtkWidget			*playing;
 	GSubprocess			*running;

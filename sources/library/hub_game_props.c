@@ -88,3 +88,19 @@ t_hub_game	*hub_game_cast(gpointer object)
 	return (G_TYPE_CHECK_INSTANCE_CAST(object,
 			hub_game_get_type(), t_hub_game));
 }
+
+gboolean	hub_game_same(const t_hub_game *game, const t_hub_game *other)
+{
+	const gchar	*mine;
+	const gchar	*theirs;
+
+	if (game->source != other->source)
+		return (FALSE);
+	mine = game->id;
+	if (mine == NULL)
+		mine = game->name;
+	theirs = other->id;
+	if (theirs == NULL)
+		theirs = other->name;
+	return (g_strcmp0(mine, theirs) == 0);
+}
