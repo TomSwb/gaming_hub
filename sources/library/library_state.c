@@ -16,8 +16,8 @@ gsize	hub_state_under(const gchar *path, const gchar *point)
 {
 	gsize	len;
 
-	if (g_strcmp0(point, "/") == 0)
-		return (0);
+	if (g_strcmp0(point, HUB_ROOT_PATH) == 0)
+		return (1);
 	if (!g_str_has_prefix(path, point))
 		return (0);
 	len = ft_strlen(point);
@@ -76,7 +76,7 @@ void	hub_game_check(t_hub_game *game, GList *mounts)
 	if (g_file_test(game->path, G_FILE_TEST_EXISTS))
 		game->state = GAME_READY;
 	else
-	 	game->state = GAME_NOT_INSTALLED;
+		game->state = GAME_NOT_INSTALLED;
 }
 
 void	hub_library_check(t_library *library)

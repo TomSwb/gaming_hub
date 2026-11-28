@@ -88,6 +88,7 @@
 # define HUB_PLAT_COMMAND "command"
 # define HUB_HOME_PREFIX "~/"
 # define HUB_ROOT_DIR '/'
+# define HUB_ROOT_PATH "/"
 # define HUB_AUTOFS "autofs"
 # define HUB_HOME_PREFIX_L 2
 # define HUB_DATA_DIR "gaming_hub"
